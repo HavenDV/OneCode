@@ -102,17 +102,11 @@ namespace OneCode.VsExtension
             //IVsHierarchy hierarchy;
             //solution.GetProjectOfUniqueName(project.UniqueName, out hierarchy);
 
-            var prefix = node.CodeFile.RelativePath.TrimStart('\\', '/');
-            var index = prefix.IndexOfAny(new []{ '\\', '/' });
-            var relativePath = index > 0
-                ? prefix.Substring(index + 1)
-                : prefix;
-
             var projectDirectory = Path.GetDirectoryName(project.FileName);
-            var fullPath = Path.Combine(projectDirectory ?? string.Empty, relativePath);
+            var fullPath = Path.Combine(projectDirectory ?? string.Empty, node.CodeFile.RelativePathWithoutTargetFramework);
             var directory = Path.GetDirectoryName(fullPath);
 
-            node.CodeFile.Code.NamespaceName = project.Name;
+            node.CodeFile.Code.NamespaceName = project.Name + node.CodeFile.AdditionalNamespace;
             node.CodeFile.Code.Methods = new List<Method> { node.Method };
 
             if (!File.Exists(fullPath))

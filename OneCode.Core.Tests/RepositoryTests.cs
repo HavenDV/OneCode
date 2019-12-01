@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OneCode.Core.Tests.Utilities;
@@ -32,7 +33,7 @@ namespace OneCode.Core.Tests
 
             foreach (var file in repository.Files)
             {
-                Console.WriteLine($"Path: {file.RelativePath}");
+                Console.WriteLine($"RelativePath: {file.RelativePath}");
 
                 foreach (var method in file.Code.Methods)
                 {
@@ -41,6 +42,28 @@ namespace OneCode.Core.Tests
             }
 
             Assert.IsTrue(repository.Files.Any());
+        }
+
+        [TestMethod]
+        public void CodeLoadTest()
+        {
+            var path = Path.GetFullPath(Directory
+                .EnumerateFiles("../../../../../CSharpUtilities", "*.cs", SearchOption.AllDirectories)
+                .FirstOrDefault());
+            var file = CodeFile.Load(path, Path.GetFullPath("../../../../../CSharpUtilities"));
+
+            Console.WriteLine($"FullPath: {file.FullPath}");
+            Console.WriteLine($"TargetFramework: {file.TargetFramework}");
+            Console.WriteLine($"RelativePath: {file.RelativePath}");
+            Console.WriteLine($"RelativePathWithoutTargetFramework: {file.RelativePathWithoutTargetFramework}");
+            Console.WriteLine($"RelativeFolder: {file.RelativeFolder}");
+            Console.WriteLine($"RelativeFolderWithoutTargetFramework: {file.RelativeFolderWithoutTargetFramework}");
+            Console.WriteLine($"AdditionalNamespace: {file.AdditionalNamespace}");
+
+            foreach (var method in file.Code.Methods)
+            {
+                Console.WriteLine($"- {method.Name}");
+            }
         }
 
         [TestMethod]
