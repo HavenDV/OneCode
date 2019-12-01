@@ -9,6 +9,7 @@ using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using OneCode.Core;
 using OneCode.VsExtension.Properties;
+using OneCode.VsExtension.Utilities;
 
 namespace OneCode.VsExtension
 {
@@ -84,6 +85,7 @@ namespace OneCode.VsExtension
             TreeView.ItemsSource = Nodes;
         }
 
+
         private void AddItem(Node node)
         {
             if (node?.CodeFile == null)
@@ -91,16 +93,23 @@ namespace OneCode.VsExtension
                 return;
             }
 
-            var dte = (DTE)Package.GetGlobalService(typeof(EnvDTE.DTE));
-            var project = dte.Solution.Projects.Item(1);
-            var selectedProject = dte.SelectedItems.OfType<Project>().FirstOrDefault();
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            var dte = (DTE)Package.GetGlobalService(typeof(DTE));
+            var project = dte.GetActiveProject();
 
             //var solution = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
             //IVsHierarchy hierarchy;
             //solution.GetProjectOfUniqueName(project.UniqueName, out hierarchy);
 
+            var prefix = node.CodeFile.RelativePath.TrimStart('\\', '/');
+            var index = prefix.IndexOfAny(new []{ '\\', '/' });
+            var relativePath = index > 0
+                ? prefix.Substring(index + 1)
+                : prefix;
+
             var projectDirectory = Path.GetDirectoryName(project.FileName);
-            var fullPath = Path.Combine(projectDirectory, node.CodeFile.RelativePath.TrimStart('\\', '/'));
+            var fullPath = Path.Combine(projectDirectory ?? string.Empty, relativePath);
             var directory = Path.GetDirectoryName(fullPath);
 
             node.CodeFile.Code.NamespaceName = project.Name;
@@ -108,7 +117,10 @@ namespace OneCode.VsExtension
 
             if (!File.Exists(fullPath))
             {
-                Directory.CreateDirectory(directory);
+                if (directory != null)
+                {
+                    Directory.CreateDirectory(directory);
+                }
 
                 File.WriteAllText(fullPath, node.CodeFile.Code.Save());
             }
@@ -129,6 +141,8 @@ namespace OneCode.VsExtension
         {
             var item = sender as TreeViewItem;
             var node = item?.Header as Node;
+
+            ThreadHelper.ThrowIfNotOnUIThread();
 
             AddItem(node);
         }
