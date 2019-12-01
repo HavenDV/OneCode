@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
+using OneCode.VsExtension.Properties;
 
 namespace OneCode.VsExtension
 {
@@ -21,6 +22,11 @@ namespace OneCode.VsExtension
         public OneCodeWindowControl()
         {
             InitializeComponent();
+
+            if (!string.IsNullOrWhiteSpace(Settings.Default.RepositoryPath))
+            {
+                Load(Settings.Default.RepositoryPath);
+            }
         }
 
         /*
@@ -39,7 +45,6 @@ namespace OneCode.VsExtension
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
-            string path;
             using (var dialog = new FolderBrowserDialog())
             {
                 if (dialog.ShowDialog() != DialogResult.OK ||
@@ -48,8 +53,14 @@ namespace OneCode.VsExtension
                     return;
                 }
 
-                path = dialog.SelectedPath;
+                Load(dialog.SelectedPath);
             }
+        }
+
+        private void Load(string path)
+        {
+            Settings.Default.RepositoryPath = path;
+            Settings.Default.Save();
 
             Methods = Core.Repository.Load(path);
 

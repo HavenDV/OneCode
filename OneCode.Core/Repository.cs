@@ -10,7 +10,9 @@ namespace OneCode.Core
     {
         public static Dictionary<string, Dictionary<string, string>> Load(string path)
         {
-            return Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories)
+            return Directory
+                .EnumerateFiles(path, "*.cs", SearchOption.AllDirectories)
+                .Where(value => !value.EndsWith("AssemblyInfo.cs"))
                 .ToDictionary(
                     filePath => filePath.Replace(path, string.Empty),
                     GetMethodsFromPath);
