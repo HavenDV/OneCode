@@ -31,7 +31,7 @@ namespace OneCode.Core
 
         public static CodeFile Load(string path, string baseFolder = null)
         {
-            if (baseFolder == null)
+            if (string.IsNullOrWhiteSpace(baseFolder))
             {
                 return new CodeFile
                 {
@@ -46,8 +46,10 @@ namespace OneCode.Core
                 ? relativePath.Substring(index + 1)
                 : relativePath;
             var targetFramework = relativePath.Replace(relativePathWithoutTargetFramework, string.Empty).TrimEnd('\\', '/');
-            var relativeFolder = Path.GetDirectoryName(relativePath);
-            var relativeFolderWithoutTargetFramework = relativeFolder?.Replace(targetFramework, string.Empty).TrimStart('\\', '/');
+            var relativeFolder = Path.GetDirectoryName(relativePath) ?? string.Empty;
+            var relativeFolderWithoutTargetFramework = !string.IsNullOrWhiteSpace(targetFramework)
+                ? relativeFolder.Replace(targetFramework, string.Empty).TrimStart('\\', '/')
+                : relativeFolder;
             var additionalNamespace = string.IsNullOrWhiteSpace(relativeFolderWithoutTargetFramework)
                 ? string.Empty
                 : $".{relativeFolderWithoutTargetFramework.Replace('\\', '.').Replace('/', '.')}";

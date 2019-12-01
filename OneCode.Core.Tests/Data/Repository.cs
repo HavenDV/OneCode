@@ -9,7 +9,9 @@ namespace OneCode.Core
     public static class Repository
     {
         /// <summary>
-        /// Version: 1.1.1.1
+        /// <![CDATA[Version: 1.1.1.1]]>
+        /// <![CDATA[Dependency: GetMethods(string path)]]>
+        /// <![CDATA[Dependency: GetMethods(string path)]]>
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>

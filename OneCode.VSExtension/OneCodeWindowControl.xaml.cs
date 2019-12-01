@@ -51,16 +51,20 @@ namespace OneCode.VsExtension
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
-            using (var dialog = new FolderBrowserDialog())
-            {
-                if (dialog.ShowDialog() != DialogResult.OK ||
-                    string.IsNullOrWhiteSpace(dialog.SelectedPath))
-                {
-                    return;
-                }
+            using var dialog = new FolderBrowserDialog();
 
-                Load(dialog.SelectedPath);
+            if (dialog.ShowDialog() != DialogResult.OK ||
+                string.IsNullOrWhiteSpace(dialog.SelectedPath))
+            {
+                return;
             }
+
+            Load(dialog.SelectedPath);
+        }
+
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            Load(Settings.Default.RepositoryPath);
         }
 
         private void Load(string path)

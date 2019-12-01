@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -24,6 +25,9 @@ namespace OneCode.Core.Tests
 
             Assert.AreEqual(Version.Parse("1.1.1.1"), code.Methods[0].Version);
             Assert.AreEqual(Version.Parse("1.0.0.0"), code.Methods[1].Version);
+
+            CollectionAssert.AreEqual(new List<string>{ "GetMethods(string path)", "GetMethods(string path)" }, code.Methods[0].Dependencies);
+            CollectionAssert.AreEqual(new List<string>(), code.Methods[1].Dependencies);
         }
 
         [TestMethod]
