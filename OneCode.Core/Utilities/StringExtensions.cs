@@ -51,7 +51,7 @@ namespace OneCode.Core.Utilities
         /// Retrieves the strings between the starting fragment and the ending.
         /// All available fragments are retrieved.
         /// Returns empty <see cref="List{T}"/> if nothing is found.
-        /// Version: 1.0.0.0
+        /// <![CDATA[Version: 1.0.0.2]]>
         /// </summary>
         /// <param name="text"></param>
         /// <param name="start"></param>
@@ -65,15 +65,17 @@ namespace OneCode.Core.Utilities
 
             var values = new List<string>();
 
+            var index2 = -end.Length;
             while (true)
             {
-                var index1 = text.IndexOf(start, StringComparison.Ordinal);
+                var index1 = text.IndexOf(start, index2 + end.Length, StringComparison.Ordinal);
                 if (index1 < 0)
                 {
                     return values;
                 }
 
-                var index2 = text.IndexOf(end, index1 + start.Length, StringComparison.Ordinal);
+                index1 += start.Length;
+                index2 = text.IndexOf(end, index1, StringComparison.Ordinal);
                 if (index2 < 0)
                 {
                     return values;

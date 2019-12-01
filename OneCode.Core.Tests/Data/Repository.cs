@@ -23,6 +23,11 @@ namespace OneCode.Core
                     GetMethods);
         }
 
+        /// <summary>
+        /// <![CDATA[Version: 55]]>
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         private static string[] GetMethods(string path)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(path);

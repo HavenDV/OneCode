@@ -99,7 +99,9 @@ namespace OneCode.Core
 
         public static Version GetVersion(string modifiersText)
         {
-            return Version.Parse(GetVersionText(modifiersText));
+            return Version.TryParse(GetVersionText(modifiersText), out var result)
+                ? result
+                : Version.Parse("1.0.0.0");
         }
 
         #endregion
