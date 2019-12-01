@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
+using OneCode.Core;
 using OneCode.VsExtension.Properties;
 
 namespace OneCode.VsExtension
@@ -12,7 +13,7 @@ namespace OneCode.VsExtension
     /// </summary>
     public partial class OneCodeWindowControl
     {
-        private Dictionary<string, Dictionary<string, string>> Methods { get; set; }
+        private Dictionary<string, List<Method>> Methods { get; set; }
 
         public ObservableCollection<Node> Nodes { get; set; }
 
@@ -62,15 +63,15 @@ namespace OneCode.VsExtension
             Settings.Default.RepositoryPath = path;
             Settings.Default.Save();
 
-            Methods = Core.Repository.Load(path);
+            Methods = Repository.Load(path);
 
             Nodes = new ObservableCollection<Node>(
                 Methods.Select(pair => new Node
                 {
                     Name = pair.Key,
-                    Nodes = new ObservableCollection<Node>(pair.Value.Select(i => new Node
+                    Nodes = new ObservableCollection<Node>(pair.Value.Select(method => new Node
                     {
-                        Name = i.Key,
+                        Name = method.Name,
                     }))
                 }));
 

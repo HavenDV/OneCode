@@ -15,12 +15,15 @@ namespace OneCode.Core.Tests
 
             var methods = Repository.GetMethods(text);
 
-            foreach (var (name, _) in methods)
+            foreach (var method in methods)
             {
-                Console.WriteLine(name);
+                Console.WriteLine(method.Name);
             }
 
             Assert.AreEqual(2, methods.Count);
+
+            Assert.AreEqual(Version.Parse("1.1.1.1"), methods[0].Version);
+            Assert.AreEqual(Version.Parse("1.0.0.0"), methods[1].Version);
         }
 
         [TestMethod]
@@ -31,9 +34,9 @@ namespace OneCode.Core.Tests
             foreach (var (path, methods) in dictionary)
             {
                 Console.WriteLine($"Path: {path}");
-                foreach (var (name, _) in methods)
+                foreach (var method in methods)
                 {
-                    Console.WriteLine($"- {name}");
+                    Console.WriteLine($"- {method.Name}");
                 }
             }
 

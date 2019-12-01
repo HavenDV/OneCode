@@ -8,6 +8,11 @@ namespace OneCode.Core
 {
     public static class Repository
     {
+        /// <summary>
+        /// Version: 1.1.1.1
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static Dictionary<string, string[]> Load(string path)
         {
             return Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories)
