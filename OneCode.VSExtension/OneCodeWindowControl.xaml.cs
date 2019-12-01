@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Forms;
+using EnvDTE;
+using Microsoft.VisualStudio.Shell;
 using OneCode.Core;
 using OneCode.VsExtension.Properties;
 
@@ -13,7 +17,7 @@ namespace OneCode.VsExtension
     /// </summary>
     public partial class OneCodeWindowControl
     {
-        private Dictionary<string, List<Method>> Methods { get; set; }
+        private Repository Repository { get; set; }
 
         public ObservableCollection<Node> Nodes { get; set; }
 
@@ -63,25 +67,78 @@ namespace OneCode.VsExtension
             Settings.Default.RepositoryPath = path;
             Settings.Default.Save();
 
-            Methods = Repository.Load(path);
+            Repository = Repository.Load(path);
 
             Nodes = new ObservableCollection<Node>(
-                Methods.Select(pair => new Node
+                Repository.Files.Select(file => new Node
                 {
-                    Name = pair.Key,
-                    Nodes = new ObservableCollection<Node>(pair.Value.Select(method => new Node
+                    Name = file.RelativePath,
+                    Nodes = new ObservableCollection<Node>(file.Code.Methods.Select(method => new Node
                     {
                         Name = method.Name,
+                        Method = method,
+                        CodeFile = file,
                     }))
                 }));
 
             TreeView.ItemsSource = Nodes;
+        }
+
+        private void AddItem(Node node)
+        {
+            if (node?.CodeFile == null)
+            {
+                return;
+            }
+
+            var dte = (DTE)Package.GetGlobalService(typeof(EnvDTE.DTE));
+            var project = dte.Solution.Projects.Item(1);
+            var selectedProject = dte.SelectedItems.OfType<Project>().FirstOrDefault();
+
+            //var solution = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
+            //IVsHierarchy hierarchy;
+            //solution.GetProjectOfUniqueName(project.UniqueName, out hierarchy);
+
+            var projectDirectory = Path.GetDirectoryName(project.FileName);
+            var fullPath = Path.Combine(projectDirectory, node.CodeFile.RelativePath.TrimStart('\\', '/'));
+            var directory = Path.GetDirectoryName(fullPath);
+
+            node.CodeFile.Code.NamespaceName = project.Name;
+            node.CodeFile.Code.Methods = new List<Method> { node.Method };
+
+            if (!File.Exists(fullPath))
+            {
+                Directory.CreateDirectory(directory);
+
+                File.WriteAllText(fullPath, node.CodeFile.Code.Save());
+            }
+            else
+            {
+                CodeFile
+                    .Load(fullPath)
+                    .Merge(node.CodeFile)
+                    .Save();
+            }
+
+            project.ProjectItems.AddFromFile(fullPath);
+
+            dte.ItemOperations.OpenFile(fullPath, Constants.vsViewKindTextView);
+        }
+
+        private void TreeView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var item = sender as TreeViewItem;
+            var node = item?.Header as Node;
+
+            AddItem(node);
         }
     }
 
     public class Node
     {
         public string Name { get; set; }
+        public Method Method { get; set; }
+        public CodeFile CodeFile { get; set; }
         public ObservableCollection<Node> Nodes { get; set; }
     }
 }

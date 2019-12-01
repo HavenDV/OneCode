@@ -12,35 +12,56 @@ namespace OneCode.Core.Tests
         public void GetMethodsTest()
         {
             var text = ResourcesUtilities.ReadFile("Repository.cs");
+            var code = Code.Load(text);
 
-            var methods = Repository.GetMethods(text);
-
-            foreach (var method in methods)
+            foreach (var method in code.Methods)
             {
                 Console.WriteLine(method.Name);
             }
 
-            Assert.AreEqual(2, methods.Count);
+            Assert.AreEqual(2, code.Methods.Count);
 
-            Assert.AreEqual(Version.Parse("1.1.1.1"), methods[0].Version);
-            Assert.AreEqual(Version.Parse("1.0.0.0"), methods[1].Version);
+            Assert.AreEqual(Version.Parse("1.1.1.1"), code.Methods[0].Version);
+            Assert.AreEqual(Version.Parse("1.0.0.0"), code.Methods[1].Version);
         }
 
         [TestMethod]
-        public void LoadTest()
+        public void RepositoryLoadTest()
         {
-            var dictionary = Repository.Load("../../../../OneCode.Core");
+            var repository = Repository.Load("../../../../OneCode.Core");
 
-            foreach (var (path, methods) in dictionary)
+            foreach (var file in repository.Files)
             {
-                Console.WriteLine($"Path: {path}");
-                foreach (var method in methods)
+                Console.WriteLine($"Path: {file.RelativePath}");
+
+                foreach (var method in file.Code.Methods)
                 {
                     Console.WriteLine($"- {method.Name}");
                 }
             }
 
-            Assert.IsTrue(dictionary.Any());
+            Assert.IsTrue(repository.Files.Any());
+        }
+
+        [TestMethod]
+        public void CodeSaveTest()
+        {
+            var text = ResourcesUtilities.ReadFile("Repository.cs");
+            var code = Code.Load(text);
+
+            Assert.AreEqual(2, code.Methods.Count);
+            Assert.AreEqual("OneCode.Core", code.NamespaceName);
+
+            code.NamespaceName = "TEST";
+            code.Methods.RemoveAt(0);
+
+            var newCodeText = code.Save();
+            Console.WriteLine(newCodeText); 
+            
+            code = Code.Load(newCodeText);
+
+            Assert.AreEqual(1, code.Methods.Count);
+            Assert.AreEqual("TEST", code.NamespaceName);
         }
     }
 }
