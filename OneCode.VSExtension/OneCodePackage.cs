@@ -27,7 +27,9 @@ namespace OneCode.VSExtension
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(PackageGuidString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideToolWindow(typeof(OneCodeWindow))]
+    [ProvideToolWindow(typeof(OneCodeWindow),
+        Style = VsDockStyle.Tabbed,
+        Window = "3ae79031-e1bc-11d0-8f78-00a0c9110057")]
     public sealed class OneCodePackage : AsyncPackage
     {
         /// <summary>
