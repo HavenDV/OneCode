@@ -59,7 +59,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -86,6 +85,26 @@
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
     <Content Include="Resources\OneCodeWindowCommand.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Dependencies\Microsoft.CodeAnalysis.CSharp.dll">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>\</VSIXSubPath>
+    </Content>
+    <Content Include="Dependencies\Microsoft.CodeAnalysis.dll">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>\</VSIXSubPath>
+    </Content>
+    <Content Include="Dependencies\System.Collections.Immutable.dll">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>\</VSIXSubPath>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OneCode.Core\OneCode.Core.csproj">
+      <Project>{67fcae5c-5939-47a9-bf9d-86943c077bb4}</Project>
+      <Name>OneCode.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
