@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.VisualStudio.Shell;
+using OneCode.VsExtension;
 using Task = System.Threading.Tasks.Task;
 
 namespace OneCode.VSExtension
@@ -25,6 +26,8 @@ namespace OneCode.VSExtension
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(PackageGuidString)]
+    [ProvideMenuResource("Menus.ctmenu", 1)]
+    [ProvideToolWindow(typeof(OneCodeWindow))]
     public sealed class OneCodePackage : AsyncPackage
     {
         /// <summary>
@@ -46,6 +49,7 @@ namespace OneCode.VSExtension
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+            await OneCodeWindowCommand.InitializeAsync(this);
         }
 
         #endregion
