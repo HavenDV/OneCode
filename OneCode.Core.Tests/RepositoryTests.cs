@@ -13,7 +13,7 @@ namespace OneCode.Core.Tests
         [TestMethod]
         public void GetMethodsTest()
         {
-            var text = ResourcesUtilities.ReadFile("Repository.cs");
+            var text = ResourcesUtilities.ReadFileAsString("Repository.cs");
             var code = Code.Load(text);
 
             foreach (var method in code.Methods)
@@ -73,7 +73,7 @@ namespace OneCode.Core.Tests
         [TestMethod]
         public void CodeSaveTest()
         {
-            var text = ResourcesUtilities.ReadFile("Repository.cs");
+            var text = ResourcesUtilities.ReadFileAsString("Repository.cs");
             var code = Code.Load(text);
 
             Assert.AreEqual(2, code.Methods.Count);
