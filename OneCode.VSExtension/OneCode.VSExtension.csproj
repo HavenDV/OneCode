@@ -59,6 +59,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="SimpleClassifier.cs" />
+    <Compile Include="SimpleClassifierClassificationDefinition.cs" />
+    <Compile Include="SimpleClassifierFormat.cs" />
+    <Compile Include="SimpleClassifierProvider.cs" />
     <Compile Include="Utilities\ProjectExtensions.cs" />
     <Compile Include="Utilities\DteExtensions.cs" />
   </ItemGroup>
@@ -73,10 +77,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
