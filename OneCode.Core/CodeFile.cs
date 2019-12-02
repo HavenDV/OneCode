@@ -33,6 +33,25 @@ namespace OneCode.Core
             File.WriteAllText(FullPath, Code?.Save());
         }
 
+        public void SaveTo(string path)
+        {
+            if (File.Exists(path))
+            {
+                Load(path)
+                    .Merge(this)
+                    .Save();
+                return;
+            }
+
+            var directory = Path.GetDirectoryName(path);
+            if (directory != null)
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            File.WriteAllText(path, Code?.Save());
+        }
+
         public static CodeFile Load(string path, string? baseFolder = null)
         {
             if (string.IsNullOrWhiteSpace(baseFolder))

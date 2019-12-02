@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using OneCode.Core;
 using OneCode.VsExtension.Properties;
@@ -129,8 +128,6 @@ namespace OneCode.VsExtension
                 return;
             }
 
-            ThreadHelper.ThrowIfNotOnUIThread();
-
             var dte = this.GetDte();
             var project = dte.GetActiveProject();
 
@@ -138,11 +135,10 @@ namespace OneCode.VsExtension
             //IVsHierarchy hierarchy;
             //solution.GetProjectOfUniqueName(project.UniqueName, out hierarchy);
 
-            var projectDirectory = Path.GetDirectoryName(project.FileName);
+            var projectDirectory = project.GetDirectory();
             var fullPath = Path.Combine(projectDirectory ?? string.Empty, node.CodeFile.RelativePathWithoutTargetFramework);
-            var directory = Path.GetDirectoryName(fullPath);
 
-            node.CodeFile.Code.NamespaceName = project.Name + node.CodeFile.AdditionalNamespace;
+            node.CodeFile.Code.NamespaceName = project.GetDefaultNamespace() + node.CodeFile.AdditionalNamespace;
             node.CodeFile.Code.Classes = new List<Class> { node.Class };
 
             if (node.Method != null)
@@ -150,26 +146,11 @@ namespace OneCode.VsExtension
                 node.CodeFile.Code.Classes[0].Methods = new List<Method> { node.Method };
             }
 
-            if (!File.Exists(fullPath))
-            {
-                if (directory != null)
-                {
-                    Directory.CreateDirectory(directory);
-                }
+            node.CodeFile.SaveTo(fullPath);
 
-                File.WriteAllText(fullPath, node.CodeFile.Code.Save());
-            }
-            else
-            {
-                CodeFile
-                    .Load(fullPath)
-                    .Merge(node.CodeFile)
-                    .Save();
-            }
+            project.AddItemFromFile(fullPath);
 
-            project.ProjectItems.AddFromFile(fullPath);
-
-            dte.ItemOperations.OpenFile(fullPath, Constants.vsViewKindTextView);
+            dte.OpenFileAsText(fullPath);
         }
 
         private void TreeView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

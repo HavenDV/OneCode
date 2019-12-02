@@ -7,11 +7,11 @@ namespace OneCode.VsExtension.Utilities
 {
     public static class DteExtensions
     {
-        public static Project GetActiveProject(this DTE source)
+        public static Project GetActiveProject(this DTE dte)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            return (source.ActiveSolutionProjects as Array)?
+            return (dte.ActiveSolutionProjects as Array)?
                 .Cast<Project>()
                 .FirstOrDefault();
         }
@@ -21,6 +21,13 @@ namespace OneCode.VsExtension.Utilities
             ThreadHelper.ThrowIfNotOnUIThread();
 
             return (DTE)Package.GetGlobalService(typeof(DTE));
+        }
+
+        public static Window OpenFileAsText(this DTE dte, string path)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            return dte.ItemOperations.OpenFile(path, Constants.vsViewKindTextView);
         }
     }
 }
