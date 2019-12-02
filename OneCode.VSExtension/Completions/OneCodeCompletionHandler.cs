@@ -28,11 +28,15 @@ namespace OneCode.VsExtension.Completions
 
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             return _nextCommandHandler.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
         }
 
         public int Exec(ref Guid pguidCmdGroup, uint nCmdId, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             if (VsShellUtilities.IsInAutomationFunction(Provider.ServiceProvider))
             {
                 return _nextCommandHandler.Exec(ref pguidCmdGroup, nCmdId, nCmdexecopt, pvaIn, pvaOut);

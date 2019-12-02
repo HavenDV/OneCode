@@ -14,8 +14,14 @@ namespace OneCode.VsExtension.Completions
     [TextViewRole(PredefinedTextViewRoles.Editable)]
     internal class OneCodeCompletionHandlerProvider : IVsTextViewCreationListener
     {
+
+#pragma warning disable 649
+
         [Import]
         internal IVsEditorAdaptersFactoryService AdapterService;
+
+#pragma warning restore 649
+
         [Import]
         internal ICompletionBroker CompletionBroker { get; set; }
         [Import]
