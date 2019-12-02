@@ -47,6 +47,10 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="OneCodeCompletionCommandHandler.cs" />
+    <Compile Include="OneCodeCompletionHandler.cs" />
+    <Compile Include="OneCodeCompletionSource.cs" />
+    <Compile Include="OneCodeCompletionSourceProvider.cs" />
     <Compile Include="OneCodeWindow.cs" />
     <Compile Include="OneCodeWindowCommand.cs" />
     <Compile Include="OneCodeWindowControl.xaml.cs">
@@ -102,6 +106,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TextFile1.txt" />
     <VSCTCompile Include="OneCodePackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
