@@ -15,5 +15,12 @@ namespace OneCode.VsExtension.Utilities
                 .Cast<Project>()
                 .FirstOrDefault();
         }
+
+        public static DTE GetDte(this object _)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            return (DTE)Package.GetGlobalService(typeof(DTE));
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace OneCode.Core
             MethodNamesToSave = methodNamesToSave;
         }
 
-        public override SyntaxNode VisitMethodDeclaration(MethodDeclarationSyntax node)
+        public override SyntaxNode? VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
             return MethodNamesToSave.Contains(node.Identifier.Text + node.ParameterList)
                 ? base.VisitMethodDeclaration(node)

@@ -14,17 +14,16 @@ namespace OneCode.Core
         public const string SpecialPrefix = "<![CDATA[";
         public const string SpecialPostfix = "]]>";
 
-        public string NamespaceName { get; set; }
-        public string ClassName { get; set; }
-        public string Text { get; set; }
+        public string? NamespaceName { get; set; } = string.Empty;
+        public string FullText { get; set; } = string.Empty;
 
-        public List<Method> Methods { get; set; }
+        public List<Class> Classes { get; set; } = new List<Class>();
 
         public Code Merge(Code other)
         {
-            Text = other.Text;
-            Methods = Methods
-                .Concat(other.Methods)
+            FullText = other.FullText;
+            Classes = Classes
+                .Concat(other.Classes)
                 .Distinct()
                 .ToList();
 
@@ -33,7 +32,7 @@ namespace OneCode.Core
 
         public string Save()
         {
-            var tree = CSharpSyntaxTree.ParseText(Text);
+            var tree = CSharpSyntaxTree.ParseText(FullText);
             var root = (CompilationUnitSyntax)tree.GetRoot();
 
             var namespaceSyntax = root
@@ -46,7 +45,8 @@ namespace OneCode.Core
                 root = root.ReplaceNode(namespaceSyntax, namespaceSyntax.WithName(IdentifierName(NamespaceName + Environment.NewLine)));
             }
 
-            var rewriter = new MethodsRewriter(Methods.Select(i => i.Name).Concat(Methods.SelectMany(i => i.Dependencies)).ToArray());
+            var methods = Classes.SelectMany(i => i.Methods).ToList();
+            var rewriter = new MethodsRewriter(methods.Select(i => i.Name).Concat(methods.SelectMany(i => i.Dependencies)).ToArray());
             var result = rewriter.Visit(root);
 
             return result.ToFullString();
@@ -60,29 +60,35 @@ namespace OneCode.Core
             var syntaxTree = CSharpSyntaxTree.ParseText(text);
             var root = syntaxTree.GetRoot();
 
-            file.Text = text;
+            file.FullText = text;
             file.NamespaceName = root
                 .DescendantNodes()
                 .OfType<NamespaceDeclarationSyntax>()
                 .FirstOrDefault()
                 ?.Name.ToString();
-            file.ClassName = root
+            file.Classes = root
                 .DescendantNodes()
                 .OfType<ClassDeclarationSyntax>()
-                .FirstOrDefault()
-                ?.Identifier.Text;
-
-            file.Methods = root
-                .DescendantNodes()
-                .OfType<MethodDeclarationSyntax>()
-                .Select(syntax => new Method
+                .Select(classSyntax => new Class
                 {
-                    Name = syntax.Identifier.Text + syntax.ParameterList,
-                    FullText = syntax.ToFullString(),
-                    Version = GetVersion(syntax.Modifiers.ToFullString()),
-                    Dependencies = GetDependencies(syntax.Modifiers.ToFullString()),
-                    IsStatic = syntax.Modifiers.Any(SyntaxKind.StaticKeyword),
-                    IsExtension = syntax.ParameterList.Parameters.ToString().StartsWith("this"),
+                    Name = classSyntax.Identifier.Text,
+                    FullText = classSyntax.ToFullString(),
+                    Version = GetVersion(classSyntax.Modifiers.ToFullString()),
+                    Dependencies = GetDependencies(classSyntax.Modifiers.ToFullString()),
+                    IsStatic = classSyntax.Modifiers.Any(SyntaxKind.StaticKeyword),
+                    Methods = classSyntax
+                        .DescendantNodes()
+                        .OfType<MethodDeclarationSyntax>()
+                        .Select(methodSyntax => new Method
+                        {
+                            Name = methodSyntax.Identifier.Text + methodSyntax.ParameterList,
+                            FullText = methodSyntax.ToFullString(),
+                            Version = GetVersion(methodSyntax.Modifiers.ToFullString()),
+                            Dependencies = GetDependencies(methodSyntax.Modifiers.ToFullString()),
+                            IsStatic = methodSyntax.Modifiers.Any(SyntaxKind.StaticKeyword),
+                            IsExtension = methodSyntax.ParameterList.Parameters.ToString().StartsWith("this"),
+                        })
+                        .ToList()
                 })
                 .ToList();
 

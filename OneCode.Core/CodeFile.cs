@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace OneCode.Core
 {
@@ -15,21 +16,24 @@ namespace OneCode.Core
 
         public string AdditionalNamespace { get; set; } = string.Empty;
 
-        public Code Code { get; set; }
+        public Code? Code { get; set; }
 
         public CodeFile Merge(CodeFile other)
         {
-            Code = Code.Merge(other.Code);
+            other = other ?? throw new ArgumentNullException(nameof(other));
+            var code = other.Code ?? throw new ArgumentException("other.Code is null", nameof(other));
+
+            Code = Code?.Merge(code);
 
             return this;
         }
 
         public void Save()
         {
-            File.WriteAllText(FullPath, Code.Save());
+            File.WriteAllText(FullPath, Code?.Save());
         }
 
-        public static CodeFile Load(string path, string baseFolder = null)
+        public static CodeFile Load(string path, string? baseFolder = null)
         {
             if (string.IsNullOrWhiteSpace(baseFolder))
             {

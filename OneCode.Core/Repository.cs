@@ -6,8 +6,8 @@ namespace OneCode.Core
 {
     public class Repository
     {
-        public string Folder { get; set; }
-        public List<CodeFile> Files { get; set; }
+        public string Folder { get; set; } = string.Empty;
+        public List<CodeFile> Files { get; set; } = new List<CodeFile>();
 
         public static Repository Load(string folder)
         {

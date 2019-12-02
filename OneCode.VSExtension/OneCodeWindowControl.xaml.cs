@@ -74,17 +74,49 @@ namespace OneCode.VsExtension
 
             Repository = Repository.Load(path);
 
-            Nodes = new ObservableCollection<Node>(
-                Repository.Files.Select(file => new Node
+            Nodes = new ObservableCollection<Node>(new[]
+            {
+                new Node
                 {
-                    Name = file.RelativePath,
-                    Nodes = new ObservableCollection<Node>(file.Code.Methods.Select(method => new Node
-                    {
-                        Name = method.Name,
-                        Method = method,
-                        CodeFile = file,
-                    }))
-                }));
+                    Name = "Static methods",
+                    Nodes = new ObservableCollection<Node>(Repository.Files
+                        .Where(file => file.Code.Classes.Any(@class => @class.IsStatic && @class.Methods.Any(method => method.IsStatic)))
+                        .Select(file => new Node
+                        {
+                            Name = file.RelativePath,
+                            Nodes = new ObservableCollection<Node>(file.Code.Classes
+                                .Where(@class => @class.IsStatic || @class.Methods.Any(method => method.IsStatic))
+                                .Select(@class => @class.Methods.
+                                    Select(method => new Node
+                                    {
+                                        Name = $"{@class.Name}.{method.Name}",
+                                        Method = method,
+                                        Class = @class,
+                                        CodeFile = file,
+                                    }))
+                                .SelectMany(i => i)),
+                        })),
+                },
+                new Node
+                {
+                    Name = "Classes",
+                    Nodes = new ObservableCollection<Node>(Repository.Files
+                        .Where(file => file.Code.Classes.Any(@class => !@class.IsStatic))
+                        .Select(file => new Node
+                        {
+                            Name = file.RelativePath,
+                            Nodes = new ObservableCollection<Node>(file.Code.Classes
+                                .Where(@class => !@class.IsStatic)
+                                .Select(@class => new Node
+                                {
+                                    Name = @class.Name,
+                                    Class = @class,
+                                    CodeFile = file,
+                                })),
+                        })),
+                },
+            });
+                
 
             TreeView.ItemsSource = Nodes;
         }
@@ -99,7 +131,7 @@ namespace OneCode.VsExtension
 
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var dte = (DTE)Package.GetGlobalService(typeof(DTE));
+            var dte = this.GetDte();
             var project = dte.GetActiveProject();
 
             //var solution = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
@@ -111,7 +143,12 @@ namespace OneCode.VsExtension
             var directory = Path.GetDirectoryName(fullPath);
 
             node.CodeFile.Code.NamespaceName = project.Name + node.CodeFile.AdditionalNamespace;
-            node.CodeFile.Code.Methods = new List<Method> { node.Method };
+            node.CodeFile.Code.Classes = new List<Class> { node.Class };
+
+            if (node.Method != null)
+            {
+                node.CodeFile.Code.Classes[0].Methods = new List<Method> { node.Method };
+            }
 
             if (!File.Exists(fullPath))
             {
@@ -150,6 +187,7 @@ namespace OneCode.VsExtension
     {
         public string Name { get; set; }
         public Method Method { get; set; }
+        public Class Class { get; set; }
         public CodeFile CodeFile { get; set; }
         public ObservableCollection<Node> Nodes { get; set; }
     }
