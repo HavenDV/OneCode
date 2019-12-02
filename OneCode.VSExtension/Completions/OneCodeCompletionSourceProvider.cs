@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Operations;
 using Microsoft.VisualStudio.Utilities;
 
-namespace OneCode.VsExtension.Completion
+namespace OneCode.VsExtension.Completions
 {
     [Export(typeof(ICompletionSourceProvider))]
     [ContentType("plaintext")]

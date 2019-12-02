@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 
-namespace OneCode.VsExtension.Completion
+namespace OneCode.VsExtension.Completions
 {
     internal class OneCodeCompletionCommandHandler : IOleCommandTarget
     {

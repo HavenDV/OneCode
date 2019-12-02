@@ -3,7 +3,7 @@ using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell;
 using Task = System.Threading.Tasks.Task;
 
-namespace OneCode.VsExtension
+namespace OneCode.VsExtension.Windows
 {
     /// <summary>
     /// Command handler

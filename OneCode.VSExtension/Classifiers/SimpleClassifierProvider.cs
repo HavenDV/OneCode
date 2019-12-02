@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
 
-namespace OneCode.VsExtension.Classifier
+namespace OneCode.VsExtension.Classifiers
 {
     /// <summary>
     /// Classifier provider. It adds the classifier to the set of classifiers.

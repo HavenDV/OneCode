@@ -10,7 +10,7 @@ using OneCode.Core;
 using OneCode.VsExtension.Properties;
 using OneCode.VsExtension.Utilities;
 
-namespace OneCode.VsExtension
+namespace OneCode.VsExtension.Windows
 {
     /// <summary>
     /// Interaction logic for OneCodeWindowControl.

@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.VisualStudio.Shell;
+using OneCode.VsExtension.Windows;
 using Task = System.Threading.Tasks.Task;
 
 namespace OneCode.VsExtension

@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
 
-namespace OneCode.VsExtension.Completion
+namespace OneCode.VsExtension.Completions
 {
     [Export(typeof(IVsTextViewCreationListener))]
     [Name("OneCode Token Completion Handler")]

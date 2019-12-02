@@ -47,13 +47,13 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Completion\OneCodeCompletionCommandHandler.cs" />
-    <Compile Include="Completion\OneCodeCompletionHandler.cs" />
-    <Compile Include="Completion\OneCodeCompletionSource.cs" />
-    <Compile Include="Completion\OneCodeCompletionSourceProvider.cs" />
-    <Compile Include="OneCodeWindow.cs" />
-    <Compile Include="OneCodeWindowCommand.cs" />
-    <Compile Include="OneCodeWindowControl.xaml.cs">
+    <Compile Include="Completions\OneCodeCompletionCommandHandler.cs" />
+    <Compile Include="Completions\OneCodeCompletionHandler.cs" />
+    <Compile Include="Completions\OneCodeCompletionSource.cs" />
+    <Compile Include="Completions\OneCodeCompletionSourceProvider.cs" />
+    <Compile Include="Windows\OneCodeWindow.cs" />
+    <Compile Include="Windows\OneCodeWindowCommand.cs" />
+    <Compile Include="Windows\OneCodeWindowControl.xaml.cs">
       <DependentUpon>OneCodeWindowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,10 +63,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Classifier\SimpleClassifier.cs" />
-    <Compile Include="Classifier\SimpleClassifierClassificationDefinition.cs" />
-    <Compile Include="Classifier\SimpleClassifierFormat.cs" />
-    <Compile Include="Classifier\SimpleClassifierProvider.cs" />
+    <Compile Include="Classifiers\SimpleClassifier.cs" />
+    <Compile Include="Classifiers\SimpleClassifierClassificationDefinition.cs" />
+    <Compile Include="Classifiers\SimpleClassifierFormat.cs" />
+    <Compile Include="Classifiers\SimpleClassifierProvider.cs" />
     <Compile Include="Utilities\ProjectExtensions.cs" />
     <Compile Include="Utilities\DteExtensions.cs" />
   </ItemGroup>
@@ -100,13 +100,12 @@
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.3.2099" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="OneCodeWindowControl.xaml">
+    <Page Include="Windows\OneCodeWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TextFile1.txt" />
     <VSCTCompile Include="OneCodePackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>

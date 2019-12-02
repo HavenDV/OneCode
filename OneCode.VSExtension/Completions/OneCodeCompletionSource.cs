@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.Text;
 using OneCode.Core;
 using OneCode.VsExtension.Properties;
 
-namespace OneCode.VsExtension.Completion
+namespace OneCode.VsExtension.Completions
 {
     internal class OneCodeCompletionSource : ICompletionSource
     {
