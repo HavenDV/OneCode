@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 
-namespace OneCode.VsExtension
+namespace OneCode.VsExtension.Classifier
 {
     /// <summary>
     /// Classifier that classifies all text as an instance of the "SimpleClassifier" classification type.

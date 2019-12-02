@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
 
-namespace OneCode.VsExtension
+namespace OneCode.VsExtension.Classifier
 {
     /// <summary>
     /// Classification type definition export for SimpleClassifier

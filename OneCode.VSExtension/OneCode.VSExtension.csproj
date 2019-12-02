@@ -47,10 +47,10 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="OneCodeCompletionCommandHandler.cs" />
-    <Compile Include="OneCodeCompletionHandler.cs" />
-    <Compile Include="OneCodeCompletionSource.cs" />
-    <Compile Include="OneCodeCompletionSourceProvider.cs" />
+    <Compile Include="Completion\OneCodeCompletionCommandHandler.cs" />
+    <Compile Include="Completion\OneCodeCompletionHandler.cs" />
+    <Compile Include="Completion\OneCodeCompletionSource.cs" />
+    <Compile Include="Completion\OneCodeCompletionSourceProvider.cs" />
     <Compile Include="OneCodeWindow.cs" />
     <Compile Include="OneCodeWindowCommand.cs" />
     <Compile Include="OneCodeWindowControl.xaml.cs">
@@ -63,10 +63,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="SimpleClassifier.cs" />
-    <Compile Include="SimpleClassifierClassificationDefinition.cs" />
-    <Compile Include="SimpleClassifierFormat.cs" />
-    <Compile Include="SimpleClassifierProvider.cs" />
+    <Compile Include="Classifier\SimpleClassifier.cs" />
+    <Compile Include="Classifier\SimpleClassifierClassificationDefinition.cs" />
+    <Compile Include="Classifier\SimpleClassifierFormat.cs" />
+    <Compile Include="Classifier\SimpleClassifierProvider.cs" />
     <Compile Include="Utilities\ProjectExtensions.cs" />
     <Compile Include="Utilities\DteExtensions.cs" />
   </ItemGroup>
