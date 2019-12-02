@@ -28,6 +28,12 @@ namespace OneCode.Core.Tests
 
             CollectionAssert.AreEqual(new List<string>{ "GetMethods(string path)", "GetMethods(string path)" }, code.Methods[0].Dependencies);
             CollectionAssert.AreEqual(new List<string>(), code.Methods[1].Dependencies);
+
+            Assert.AreEqual(false, code.Methods[0].IsStatic);
+            Assert.AreEqual(true, code.Methods[1].IsStatic);
+
+            Assert.AreEqual(false, code.Methods[0].IsExtension);
+            Assert.AreEqual(true, code.Methods[1].IsExtension);
         }
 
         [TestMethod]

@@ -15,7 +15,7 @@ namespace OneCode.Core
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static Dictionary<string, string[]> Load(string path)
+        public Dictionary<string, string[]> Load(string path)
         {
             return Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories)
                 .ToDictionary(
@@ -28,7 +28,7 @@ namespace OneCode.Core
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private static string[] GetMethods(string path)
+        private static string[] GetMethods(this string path)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(path);
             var root = syntaxTree.GetRoot();

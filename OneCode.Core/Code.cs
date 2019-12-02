@@ -81,6 +81,8 @@ namespace OneCode.Core
                     FullText = syntax.ToFullString(),
                     Version = GetVersion(syntax.Modifiers.ToFullString()),
                     Dependencies = GetDependencies(syntax.Modifiers.ToFullString()),
+                    IsStatic = syntax.Modifiers.Any(SyntaxKind.StaticKeyword),
+                    IsExtension = syntax.ParameterList.Parameters.ToString().StartsWith("this"),
                 })
                 .ToList();
 
