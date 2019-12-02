@@ -13,7 +13,7 @@ namespace OneCode.VsExtension
         /// <summary>
         /// Classification type.
         /// </summary>
-        private readonly IClassificationType classificationType;
+        private IClassificationType ClassificationType { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SimpleClassifier"/> class.
@@ -21,7 +21,7 @@ namespace OneCode.VsExtension
         /// <param name="registry">Classification registry.</param>
         internal SimpleClassifier(IClassificationTypeRegistryService registry)
         {
-            this.classificationType = registry.GetClassificationType("SimpleClassifier");
+            ClassificationType = registry.GetClassificationType("SimpleClassifier");
         }
 
         #region IClassifier
@@ -51,12 +51,10 @@ namespace OneCode.VsExtension
         /// <returns>A list of ClassificationSpans that represent spans identified to be of this classification.</returns>
         public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span)
         {
-            var result = new List<ClassificationSpan>()
+            return new List<ClassificationSpan>
             {
-                new ClassificationSpan(new SnapshotSpan(span.Snapshot, new Span(span.Start, span.Length)), this.classificationType)
+                new ClassificationSpan(new SnapshotSpan(span.Snapshot, new Span(span.Start, span.Length)), ClassificationType)
             };
-
-            return result;
         }
 
         #endregion

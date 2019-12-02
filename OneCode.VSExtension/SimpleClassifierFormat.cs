@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.Composition;
-using System.Windows.Media;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
 
@@ -21,9 +20,9 @@ namespace OneCode.VsExtension
         /// </summary>
         public SimpleClassifierFormat()
         {
-            this.DisplayName = "SimpleClassifier"; // Human readable version of the name
-            this.BackgroundColor = Colors.BlueViolet;
-            this.TextDecorations = System.Windows.TextDecorations.Underline;
+            DisplayName = "SimpleClassifier"; // Human readable version of the name
+            //BackgroundColor = Colors.BlueViolet;
+            //TextDecorations = System.Windows.TextDecorations.Underline;
         }
     }
 }
