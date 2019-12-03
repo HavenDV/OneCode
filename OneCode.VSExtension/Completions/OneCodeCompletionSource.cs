@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
@@ -19,7 +18,7 @@ namespace OneCode.VsExtension.Completions
 {
     public class OneCodeCompletionSource : IAsyncCompletionSource
     {
-        private static ImageElement ImageElement { get; } = new ImageElement(new ImageId(new Guid("ae27a6b0-e345-4288-96df-5eaf394ee369"), KnownImageIds.AddMethod), "Add Method Icon");
+        private static ImageElement ImageElement { get; } = new ImageElement(new ImageId(KnownImageIds.ImageCatalogGuid, KnownImageIds.AddMethod));
         private ImmutableArray<CompletionItem>? Items { get; set; }
         private ImmutableArray<CompletionFilter>? Filters { get; set; }
         private ImmutableArray<ImageElement>? Images { get; set; }
@@ -72,7 +71,7 @@ namespace OneCode.VsExtension.Completions
                 Repositories ??= await OneCodePackage.Repositories.GetValueAsync(token);
                 Repositories.Changed += (sender, args) => Items = GetActualItems().ToImmutableArray();
             }
-
+            
             Filters ??= ImmutableArray.Create(new CompletionFilter("OneCode", "O", ImageElement));
             Images ??= ImmutableArray.Create<ImageElement>();
             Items ??= GetActualItems()?.ToImmutableArray();
