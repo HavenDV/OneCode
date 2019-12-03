@@ -1,22 +1,21 @@
-﻿using System.ComponentModel.Composition;
-using Microsoft.VisualStudio.Language.Intellisense;
-using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Operations;
+﻿using System;
+using System.ComponentModel.Composition;
+using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion;
+using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 
 namespace OneCode.VsExtension.Completions
 {
-    [Export(typeof(ICompletionSourceProvider))]
-    [ContentType("text")]
-    [Name("OneCode completion provider")]
-    internal class OneCodeCompletionSourceProvider : ICompletionSourceProvider
+    [Export(typeof(IAsyncCompletionSourceProvider))]
+    [ContentType("CSharp")]
+    [Name("Hello World completion item source")]
+    internal class OneCodeCompletionSourceProvider : IAsyncCompletionSourceProvider
     {
-        [Import]
-        internal ITextStructureNavigatorSelectorService NavigatorService { get; set; }
+        private Lazy<OneCodeCompletionSourceProvider> Source { get; } = new Lazy<OneCodeCompletionSourceProvider>();
 
-        public ICompletionSource TryCreateCompletionSource(ITextBuffer textBuffer)
+        public IAsyncCompletionSource GetOrCreate(ITextView textView)
         {
-            return new OneCodeCompletionSource(this, textBuffer);
+            return Source.Value;
         }
     }
 }

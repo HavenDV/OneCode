@@ -47,7 +47,7 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Completions\OneCodeCompletionCommandHandler.cs" />
+    <Compile Include="Completions\OneCodeCompletionHandlerProvider.cs" />
     <Compile Include="Completions\OneCodeCompletionHandler.cs" />
     <Compile Include="Completions\OneCodeCompletionSource.cs" />
     <Compile Include="Completions\OneCodeCompletionSourceProvider.cs" />

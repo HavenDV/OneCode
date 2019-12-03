@@ -1,66 +1,80 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
-using Microsoft.VisualStudio.Language.Intellisense;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.VisualStudio.Core.Imaging;
+using Microsoft.VisualStudio.Imaging;
+using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion;
+using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion.Data;
+using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Adornments;
 using OneCode.Core;
 using OneCode.VsExtension.Properties;
 
 namespace OneCode.VsExtension.Completions
 {
-    internal class OneCodeCompletionSource : ICompletionSource
+    public class OneCodeCompletionSource : IAsyncCompletionSource
     {
-        private OneCodeCompletionSourceProvider SourceProvider { get; }
-        private ITextBuffer TextBuffer { get; }
-        private List<Completion> Completions { get; set; }
-        private bool IsDisposed { get; set; }
+        private static ImageElement CompletionItemIcon { get; } = new ImageElement(new ImageId(new Guid("ae27a6b0-e345-4288-96df-5eaf394ee369"), KnownImageIds.AddMethod), "Add Method Icon");
+        private ImmutableArray<CompletionItem> Items { get; }
+        private ImmutableArray<CompletionFilter> Filters { get; }
+        private ImmutableArray<ImageElement> Images { get; }
 
-        public OneCodeCompletionSource(OneCodeCompletionSourceProvider sourceProvider, ITextBuffer textBuffer)
-        {
-            SourceProvider = sourceProvider;
-            TextBuffer = textBuffer;
-        }
-
-        void ICompletionSource.AugmentCompletionSession(ICompletionSession session, IList<CompletionSet> completionSets)
+        public OneCodeCompletionSource()
         {
             var repository = Repository.Load(Settings.Default.RepositoryPath);
-            var values = repository.Files
-                .SelectMany(i => i.Code.Classes)
-                .SelectMany(i => i.Methods)
-                .Where(i => i.IsStatic)
-                .Select(i => i.Name)
-                .ToList();
 
-            Completions = values.Select(value => new Completion(value, value, value, null, null)).ToList();
-
-            completionSets.Add(new CompletionSet(
-                "Tokens",    //the non-localized title of the tab
-                "Tokens",    //the display title of the tab
-                FindTokenSpanAtPosition(session.GetTriggerPoint(TextBuffer), session),
-                Completions,
-                null));
+            Filters = ImmutableArray.Create<CompletionFilter>();
+            Images = ImmutableArray.Create<ImageElement>();
+            Items = ImmutableArray.Create(repository.Files
+                .Select(file => file.Code.Classes.Select(@class => @class.Methods
+                        .Where(method => method.IsStatic)
+                        .Select(method => new CompletionItem($"{@class.Name}.{method.Name}", this, CompletionItemIcon, Filters, file.Code.NamespaceName, $"{@class.Name}.{method.Name.Substring(0, method.Name.IndexOf('(') + 1)}", $"{@class.Name}.{method.Name}", $"{@class.Name}.{method.Name}", Images)))
+                    .SelectMany(i => i))
+                .SelectMany(i => i)
+                .ToArray());
         }
 
-        // ReSharper disable once SuggestBaseTypeForParameter
-        // ReSharper disable once UnusedParameter.Local
-        private ITrackingSpan FindTokenSpanAtPosition(ITrackingPoint _, ICompletionSession session)
+        public CompletionStartData InitializeCompletion(CompletionTrigger trigger, SnapshotPoint triggerLocation, CancellationToken token)
         {
-            var currentPoint = session.TextView.Caret.Position.BufferPosition - 1;
-            var navigator = SourceProvider.NavigatorService.GetTextStructureNavigator(TextBuffer);
-            var extent = navigator.GetExtentOfWord(currentPoint);
-
-            return currentPoint.Snapshot.CreateTrackingSpan(extent.Span, SpanTrackingMode.EdgeInclusive);
+            // Since we are plugging in to CSharp content type,
+            // allow the CSharp language service to pick the Applicable To Span.
+            return CompletionStartData.ParticipatesInCompletionIfAny;
+            // Alternatively, we've got to provide location for completion
+            // return new CompletionStartData(CompletionParticipation.ProvidesItems, ...
         }
 
-        public void Dispose()
+        public Task<CompletionContext> GetCompletionContextAsync(IAsyncCompletionSession session, CompletionTrigger trigger, SnapshotPoint triggerLocation, SnapshotSpan applicableToSpan, CancellationToken token)
         {
-            if (IsDisposed)
-            {
-                return;
-            }
+            session.Properties["LineNumber"] = triggerLocation.GetContainingLine().LineNumber;
 
-            GC.SuppressFinalize(this);
-            IsDisposed = true;
+            return Task.FromResult(new CompletionContext(Items));
+        }
+
+        public Task<object> GetDescriptionAsync(IAsyncCompletionSession session, CompletionItem item, CancellationToken token)
+        {
+            var content = new ContainerElement(
+                ContainerElementStyle.Wrapped,
+                CompletionItemIcon,
+                new ClassifiedTextElement(
+                    new ClassifiedTextRun(PredefinedClassificationTypeNames.Keyword, "Hello!"),
+                    new ClassifiedTextRun(PredefinedClassificationTypeNames.Identifier, " This is a sample item")));
+            var lineInfo = new ClassifiedTextElement(
+                    new ClassifiedTextRun(
+                        PredefinedClassificationTypeNames.Comment,
+                        "You are on line " + ((int)(session.Properties["LineNumber"]) + 1)));
+            var timeInfo = new ClassifiedTextElement(
+                    new ClassifiedTextRun(
+                        PredefinedClassificationTypeNames.Identifier,
+                        "and it is " + DateTime.Now.ToShortTimeString()));
+
+            return Task.FromResult<object>(new ContainerElement(
+                ContainerElementStyle.Stacked,
+                content,
+                lineInfo,
+                timeInfo));
         }
     }
 }
