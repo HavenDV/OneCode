@@ -10,7 +10,7 @@ namespace OneCode.VsExtension.Completions
 {
     [Export(typeof(IVsTextViewCreationListener))]
     [Name("OneCode Token Completion Handler")]
-    [ContentType("plaintext")]
+    [ContentType("CSharp")]
     [TextViewRole(PredefinedTextViewRoles.Editable)]
     internal class OneCodeCompletionHandlerProvider : IVsTextViewCreationListener
     {
@@ -35,7 +35,7 @@ namespace OneCode.VsExtension.Completions
             }
 
             textView.Properties.GetOrCreateSingletonProperty(
-                () => new OneCodeCompletionCommandHandler(textViewAdapter, textView, this));
+                () => new OneCodeCompletionHandler(textViewAdapter, textView, this));
         }
     }
 }

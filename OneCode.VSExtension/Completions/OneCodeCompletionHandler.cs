@@ -10,14 +10,14 @@ using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace OneCode.VsExtension.Completions
 {
-    internal class OneCodeCompletionCommandHandler : IOleCommandTarget
+    internal class OneCodeCompletionHandler : IOleCommandTarget
     {
         private readonly IOleCommandTarget _nextCommandHandler;
         private ITextView TextView { get; }
         private OneCodeCompletionHandlerProvider Provider { get; }
         private ICompletionSession Session { get; set; }
 
-        internal OneCodeCompletionCommandHandler(IVsTextView textViewAdapter, ITextView textView, OneCodeCompletionHandlerProvider provider)
+        internal OneCodeCompletionHandler(IVsTextView textViewAdapter, ITextView textView, OneCodeCompletionHandlerProvider provider)
         {
             TextView = textView;
             Provider = provider;
@@ -52,9 +52,10 @@ namespace OneCode.VsExtension.Completions
             }
 
             //check for a commit character
-            if (nCmdId == (uint)VSConstants.VSStd2KCmdID.RETURN
-                || nCmdId == (uint)VSConstants.VSStd2KCmdID.TAB
-                || (char.IsWhiteSpace(typedChar) || char.IsPunctuation(typedChar)))
+            if (nCmdId == (uint)VSConstants.VSStd2KCmdID.RETURN || 
+                nCmdId == (uint)VSConstants.VSStd2KCmdID.TAB ||
+                char.IsWhiteSpace(typedChar) || 
+                char.IsPunctuation(typedChar))
             {
                 //check for a selection
                 if (Session != null && !Session.IsDismissed)
