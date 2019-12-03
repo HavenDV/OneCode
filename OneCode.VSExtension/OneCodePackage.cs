@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Threading;
 using OneCode.Core;
 using OneCode.VsExtension.Properties;
+using OneCode.VsExtension.Utilities;
 using OneCode.VsExtension.Windows;
 using Task = System.Threading.Tasks.Task;
 
@@ -46,8 +50,51 @@ namespace OneCode.VsExtension
         
         #region OneCode
 
-        public static Repositories Repositories { get; set; } = new Repositories();
-        public static AsyncPackage Instance { get; set; }
+        public static AsyncLazy<Repositories> Repositories { get; set; } = new AsyncLazy<Repositories>(() => Task.Run(() =>
+        {
+            var repositories = new Repositories();
+
+            repositories.Load(Settings.Default.RepositoryPath.Split(';').ToList());
+
+            return repositories;
+        }), ThreadHelper.JoinableTaskFactory);
+
+        public static OneCodePackage Instance { get; set; }
+
+        public static void AddItem(CodeFile file, Class @class, Method method, bool openAfterAdd = false)
+        {
+            if (file == null || Instance == null)
+            {
+                return;
+            }
+
+            var dte = Instance.GetDte();
+            var project = dte.GetActiveProject();
+
+            //var solution = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
+            //IVsHierarchy hierarchy;
+            //solution.GetProjectOfUniqueName(project.UniqueName, out hierarchy);
+
+            var projectDirectory = project.GetDirectory();
+            var fullPath = Path.Combine(projectDirectory ?? string.Empty, file.RelativePathWithoutTargetFramework);
+
+            file.Code.NamespaceName = project.GetDefaultNamespace() + file.AdditionalNamespace;
+            file.Code.Classes = new List<Class> { @class };
+
+            if (method != null)
+            {
+                file.Code.Classes[0].Methods = new List<Method> { method };
+            }
+
+            file.SaveTo(fullPath);
+
+            project.AddItemFromFile(fullPath);
+
+            if (openAfterAdd)
+            {
+                dte.OpenFileAsText(fullPath);
+            }
+        }
 
         #endregion
 
@@ -69,11 +116,7 @@ namespace OneCode.VsExtension
             progress.Report(new ServiceProgressData("Initializing windows..."));
 
             await OneCodeWindowCommand.InitializeAsync(this);
-
-            progress.Report(new ServiceProgressData("Loading repositories..."));
-
-            Repositories.Load(Settings.Default.RepositoryPath.Split(';').ToList());
-
+            
             Instance = this;
         }
 
@@ -104,8 +147,13 @@ namespace OneCode.VsExtension
             return base.GetToolWindowTitle(toolWindowType, id);
         }
 
-        protected override Task<object> InitializeToolWindowAsync(Type toolWindowType, int id, CancellationToken cancellationToken)
+        protected override async Task<object> InitializeToolWindowAsync(Type toolWindowType, int id, CancellationToken cancellationToken)
         {
+            if (toolWindowType == typeof(OneCodeWindow))
+            {
+                await Repositories.GetValueAsync(cancellationToken);
+            }
+
             return Task.FromResult<object>(null);
         }
 

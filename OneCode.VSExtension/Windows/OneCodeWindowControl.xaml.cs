@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,6 +13,8 @@ namespace OneCode.VsExtension.Windows
     /// </summary>
     public partial class OneCodeWindowControl
     {
+        public Repositories Repositories { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OneCodeWindowControl"/> class.
         /// </summary>
@@ -22,9 +22,10 @@ namespace OneCode.VsExtension.Windows
         {
             InitializeComponent();
 
-            OneCodePackage.Repositories.Changed += (sender, args) => RefreshTree(OneCodePackage.Repositories);
+            Repositories = OneCodePackage.Repositories.GetValue();
+            Repositories.Changed += (sender, args) => RefreshTree(Repositories);
 
-            RefreshTree(OneCodePackage.Repositories);
+            RefreshTree(Repositories);
         }
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
@@ -39,12 +40,12 @@ namespace OneCode.VsExtension.Windows
 
             var path = dialog.SelectedPath;
 
-            OneCodePackage.Repositories.Load(path);
+            Repositories.Load(path);
         }
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
-            OneCodePackage.Repositories.Reload();
+            Repositories.Reload();
         }
 
         private void RefreshTree(Repositories repositories)
@@ -95,44 +96,12 @@ namespace OneCode.VsExtension.Windows
             });
         }
 
-        private void AddItem(Node node)
-        {
-            if (node?.CodeFile == null)
-            {
-                return;
-            }
-
-            var dte = this.GetDte();
-            var project = dte.GetActiveProject();
-
-            //var solution = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
-            //IVsHierarchy hierarchy;
-            //solution.GetProjectOfUniqueName(project.UniqueName, out hierarchy);
-
-            var projectDirectory = project.GetDirectory();
-            var fullPath = Path.Combine(projectDirectory ?? string.Empty, node.CodeFile.RelativePathWithoutTargetFramework);
-
-            node.CodeFile.Code.NamespaceName = project.GetDefaultNamespace() + node.CodeFile.AdditionalNamespace;
-            node.CodeFile.Code.Classes = new List<Class> { node.Class };
-
-            if (node.Method != null)
-            {
-                node.CodeFile.Code.Classes[0].Methods = new List<Method> { node.Method };
-            }
-
-            node.CodeFile.SaveTo(fullPath);
-
-            project.AddItemFromFile(fullPath);
-
-            dte.OpenFileAsText(fullPath);
-        }
-
         private void TreeView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var item = sender as TreeViewItem;
             var node = item?.Header as Node;
 
-            AddItem(node);
+            OneCodePackage.AddItem(node?.CodeFile, node?.Class, node?.Method, true);
         }
 
         private void ShowRepositoriesButton_OnClick(object sender, RoutedEventArgs e)

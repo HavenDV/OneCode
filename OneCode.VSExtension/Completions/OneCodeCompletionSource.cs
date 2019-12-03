@@ -10,29 +10,17 @@ using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion.Data;
 using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Adornments;
+using OneCode.Core;
 
 namespace OneCode.VsExtension.Completions
 {
     public class OneCodeCompletionSource : IAsyncCompletionSource
     {
         private static ImageElement CompletionItemIcon { get; } = new ImageElement(new ImageId(new Guid("ae27a6b0-e345-4288-96df-5eaf394ee369"), KnownImageIds.AddMethod), "Add Method Icon");
-        private ImmutableArray<CompletionItem> Items { get; }
-        private ImmutableArray<CompletionFilter> Filters { get; }
-        private ImmutableArray<ImageElement> Images { get; }
-
-        public OneCodeCompletionSource()
-        {
-            Filters = ImmutableArray.Create<CompletionFilter>();
-            Images = ImmutableArray.Create<ImageElement>();
-            Items = ImmutableArray.Create(OneCodePackage.Repositories.Values
-                .SelectMany(repository => repository.Files)
-                .Select(file => file.Code.Classes.Select(@class => @class.Methods
-                        .Where(method => method.IsStatic)
-                        .Select(method => new CompletionItem($"{@class.Name}.{method.Name}", this, CompletionItemIcon, Filters, file.Code.NamespaceName, $"{@class.Name}.{method.Name.Substring(0, method.Name.IndexOf('(') + 1)}", $"{@class.Name}.{method.Name}", $"{@class.Name}.{method.Name}", Images)))
-                    .SelectMany(i => i))
-                .SelectMany(i => i)
-                .ToArray());
-        }
+        private ImmutableArray<CompletionItem>? Items { get; set; }
+        private ImmutableArray<CompletionFilter>? Filters { get; set; }
+        private ImmutableArray<ImageElement>? Images { get; set; }
+        private Repositories Repositories { get; set; }
 
         public CompletionStartData InitializeCompletion(CompletionTrigger trigger, SnapshotPoint triggerLocation, CancellationToken token)
         {
@@ -43,11 +31,43 @@ namespace OneCode.VsExtension.Completions
             // return new CompletionStartData(CompletionParticipation.ProvidesItems, ...
         }
 
-        public Task<CompletionContext> GetCompletionContextAsync(IAsyncCompletionSession session, CompletionTrigger trigger, SnapshotPoint triggerLocation, SnapshotSpan applicableToSpan, CancellationToken token)
+        public async Task<CompletionContext> GetCompletionContextAsync(IAsyncCompletionSession session, CompletionTrigger trigger, SnapshotPoint triggerLocation, SnapshotSpan applicableToSpan, CancellationToken token)
         {
             session.Properties["LineNumber"] = triggerLocation.GetContainingLine().LineNumber;
 
-            return Task.FromResult(new CompletionContext(Items));
+            Repositories ??= await OneCodePackage.Repositories.GetValueAsync(token);
+            Filters ??= ImmutableArray.Create<CompletionFilter>();
+            Images ??= ImmutableArray.Create<ImageElement>();
+            Items ??= ImmutableArray.Create(Repositories.Values
+                .Select(repository => repository.Files
+                    .Select(file => file.Code.Classes.Select(@class => @class.Methods
+                            .Where(method => method.IsStatic)
+                            .Select(method =>
+                            {
+                                var item = new CompletionItem(
+                                    $"{@class.Name}.{method.Name}",
+                                    this,
+                                    CompletionItemIcon,
+                                    Filters.Value,
+                                    file.Code.NamespaceName,
+                                    $"{@class.Name}.{method.Name.Substring(0, method.Name.IndexOf('(') + 1)}",
+                                    $"{@class.Name}.{method.Name}",
+                                    $"{@class.Name}.{method.Name}",
+                                    Images.Value);
+
+                                item.Properties[nameof(Repository)] = repository;
+                                item.Properties[nameof(CodeFile)] = file;
+                                item.Properties[nameof(Class)] = @class;
+                                item.Properties[nameof(Method)] = method;
+
+                                return item;
+                            }))
+                        .SelectMany(i => i))
+                    .SelectMany(i => i))
+                .SelectMany(i => i)
+                .ToArray());
+
+            return new CompletionContext(Items.Value);
         }
 
         public Task<object> GetDescriptionAsync(IAsyncCompletionSession session, CompletionItem item, CancellationToken token)
