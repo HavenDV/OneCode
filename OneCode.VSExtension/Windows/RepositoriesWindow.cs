@@ -29,5 +29,9 @@ namespace OneCode.VsExtension.Windows
             // the object returned by the Content property.
             Content = new RepositoriesControl();
         }
+
+        public RepositoriesWindow(string _) : this()
+        {
+        }
     }
 }

@@ -52,7 +52,7 @@
             />
             <Button Width="120" 
                     Content="Show Repositories"
-                    Click="ShowRepositoriesButton_Click"
+                    Click="ShowRepositoriesButton_OnClick"
                     Background="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}" 
                     Foreground="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}"
             />

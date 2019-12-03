@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using OneCode.Core;
 using OneCode.VsExtension.Properties;
 using OneCode.VsExtension.Windows;
@@ -41,7 +43,7 @@ namespace OneCode.VsExtension
         /// OneCodeExtensionPackage GUID string.
         /// </summary>
         public const string PackageGuidString = "7ff6c859-ac79-49e7-98cf-70dfcf6a101d";
-
+        
         #region OneCode
 
         public static Repositories Repositories { get; set; } = new Repositories();
@@ -73,6 +75,38 @@ namespace OneCode.VsExtension
             Repositories.Load(Settings.Default.RepositoryPath.Split(';').ToList());
 
             Instance = this;
+        }
+
+        public override IVsAsyncToolWindowFactory GetAsyncToolWindowFactory(Guid toolWindowType)
+        {
+            if (toolWindowType == typeof(OneCodeWindow).GUID || 
+                toolWindowType == typeof(RepositoriesWindow).GUID)
+            {
+                return this;
+            }
+
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            return base.GetAsyncToolWindowFactory(toolWindowType);
+        }
+
+        protected override string GetToolWindowTitle(Type toolWindowType, int id)
+        {
+            if (toolWindowType == typeof(OneCodeWindow))
+            {
+                return "Loading OneCode Window...";
+            }
+            if (toolWindowType == typeof(RepositoriesWindow))
+            {
+                return "Loading OneCode Repositories Window...";
+            }
+
+            return base.GetToolWindowTitle(toolWindowType, id);
+        }
+
+        protected override Task<object> InitializeToolWindowAsync(Type toolWindowType, int id, CancellationToken cancellationToken)
+        {
+            return Task.FromResult<object>(null);
         }
 
         #endregion

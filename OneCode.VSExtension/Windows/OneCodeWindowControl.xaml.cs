@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using Microsoft.VisualStudio.Shell;
 using OneCode.Core;
 using OneCode.VsExtension.Utilities;
 
@@ -137,18 +135,9 @@ namespace OneCode.VsExtension.Windows
             AddItem(node);
         }
 
-        private void ShowRepositoriesButton_Click(object sender, RoutedEventArgs e)
+        private void ShowRepositoriesButton_OnClick(object sender, RoutedEventArgs e)
         {
-            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
-            {
-                var package = OneCodePackage.Instance;
-                var window = await package.ShowToolWindowAsync(typeof(RepositoriesWindow), 0, true, package.DisposalToken);
-                window = await package.ShowToolWindowAsync(typeof(RepositoriesWindow), 0, true, package.DisposalToken);
-                if (window?.Frame == null)
-                {
-                    throw new NotSupportedException("Cannot create tool window");
-                }
-            });
+            OneCodePackage.Instance.ShowWindow(typeof(RepositoriesWindow));
         }
     }
 }

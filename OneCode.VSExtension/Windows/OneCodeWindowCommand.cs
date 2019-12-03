@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell;
+using OneCode.VsExtension.Utilities;
 using Task = System.Threading.Tasks.Task;
 
 namespace OneCode.VsExtension.Windows
@@ -78,14 +79,7 @@ namespace OneCode.VsExtension.Windows
         /// <param name="e">The event args.</param>
         private void Execute(object sender, EventArgs e)
         {
-            Package.JoinableTaskFactory.RunAsync(async delegate
-            {
-                var window = await Package.ShowToolWindowAsync(typeof(OneCodeWindow), 0, true, Package.DisposalToken);
-                if (window?.Frame == null)
-                {
-                    throw new NotSupportedException("Cannot create tool window");
-                }
-            });
+            Package.ShowWindow(typeof(OneCodeWindow));
         }
     }
 }
