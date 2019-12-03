@@ -154,7 +154,7 @@ namespace OneCode.VsExtension
                 await Repositories.GetValueAsync(cancellationToken);
             }
 
-            return Task.FromResult<object>(null);
+            return null;
         }
 
         #endregion

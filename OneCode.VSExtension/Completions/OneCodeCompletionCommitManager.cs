@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Threading;
 using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion;
 using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion.Data;
 using Microsoft.VisualStudio.Text;
 using OneCode.Core;
+using OneCode.VsExtension.Utilities;
 
 namespace OneCode.VsExtension.Completions
 {
@@ -32,12 +34,22 @@ namespace OneCode.VsExtension.Completions
             // Objects of interest here are session.TextView and session.TextView.Caret.
             // This method runs synchronously
 
-            var file = item.Properties[nameof(CodeFile)] as CodeFile;
-            var @class = item.Properties[nameof(Class)] as Class;
-            var method = item.Properties[nameof(Method)] as Method;
+            var file = item.Properties.GetOrDefault<CodeFile>(nameof(CodeFile));
+            var @class = item.Properties.GetOrDefault<Class>(nameof(Class));
+            var method = item.Properties.GetOrDefault<Method>(nameof(Method));
+            
+            if (!session.IsDismissed &&
+                file != null)
+            {
+                OneCodePackage.AddItem(file, @class, method);
 
-            OneCodePackage.AddItem(file, @class, method);
-
+                var usingText = $"using {file.Code.NamespaceName};{Environment.NewLine}";
+                if (!buffer.CurrentSnapshot.GetText().Contains(usingText))
+                {
+                    buffer.Replace(Span.FromBounds(0, 1), usingText + "u");
+                }
+            }
+            
             return CommitResult.Unhandled; // use default commit mechanism.
         }
     }
