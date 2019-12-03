@@ -12,7 +12,7 @@ namespace OneCode.VsExtension.Completions
     {
         private OneCodeCompletionSourceProvider SourceProvider { get; }
         private ITextBuffer TextBuffer { get; }
-        private List<Microsoft.VisualStudio.Language.Intellisense.Completion> Completions { get; set; }
+        private List<Completion> Completions { get; set; }
         private bool IsDisposed { get; set; }
 
         public OneCodeCompletionSource(OneCodeCompletionSourceProvider sourceProvider, ITextBuffer textBuffer)
@@ -31,7 +31,7 @@ namespace OneCode.VsExtension.Completions
                 .Select(i => i.Name)
                 .ToList();
 
-            Completions = values.Select(value => new Microsoft.VisualStudio.Language.Intellisense.Completion(value, value, value, null, null)).ToList();
+            Completions = values.Select(value => new Completion(value, value, value, null, null)).ToList();
 
             completionSets.Add(new CompletionSet(
                 "Tokens",    //the non-localized title of the tab

@@ -7,8 +7,8 @@ using Microsoft.VisualStudio.Utilities;
 namespace OneCode.VsExtension.Completions
 {
     [Export(typeof(ICompletionSourceProvider))]
-    [ContentType("plaintext")]
-    [Name("token completion")]
+    [ContentType("text")]
+    [Name("OneCode completion provider")]
     internal class OneCodeCompletionSourceProvider : ICompletionSourceProvider
     {
         [Import]
