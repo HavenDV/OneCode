@@ -10,8 +10,6 @@ using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion.Data;
 using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Adornments;
-using OneCode.Core;
-using OneCode.VsExtension.Properties;
 
 namespace OneCode.VsExtension.Completions
 {
@@ -24,11 +22,10 @@ namespace OneCode.VsExtension.Completions
 
         public OneCodeCompletionSource()
         {
-            var repository = Repository.Load(Settings.Default.RepositoryPath);
-
             Filters = ImmutableArray.Create<CompletionFilter>();
             Images = ImmutableArray.Create<ImageElement>();
-            Items = ImmutableArray.Create(repository.Files
+            Items = ImmutableArray.Create(OneCodePackage.Repositories.Values
+                .SelectMany(repository => repository.Files)
                 .Select(file => file.Code.Classes.Select(@class => @class.Methods
                         .Where(method => method.IsStatic)
                         .Select(method => new CompletionItem($"{@class.Name}.{method.Name}", this, CompletionItemIcon, Filters, file.Code.NamespaceName, $"{@class.Name}.{method.Name.Substring(0, method.Name.IndexOf('(') + 1)}", $"{@class.Name}.{method.Name}", $"{@class.Name}.{method.Name}", Images)))

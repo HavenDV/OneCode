@@ -51,6 +51,8 @@
     <Compile Include="Completions\OneCodeCompletionHandler.cs" />
     <Compile Include="Completions\OneCodeCompletionSource.cs" />
     <Compile Include="Completions\OneCodeCompletionSourceProvider.cs" />
+    <Compile Include="Windows\Node.cs" />
+    <Compile Include="Windows\RepositoriesWindow.cs" />
     <Compile Include="Windows\OneCodeWindow.cs" />
     <Compile Include="Windows\OneCodeWindowCommand.cs" />
     <Compile Include="Windows\OneCodeWindowControl.xaml.cs">
@@ -63,12 +65,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Classifiers\SimpleClassifier.cs" />
-    <Compile Include="Classifiers\SimpleClassifierClassificationDefinition.cs" />
-    <Compile Include="Classifiers\SimpleClassifierFormat.cs" />
-    <Compile Include="Classifiers\SimpleClassifierProvider.cs" />
     <Compile Include="Utilities\ProjectExtensions.cs" />
     <Compile Include="Utilities\DteExtensions.cs" />
+    <Compile Include="Windows\RepositoriesControl.xaml.cs">
+      <DependentUpon>RepositoriesControl.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -101,6 +102,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Windows\OneCodeWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\RepositoriesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

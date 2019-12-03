@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -7,7 +8,6 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using Microsoft.VisualStudio.Shell;
 using OneCode.Core;
-using OneCode.VsExtension.Properties;
 using OneCode.VsExtension.Utilities;
 
 namespace OneCode.VsExtension.Windows
@@ -17,10 +17,6 @@ namespace OneCode.VsExtension.Windows
     /// </summary>
     public partial class OneCodeWindowControl
     {
-        private Repository Repository { get; set; }
-
-        public ObservableCollection<Node> Nodes { get; set; }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="OneCodeWindowControl"/> class.
         /// </summary>
@@ -28,25 +24,10 @@ namespace OneCode.VsExtension.Windows
         {
             InitializeComponent();
 
-            if (!string.IsNullOrWhiteSpace(Settings.Default.RepositoryPath))
-            {
-                Load(Settings.Default.RepositoryPath);
-            }
-        }
+            OneCodePackage.Repositories.Changed += (sender, args) => RefreshTree(OneCodePackage.Repositories);
 
-        /*
-        /// <summary>
-        /// Handles click on the button by displaying a message box.
-        /// </summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event args.</param>
-        private void button1_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show(
-                string.Format(CultureInfo.CurrentUICulture, $"Invoked '{this}'"),
-                "OneCodeWindow");
+            RefreshTree(OneCodePackage.Repositories);
         }
-        */
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
@@ -58,27 +39,25 @@ namespace OneCode.VsExtension.Windows
                 return;
             }
 
-            Load(dialog.SelectedPath);
+            var path = dialog.SelectedPath;
+
+            OneCodePackage.Repositories.Load(path);
         }
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
-            Load(Settings.Default.RepositoryPath);
+            OneCodePackage.Repositories.Reload();
         }
 
-        private void Load(string path)
+        private void RefreshTree(Repositories repositories)
         {
-            Settings.Default.RepositoryPath = path;
-            Settings.Default.Save();
-
-            Repository = Repository.Load(path);
-
-            Nodes = new ObservableCollection<Node>(new[]
+            TreeView.ItemsSource = new ObservableCollection<Node>(new[]
             {
                 new Node
                 {
                     Name = "Static methods",
-                    Nodes = new ObservableCollection<Node>(Repository.Files
+                    Nodes = new ObservableCollection<Node>(repositories.Values
+                        .SelectMany(repository => repository.Files)
                         .Where(file => file.Code.Classes.Any(@class => @class.IsStatic && @class.Methods.Any(method => method.IsStatic)))
                         .Select(file => new Node
                         {
@@ -99,7 +78,8 @@ namespace OneCode.VsExtension.Windows
                 new Node
                 {
                     Name = "Classes",
-                    Nodes = new ObservableCollection<Node>(Repository.Files
+                    Nodes = new ObservableCollection<Node>(repositories.Values
+                        .SelectMany(repository => repository.Files)
                         .Where(file => file.Code.Classes.Any(@class => !@class.IsStatic))
                         .Select(file => new Node
                         {
@@ -115,11 +95,7 @@ namespace OneCode.VsExtension.Windows
                         })),
                 },
             });
-                
-
-            TreeView.ItemsSource = Nodes;
         }
-
 
         private void AddItem(Node node)
         {
@@ -158,18 +134,21 @@ namespace OneCode.VsExtension.Windows
             var item = sender as TreeViewItem;
             var node = item?.Header as Node;
 
-            ThreadHelper.ThrowIfNotOnUIThread();
-
             AddItem(node);
         }
-    }
 
-    public class Node
-    {
-        public string Name { get; set; }
-        public Method Method { get; set; }
-        public Class Class { get; set; }
-        public CodeFile CodeFile { get; set; }
-        public ObservableCollection<Node> Nodes { get; set; }
+        private void ShowRepositoriesButton_Click(object sender, RoutedEventArgs e)
+        {
+            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            {
+                var package = OneCodePackage.Instance;
+                var window = await package.ShowToolWindowAsync(typeof(RepositoriesWindow), 0, true, package.DisposalToken);
+                window = await package.ShowToolWindowAsync(typeof(RepositoriesWindow), 0, true, package.DisposalToken);
+                if (window?.Frame == null)
+                {
+                    throw new NotSupportedException("Cannot create tool window");
+                }
+            });
+        }
     }
 }

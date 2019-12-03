@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.VisualStudio.Shell;
+using OneCode.Core;
+using OneCode.VsExtension.Properties;
 using OneCode.VsExtension.Windows;
 using Task = System.Threading.Tasks.Task;
 
@@ -29,13 +32,22 @@ namespace OneCode.VsExtension
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideToolWindow(typeof(OneCodeWindow),
         Style = VsDockStyle.Tabbed,
-        Window = "3ae79031-e1bc-11d0-8f78-00a0c9110057")]
+        Window = EnvDTE.Constants.vsWindowKindSolutionExplorer)]
+    [ProvideToolWindow(typeof(RepositoriesWindow),
+        Style = VsDockStyle.AlwaysFloat)]
     public sealed class OneCodePackage : AsyncPackage
     {
         /// <summary>
         /// OneCodeExtensionPackage GUID string.
         /// </summary>
         public const string PackageGuidString = "7ff6c859-ac79-49e7-98cf-70dfcf6a101d";
+
+        #region OneCode
+
+        public static Repositories Repositories { get; set; } = new Repositories();
+        public static AsyncPackage Instance { get; set; }
+
+        #endregion
 
         #region Package Members
 
@@ -51,7 +63,16 @@ namespace OneCode.VsExtension
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+
+            progress.Report(new ServiceProgressData("Initializing windows..."));
+
             await OneCodeWindowCommand.InitializeAsync(this);
+
+            progress.Report(new ServiceProgressData("Loading repositories..."));
+
+            Repositories.Load(Settings.Default.RepositoryPath.Split(';').ToList());
+
+            Instance = this;
         }
 
         #endregion

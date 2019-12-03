@@ -11,7 +11,7 @@ namespace OneCode.VsExtension.Completions
     [Name("Hello World completion item source")]
     internal class OneCodeCompletionSourceProvider : IAsyncCompletionSourceProvider
     {
-        private Lazy<OneCodeCompletionSourceProvider> Source { get; } = new Lazy<OneCodeCompletionSourceProvider>();
+        private Lazy<OneCodeCompletionSource> Source { get; } = new Lazy<OneCodeCompletionSource>();
 
         public IAsyncCompletionSource GetOrCreate(ITextView textView)
         {
