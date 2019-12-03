@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
@@ -11,12 +12,14 @@ using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Adornments;
 using OneCode.Core;
+using OneCode.VsExtension.Utilities;
+using Task = System.Threading.Tasks.Task;
 
 namespace OneCode.VsExtension.Completions
 {
     public class OneCodeCompletionSource : IAsyncCompletionSource
     {
-        private static ImageElement CompletionItemIcon { get; } = new ImageElement(new ImageId(new Guid("ae27a6b0-e345-4288-96df-5eaf394ee369"), KnownImageIds.AddMethod), "Add Method Icon");
+        private static ImageElement ImageElement { get; } = new ImageElement(new ImageId(new Guid("ae27a6b0-e345-4288-96df-5eaf394ee369"), KnownImageIds.AddMethod), "Add Method Icon");
         private ImmutableArray<CompletionItem>? Items { get; set; }
         private ImmutableArray<CompletionFilter>? Filters { get; set; }
         private ImmutableArray<ImageElement>? Images { get; set; }
@@ -31,14 +34,9 @@ namespace OneCode.VsExtension.Completions
             // return new CompletionStartData(CompletionParticipation.ProvidesItems, ...
         }
 
-        public async Task<CompletionContext> GetCompletionContextAsync(IAsyncCompletionSession session, CompletionTrigger trigger, SnapshotPoint triggerLocation, SnapshotSpan applicableToSpan, CancellationToken token)
+        public IEnumerable<CompletionItem> GetActualItems()
         {
-            session.Properties["LineNumber"] = triggerLocation.GetContainingLine().LineNumber;
-
-            Repositories ??= await OneCodePackage.Repositories.GetValueAsync(token);
-            Filters ??= ImmutableArray.Create<CompletionFilter>();
-            Images ??= ImmutableArray.Create<ImageElement>();
-            Items ??= ImmutableArray.Create(Repositories.Values
+            return Repositories.Values
                 .Select(repository => repository.Files
                     .Select(file => file.Code.Classes.Select(@class => @class.Methods
                             .Where(method => method.IsStatic)
@@ -47,13 +45,13 @@ namespace OneCode.VsExtension.Completions
                                 var item = new CompletionItem(
                                     $"{@class.Name}.{method.Name}",
                                     this,
-                                    CompletionItemIcon,
-                                    Filters.Value,
+                                    ImageElement,
+                                    Filters ?? ImmutableArray<CompletionFilter>.Empty,
                                     file.Code.NamespaceName,
                                     $"{@class.Name}.{method.Name.Substring(0, method.Name.IndexOf('(') + 1)}",
                                     $"{@class.Name}.{method.Name}",
                                     $"{@class.Name}.{method.Name}",
-                                    Images.Value);
+                                    Images ?? ImmutableArray<ImageElement>.Empty);
 
                                 item.Properties[nameof(Repository)] = repository;
                                 item.Properties[nameof(CodeFile)] = file;
@@ -64,34 +62,57 @@ namespace OneCode.VsExtension.Completions
                             }))
                         .SelectMany(i => i))
                     .SelectMany(i => i))
-                .SelectMany(i => i)
-                .ToArray());
+                .SelectMany(i => i);
+        }
 
-            return new CompletionContext(Items.Value);
+        public async Task<CompletionContext> GetCompletionContextAsync(IAsyncCompletionSession session, CompletionTrigger trigger, SnapshotPoint triggerLocation, SnapshotSpan applicableToSpan, CancellationToken token)
+        {
+            if (Repositories == null)
+            {
+                Repositories ??= await OneCodePackage.Repositories.GetValueAsync(token);
+                Repositories.Changed += (sender, args) => Items = GetActualItems().ToImmutableArray();
+            }
+
+            Filters ??= ImmutableArray.Create(new CompletionFilter("OneCode", "O", ImageElement));
+            Images ??= ImmutableArray.Create<ImageElement>();
+            Items ??= GetActualItems()?.ToImmutableArray();
+
+            return new CompletionContext(Items ?? ImmutableArray<CompletionItem>.Empty);
         }
 
         public Task<object> GetDescriptionAsync(IAsyncCompletionSession session, CompletionItem item, CancellationToken token)
         {
+            /*
             var content = new ContainerElement(
                 ContainerElementStyle.Wrapped,
                 CompletionItemIcon,
                 new ClassifiedTextElement(
                     new ClassifiedTextRun(PredefinedClassificationTypeNames.Keyword, "Hello!"),
                     new ClassifiedTextRun(PredefinedClassificationTypeNames.Identifier, " This is a sample item")));
-            var lineInfo = new ClassifiedTextElement(
-                    new ClassifiedTextRun(
-                        PredefinedClassificationTypeNames.Comment,
-                        "You are on line " + ((int)(session.Properties["LineNumber"]) + 1)));
-            var timeInfo = new ClassifiedTextElement(
+            */
+            var fileInfo = new ClassifiedTextElement(
+                new ClassifiedTextRun(
+                    PredefinedClassificationTypeNames.String,
+                    "File: " + item.Properties.GetOrDefault<CodeFile>(nameof(CodeFile))?.RelativePath));
+            var versionInfo = new ClassifiedTextElement(
+                new ClassifiedTextRun(
+                    PredefinedClassificationTypeNames.Comment,
+                    "Version: " + item.Properties.GetOrDefault<Method>(nameof(Method))?.Version));
+            var dependencyInfo = new ContainerElement(
+                ContainerElementStyle.Stacked,
+                new ClassifiedTextElement(item.Properties.GetOrDefault<Method>(nameof(Method))?.Dependencies
+                    .Select(dependency => new ClassifiedTextRun(PredefinedClassificationTypeNames.Keyword, $"Dependency: {dependency}"))));
+            var methodInfo = new ClassifiedTextElement(
                     new ClassifiedTextRun(
                         PredefinedClassificationTypeNames.Identifier,
-                        "and it is " + DateTime.Now.ToShortTimeString()));
+                        "Method: " + item.Properties.GetOrDefault<Method>(nameof(Method))?.FullText));
 
             return Task.FromResult<object>(new ContainerElement(
                 ContainerElementStyle.Stacked,
-                content,
-                lineInfo,
-                timeInfo));
+                fileInfo,
+                versionInfo,
+                dependencyInfo,
+                methodInfo));
         }
     }
 }

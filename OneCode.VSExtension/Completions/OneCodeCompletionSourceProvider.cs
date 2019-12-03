@@ -9,6 +9,8 @@ namespace OneCode.VsExtension.Completions
     [Export(typeof(IAsyncCompletionSourceProvider))]
     [ContentType("CSharp")]
     [Name("OneCode completion item source")]
+    [Order(After = "default")]
+    [Order(After = "Roslyn Completion Presenter")]
     internal class OneCodeCompletionSourceProvider : IAsyncCompletionSourceProvider
     {
         private Lazy<OneCodeCompletionSource> Source { get; } = new Lazy<OneCodeCompletionSource>();

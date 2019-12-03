@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using OneCode.Core;
+using OneCode.VsExtension.Properties;
 using OneCode.VsExtension.Utilities;
 
 namespace OneCode.VsExtension.Windows
@@ -41,6 +42,9 @@ namespace OneCode.VsExtension.Windows
             var path = dialog.SelectedPath;
 
             Repositories.Load(path);
+
+            Settings.Default.RepositoryPath = path;
+            Settings.Default.Save();
         }
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
