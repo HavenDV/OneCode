@@ -53,11 +53,10 @@
     <Compile Include="Completions\OneCodeCompletionSourceProvider.cs" />
     <Compile Include="Utilities\PropertyCollectionExtensions.cs" />
     <Compile Include="Utilities\AsyncPackageExtensions.cs" />
-    <Compile Include="Windows\Node.cs" />
-    <Compile Include="Windows\RepositoriesWindow.cs" />
-    <Compile Include="Windows\OneCodeWindow.cs" />
-    <Compile Include="Windows\OneCodeWindowCommand.cs" />
-    <Compile Include="Windows\OneCodeWindowControl.xaml.cs">
+    <Compile Include="UI\Windows\RepositoriesWindow.cs" />
+    <Compile Include="UI\Windows\OneCodeWindow.cs" />
+    <Compile Include="Commands\OneCodeWindowCommand.cs" />
+    <Compile Include="UI\Controls\OneCodeWindowControl.xaml.cs">
       <DependentUpon>OneCodeWindowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -69,7 +68,7 @@
     </Compile>
     <Compile Include="Utilities\ProjectExtensions.cs" />
     <Compile Include="Utilities\DteExtensions.cs" />
-    <Compile Include="Windows\RepositoriesControl.xaml.cs">
+    <Compile Include="UI\Controls\RepositoriesControl.xaml.cs">
       <DependentUpon>RepositoriesControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -103,11 +102,11 @@
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.3.2099" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Windows\OneCodeWindowControl.xaml">
+    <Page Include="UI\Controls\OneCodeWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\RepositoriesControl.xaml">
+    <Page Include="UI\Controls\RepositoriesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -138,7 +137,9 @@
       <Name>OneCode.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="UI\ViewModels\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

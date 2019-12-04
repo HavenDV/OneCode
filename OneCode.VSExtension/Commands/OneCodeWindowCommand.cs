@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell;
+using OneCode.VsExtension.UI.Windows;
 using OneCode.VsExtension.Utilities;
 using Task = System.Threading.Tasks.Task;
 
-namespace OneCode.VsExtension.Windows
+namespace OneCode.VsExtension.Commands
 {
     /// <summary>
     /// Command handler

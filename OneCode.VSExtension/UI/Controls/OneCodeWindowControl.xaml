@@ -1,10 +1,10 @@
-﻿<UserControl x:Class="OneCode.VsExtension.Windows.OneCodeWindowControl"
+﻿<UserControl x:Class="OneCode.VsExtension.UI.Controls.OneCodeWindowControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsShell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
-             xmlns:windows="clr-namespace:OneCode.VsExtension.Windows"
+             xmlns:controls="clr-namespace:OneCode.VsExtension.UI.Controls"
              Background="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}"
              Foreground="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}"
              mc:Ignorable="d"
@@ -27,7 +27,7 @@
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Path=Nodes}" DataType="windows:Node">
+                <HierarchicalDataTemplate ItemsSource="{Binding Path=Nodes}" DataType="{x:Type controls:OneCodeWindowControl+Node}">
                     <TextBlock Text="{Binding Name}" 
                                Background="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}" 
                                Foreground="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}"

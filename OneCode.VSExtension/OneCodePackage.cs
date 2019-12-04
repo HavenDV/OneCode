@@ -9,9 +9,10 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Threading;
 using OneCode.Core;
+using OneCode.VsExtension.Commands;
 using OneCode.VsExtension.Properties;
+using OneCode.VsExtension.UI.Windows;
 using OneCode.VsExtension.Utilities;
-using OneCode.VsExtension.Windows;
 using Task = System.Threading.Tasks.Task;
 
 namespace OneCode.VsExtension

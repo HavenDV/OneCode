@@ -5,15 +5,25 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using OneCode.Core;
 using OneCode.VsExtension.Properties;
+using OneCode.VsExtension.UI.Windows;
 using OneCode.VsExtension.Utilities;
 
-namespace OneCode.VsExtension.Windows
+namespace OneCode.VsExtension.UI.Controls
 {
     /// <summary>
     /// Interaction logic for OneCodeWindowControl.
     /// </summary>
     public partial class OneCodeWindowControl
     {
+        public class Node
+        {
+            public string Name { get; set; }
+            public Method Method { get; set; }
+            public Class Class { get; set; }
+            public CodeFile CodeFile { get; set; }
+            public ObservableCollection<Node> Nodes { get; set; }
+        }
+
         public Repositories Repositories { get; }
 
         /// <summary>

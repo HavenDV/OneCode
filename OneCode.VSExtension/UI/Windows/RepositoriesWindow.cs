@@ -1,7 +1,9 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
+using OneCode.VsExtension.Properties;
 
-namespace OneCode.VsExtension.Windows
+namespace OneCode.VsExtension.UI.Windows
 {
     /// <summary>
     /// This class implements the tool window exposed by this package and hosts a user control.
@@ -14,23 +16,26 @@ namespace OneCode.VsExtension.Windows
     /// implementation of the IVsUIElementPane interface.
     /// </para>
     /// </remarks>
-    [Guid("a5bd910c-8654-4af5-a493-631e287a9a36")]
-    public sealed class OneCodeWindow : ToolWindowPane
+    [Guid("84CE1945-138B-4F6B-82BD-71CE4379B992")]
+    public sealed class RepositoriesWindow : ToolWindowPane
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OneCodeWindow"/> class.
+        /// Initializes a new instance of the <see cref="RepositoriesWindow"/> class.
         /// </summary>
-        public OneCodeWindow() : base(null)
+        public RepositoriesWindow() : base(null)
         {
-            Caption = "OneCode";
+            Caption = "OneCode Repositories";
 
             // This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
             // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on
             // the object returned by the Content property.
-            Content = new OneCodeWindowControl();
+            Content = new Controls.RepositoriesControl
+            {
+                Values = new ObservableCollection<string>(Settings.Default.RepositoryPath.Split(';'))
+            };
         }
 
-        public OneCodeWindow(string _) : this()
+        public RepositoriesWindow(string _) : this()
         {
         }
     }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 
-namespace OneCode.VsExtension.Windows
+namespace OneCode.VsExtension.UI.Controls
 {
     /// <summary>
     /// Interaction logic for RepositoriesControl.xaml
