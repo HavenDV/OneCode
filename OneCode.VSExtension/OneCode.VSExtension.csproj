@@ -51,6 +51,7 @@
     <Compile Include="Completions\OneCodeCompletionCommitManagerProvider.cs" />
     <Compile Include="Completions\OneCodeCompletionSource.cs" />
     <Compile Include="Completions\OneCodeCompletionSourceProvider.cs" />
+    <Compile Include="UI\ViewModels\OneCodeViewModel.cs" />
     <Compile Include="UI\ViewModels\RepositoryViewModel.cs" />
     <Compile Include="UI\ViewModels\RepositoriesViewModel.cs" />
     <Compile Include="Utilities\ControlExtensions.cs" />
