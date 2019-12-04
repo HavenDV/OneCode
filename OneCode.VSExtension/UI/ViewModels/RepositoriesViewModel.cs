@@ -53,14 +53,16 @@ namespace OneCode.VsExtension.UI.ViewModels
             Settings.Default.Save();
         }
 
-        private static void OnEdit(Repository repository)
+        private void OnEdit(Repository repository)
         {
             if (repository == null)
             {
                 return;
             }
 
-            new RepositoriesControl().ShowAsDialog($"Edit {repository.Folder}");
+            new RepositoriesViewModel(Model)
+                .ShowAsDialog<RepositoriesControl>(
+                    $"Edit {repository.Folder}", 400, 400);
         }
 
         private void OnAdd()

@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.VisualStudio.PlatformUI;
 using OneCode.Core;
-using OneCode.VsExtension.UI.Windows;
+using OneCode.VsExtension.UI.Controls;
 using OneCode.VsExtension.Utilities;
 
 namespace OneCode.VsExtension.UI.ViewModels
@@ -35,9 +35,11 @@ namespace OneCode.VsExtension.UI.ViewModels
             Model.Reload();
         }
 
-        private static void OnShowRepositories()
+        private void OnShowRepositories()
         {
-            OneCodePackage.Instance.ShowWindow(typeof(RepositoriesWindow));
+            new RepositoriesViewModel(Model)
+                .ShowAsDialog<RepositoriesControl>(
+                    "OneCode Repositories", 400, 400);
         }
 
         private static void OnAddItem(Node node)

@@ -40,8 +40,6 @@ namespace OneCode.VsExtension
     [ProvideToolWindow(typeof(OneCodeWindow),
         Style = VsDockStyle.Tabbed,
         Window = EnvDTE.Constants.vsWindowKindSolutionExplorer)]
-    [ProvideToolWindow(typeof(RepositoriesWindow),
-        Style = VsDockStyle.AlwaysFloat)]
     public sealed class OneCodePackage : AsyncPackage
     {
         /// <summary>
@@ -123,8 +121,7 @@ namespace OneCode.VsExtension
 
         public override IVsAsyncToolWindowFactory GetAsyncToolWindowFactory(Guid toolWindowType)
         {
-            if (toolWindowType == typeof(OneCodeWindow).GUID || 
-                toolWindowType == typeof(RepositoriesWindow).GUID)
+            if (toolWindowType == typeof(OneCodeWindow).GUID)
             {
                 return this;
             }
@@ -139,10 +136,6 @@ namespace OneCode.VsExtension
             if (toolWindowType == typeof(OneCodeWindow))
             {
                 return "Loading OneCode Window...";
-            }
-            if (toolWindowType == typeof(RepositoriesWindow))
-            {
-                return "Loading OneCode Repositories Window...";
             }
 
             return base.GetToolWindowTitle(toolWindowType, id);
