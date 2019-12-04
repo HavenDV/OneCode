@@ -3,24 +3,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:vsShell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
              xmlns:controls="clr-namespace:OneCode.VsExtension.UI.Controls"
-             Background="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}"
-             Foreground="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="VisualStudioStylesDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
         </Grid.RowDefinitions>
-        <TreeView Grid.Row="0" 
-                  Background="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}" 
-                  Margin="5"
-                  x:Name="TreeView"
-                  >
+        <TreeView x:Name="TreeView" Grid.Row="0" Margin="5">
             <TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type TreeViewItem}">
+                <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource VisualStudioTreeViewItemStyle}">
                     <Setter Property="IsExpanded" Value="True" />
                     <EventSetter Event="MouseDoubleClick"
                                  Handler="TreeView_MouseDoubleClick"/>
@@ -28,34 +28,14 @@
             </TreeView.ItemContainerStyle>
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Nodes}" DataType="{x:Type controls:OneCodeWindowControl+Node}">
-                    <TextBlock Text="{Binding Name}" 
-                               Background="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}" 
-                               Foreground="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}"
-                               />
+                    <TextBlock Text="{Binding Name}"/>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        <StackPanel Grid.Row="1" 
-                    Orientation="Horizontal"
-                    Margin="5">
-            <Button Width="80" 
-                    Content="Load" 
-                    Click="LoadButton_Click" 
-                    Background="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}" 
-                    Foreground="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}"
-                    />
-            <Button Width="80" 
-                    Content="Update" 
-                    Click="UpdateButton_Click" 
-                    Background="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}" 
-                    Foreground="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}"
-            />
-            <Button Width="120" 
-                    Content="Show Repositories"
-                    Click="ShowRepositoriesButton_OnClick"
-                    Background="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}" 
-                    Foreground="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}"
-            />
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
+            <Button Width="80" Content="Load" Click="LoadButton_Click" />
+            <Button Width="80" Content="Update" Click="UpdateButton_Click" />
+            <Button Width="120" Content="Show Repositories" Click="ShowRepositoriesButton_OnClick" />
         </StackPanel>
     </Grid>
 </UserControl>
