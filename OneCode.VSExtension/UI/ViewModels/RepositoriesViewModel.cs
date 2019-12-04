@@ -5,6 +5,8 @@ using System.Windows.Forms;
 using Microsoft.VisualStudio.PlatformUI;
 using OneCode.Core;
 using OneCode.VsExtension.Properties;
+using OneCode.VsExtension.UI.Controls;
+using OneCode.VsExtension.Utilities;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace OneCode.VsExtension.UI.ViewModels
@@ -38,7 +40,7 @@ namespace OneCode.VsExtension.UI.ViewModels
             }
 
             if (MessageBox.Show(
-                    $"Are you sure you want to delete \"{repository?.Folder}\"", 
+                    $"Are you sure you want to delete \"{repository.Folder}\"", 
                     "Question", 
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) != DialogResult.Yes)
             {
@@ -57,8 +59,8 @@ namespace OneCode.VsExtension.UI.ViewModels
             {
                 return;
             }
-            
-            MessageBox.Show($"Edit {repository.Folder}");
+
+            new RepositoriesControl().ShowAsDialog($"Edit {repository.Folder}");
         }
 
         private void OnAdd()

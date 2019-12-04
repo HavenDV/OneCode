@@ -2,46 +2,53 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:vsShell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0">
     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                     Color="{DynamicResource {x:Static vsShell:VsColors.HighlightKey}}"  />
+                     Color="{DynamicResource {x:Static vsShell:VsColors.HighlightKey}}"/>
     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
-                     Color="{DynamicResource {x:Static vsShell:VsColors.HighlightTextKey}}" />
+                     Color="{DynamicResource {x:Static vsShell:VsColors.HighlightTextKey}}"/>
     <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" 
-                     Color="{DynamicResource {x:Static vsShell:VsColors.HighlightKey}}"  />
+                     Color="{DynamicResource {x:Static vsShell:VsColors.HighlightKey}}"/>
     <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
-                     Color="{DynamicResource {x:Static vsShell:VsColors.HighlightTextKey}}" />
+                     Color="{DynamicResource {x:Static vsShell:VsColors.HighlightTextKey}}"/>
+    <Style TargetType="{x:Type Window}">
+        <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}"/>
+    </Style>
+    <Style TargetType="{x:Type Grid}">
+        <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}"/>
+    </Style>
     <Style TargetType="{x:Type UserControl}">
-        <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}"  />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}"/>
     </Style>
     <Style TargetType="{x:Type ListView}">
-        <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}"  />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}"/>
     </Style>
     <Style TargetType="{x:Type TreeView}">
-        <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}"  />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}"/>
     </Style>
     <Style TargetType="{x:Type TreeViewItem}">
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="False">
-                <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}" />
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}"/>
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.HighlightKey}}" />
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:VsBrushes.HighlightTextKey}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.HighlightKey}}"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:VsBrushes.HighlightTextKey}}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
     <Style TargetType="{x:Type Button}">
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="False">
-                <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.ButtonFaceKey}}"  />
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:VsBrushes.ButtonTextKey}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.ButtonFaceKey}}"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:VsBrushes.ButtonTextKey}}"/>
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.ButtonHighlightKey}}"  />
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:VsBrushes.ButtonShadowKey}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.ButtonHighlightKey}}"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:VsBrushes.ButtonShadowKey}}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
