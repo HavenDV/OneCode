@@ -26,7 +26,7 @@ namespace OneCode.Core
 
         #region Public methods
 
-        public void Load(string path)
+        public void Load(string path, bool raiseChanged = true)
         {
             if (Values.Any(repository => repository.Folder == path))
             {
@@ -35,15 +35,20 @@ namespace OneCode.Core
 
             Values.Add(Repository.Load(path));
 
-            OnChanged();
+            if (raiseChanged)
+            {
+                OnChanged();
+            }
         }
 
         public void Load(List<string> paths)
         {
             foreach (var path in paths)
             {
-                Load(path);
+                Load(path, false);
             }
+
+            OnChanged();
         }
 
         public void Remove(Repository repository)
