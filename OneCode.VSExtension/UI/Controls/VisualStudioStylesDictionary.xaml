@@ -21,7 +21,7 @@
         <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}"  />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowTextKey}}" />
     </Style>
-    <Style TargetType="{x:Type TreeViewItem}" x:Key="VisualStudioTreeViewItemStyle">
+    <Style TargetType="{x:Type TreeViewItem}">
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="False">
                 <Setter Property="Background" Value="{DynamicResource {x:Static vsShell:VsBrushes.WindowKey}}" />
