@@ -7,8 +7,9 @@ using Microsoft.VisualStudio.Utilities;
 namespace OneCode.VsExtension.Completions
 {
     [Export(typeof(IAsyncCompletionCommitManagerProvider))]
-    [Name("OneCode commit manager provider")]
+    [Name(nameof(OneCodeCompletionCommitManagerProvider))]
     [ContentType("CSharp")]
+    [TextViewRole(PredefinedTextViewRoles.Editable)]
     internal class OneCodeCompletionCommitManagerProvider : IAsyncCompletionCommitManagerProvider
     {
         private IDictionary<ITextView, IAsyncCompletionCommitManager> Cache { get; } = new Dictionary<ITextView, IAsyncCompletionCommitManager>();
