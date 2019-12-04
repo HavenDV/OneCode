@@ -2,9 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using OneCode.Core;
-using OneCode.VsExtension.Properties;
 using OneCode.VsExtension.UI.Windows;
 using OneCode.VsExtension.Utilities;
 
@@ -37,24 +35,6 @@ namespace OneCode.VsExtension.UI.Controls
             Repositories.Changed += (sender, args) => RefreshTree(Repositories);
 
             RefreshTree(Repositories);
-        }
-
-        private void LoadButton_Click(object sender, RoutedEventArgs e)
-        {
-            using var dialog = new FolderBrowserDialog();
-
-            if (dialog.ShowDialog() != DialogResult.OK ||
-                string.IsNullOrWhiteSpace(dialog.SelectedPath))
-            {
-                return;
-            }
-
-            var path = dialog.SelectedPath;
-
-            Repositories.Load(path);
-
-            Settings.Default.RepositoryPath = path;
-            Settings.Default.Save();
         }
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
