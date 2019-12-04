@@ -11,7 +11,7 @@ using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace OneCode.VsExtension.UI.ViewModels
 {
-    public class RepositoriesViewModel
+    public sealed class RepositoriesViewModel
     {
         private Repositories Model { get; }
 

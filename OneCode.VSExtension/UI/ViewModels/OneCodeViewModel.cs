@@ -8,7 +8,7 @@ using OneCode.VsExtension.Utilities;
 
 namespace OneCode.VsExtension.UI.ViewModels
 {
-    public class OneCodeViewModel
+    public sealed class OneCodeViewModel
     {
         private Repositories Model { get; }
 

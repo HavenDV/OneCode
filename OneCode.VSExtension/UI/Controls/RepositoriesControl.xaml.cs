@@ -3,7 +3,7 @@
     /// <summary>
     /// Interaction logic for RepositoriesControl.xaml
     /// </summary>
-    public partial class RepositoriesControl
+    public sealed partial class RepositoriesControl
     {
         public RepositoriesControl()
         {

@@ -10,7 +10,7 @@ namespace OneCode.VsExtension.Completions
     [Name(nameof(OneCodeCompletionCommitManagerProvider))]
     [ContentType("CSharp")]
     [TextViewRole(PredefinedTextViewRoles.Editable)]
-    internal class OneCodeCompletionCommitManagerProvider : IAsyncCompletionCommitManagerProvider
+    internal sealed class OneCodeCompletionCommitManagerProvider : IAsyncCompletionCommitManagerProvider
     {
         private IDictionary<ITextView, IAsyncCompletionCommitManager> Cache { get; } = new Dictionary<ITextView, IAsyncCompletionCommitManager>();
 

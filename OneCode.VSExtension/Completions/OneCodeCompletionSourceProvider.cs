@@ -13,7 +13,7 @@ namespace OneCode.VsExtension.Completions
     [TextViewRole(PredefinedTextViewRoles.Editable)]
     [Order(After = "default")]
     [Order(After = "Roslyn Completion Presenter")]
-    internal class OneCodeCompletionSourceProvider : IAsyncCompletionSourceProvider
+    internal sealed class OneCodeCompletionSourceProvider : IAsyncCompletionSourceProvider
     {
         private IDictionary<ITextView, IAsyncCompletionSource> CacheDictionary { get; } = new Dictionary<ITextView, IAsyncCompletionSource>();
 

@@ -18,7 +18,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace OneCode.VsExtension.Completions
 {
-    public class OneCodeCompletionSource : IAsyncCompletionSource
+    public sealed class OneCodeCompletionSource : IAsyncCompletionSource
     {
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private ITextStructureNavigatorSelectorService StructureNavigatorSelector { get; }

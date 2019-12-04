@@ -13,7 +13,7 @@ namespace OneCode.VsExtension.Completions
     /// <summary>
     /// The simplest implementation of IAsyncCompletionCommitManager that provides Commit Characters and uses default behavior otherwise
     /// </summary>
-    internal class OneCodeCompletionCommitManager : IAsyncCompletionCommitManager
+    internal sealed class OneCodeCompletionCommitManager : IAsyncCompletionCommitManager
     {
         private ImmutableArray<char> CommitChars { get; } = new [] { ' ', '\'', '"', ',', '.', ';', ':' }.ToImmutableArray();
 

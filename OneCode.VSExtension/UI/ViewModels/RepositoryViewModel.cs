@@ -4,7 +4,7 @@ using OneCode.Core;
 
 namespace OneCode.VsExtension.UI.ViewModels
 {
-    public class RepositoryViewModel
+    public sealed class RepositoryViewModel
     {
         private Repository Model { get; }
 

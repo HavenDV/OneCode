@@ -7,7 +7,7 @@ namespace OneCode.VsExtension.UI.Controls
     /// <summary>
     /// Interaction logic for OneCodeWindowControl.
     /// </summary>
-    public partial class OneCodeWindowControl
+    public sealed partial class OneCodeWindowControl
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OneCodeWindowControl"/> class.
