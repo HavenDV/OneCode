@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
@@ -11,7 +10,6 @@ using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion.Data;
 using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Adornments;
-using Microsoft.VisualStudio.Text.Operations;
 using OneCode.Core;
 using OneCode.VsExtension.Utilities;
 using Task = System.Threading.Tasks.Task;
@@ -21,7 +19,7 @@ namespace OneCode.VsExtension.Completions
     public sealed class OneCodeCompletionSource : IAsyncCompletionSource
     {
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
-        private ITextStructureNavigatorSelectorService StructureNavigatorSelector { get; }
+        //private ITextStructureNavigatorSelectorService StructureNavigatorSelector { get; }
 
         private static ImageElement ImageElement { get; } = new ImageElement(new ImageId(KnownImageIds.ImageCatalogGuid, KnownImageIds.AddMethod));
         private ImmutableArray<CompletionItem>? Items { get; set; }
@@ -29,10 +27,10 @@ namespace OneCode.VsExtension.Completions
         private ImmutableArray<ImageElement>? Images { get; set; }
         private Repositories Repositories { get; set; }
 
-        public OneCodeCompletionSource(ITextStructureNavigatorSelectorService structureNavigatorSelector)
-        {
-            StructureNavigatorSelector = structureNavigatorSelector ?? throw new ArgumentNullException(nameof(structureNavigatorSelector));
-        }
+        //public OneCodeCompletionSource() //ITextStructureNavigatorSelectorService structureNavigatorSelector
+        //{
+            //StructureNavigatorSelector = structureNavigatorSelector ?? throw new ArgumentNullException(nameof(structureNavigatorSelector));
+        //}
 
         public CompletionStartData InitializeCompletion(CompletionTrigger trigger, SnapshotPoint triggerLocation, CancellationToken token)
         {

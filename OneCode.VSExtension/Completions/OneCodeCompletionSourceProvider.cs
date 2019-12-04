@@ -2,7 +2,6 @@
 using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion;
 using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Text.Operations;
 using Microsoft.VisualStudio.Utilities;
 
 namespace OneCode.VsExtension.Completions
@@ -17,9 +16,9 @@ namespace OneCode.VsExtension.Completions
     {
         private IDictionary<ITextView, IAsyncCompletionSource> CacheDictionary { get; } = new Dictionary<ITextView, IAsyncCompletionSource>();
 
-        [Import]
+        //[Import]
         // ReSharper disable once InconsistentNaming
-        private readonly ITextStructureNavigatorSelectorService StructureNavigatorSelector;
+        //private readonly ITextStructureNavigatorSelectorService StructureNavigatorSelector;
 
         public IAsyncCompletionSource GetOrCreate(ITextView textView)
         {
@@ -28,7 +27,7 @@ namespace OneCode.VsExtension.Completions
                 return cachedSource;
             }
 
-            var source = new OneCodeCompletionSource(StructureNavigatorSelector);
+            var source = new OneCodeCompletionSource();
             textView.Closed += (o, e) => CacheDictionary.Remove(textView);
             CacheDictionary.Add(textView, source);
 
