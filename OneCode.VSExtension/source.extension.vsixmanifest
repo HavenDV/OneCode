@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="OneCode.VSExtension.a25f430e-f649-4dcd-a83d-92a906e35342" Version="1.0.0.5" Language="en-US" Publisher="Konstantin S." />
+        <Identity Id="OneCode.VSExtension.a25f430e-f649-4dcd-a83d-92a906e35342" Version="1.0.0.6" Language="en-US" Publisher="Konstantin S." />
         <DisplayName>OneCode.VSExtension</DisplayName>
-        <Description>Empty VSIX Project.</Description>
+        <Description xml:space="preserve">This extension adds methods and classes from the repositories of your choice to IntelliSense autocompletion and allows you to automatically add them to the project after autocompletion</Description>
+        <MoreInfo>https://github.com/HavenDV/OneCode.VSExtension</MoreInfo>
+        <Preview>true</Preview>
     </Metadata>
     <Installation>
-        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[16.0, 17.0)" />
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0, 17.0)" />
     </Installation>
     <Dependencies>
         <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
@@ -16,6 +18,6 @@
     </Prerequisites>
     <Assets>
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
-      <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
-  </Assets>
+        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
+    </Assets>
 </PackageManifest>
