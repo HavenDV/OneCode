@@ -84,9 +84,9 @@ namespace OneCode.VsExtension
             {
                 file.Code.Classes[0].Methods = new List<Method> { method };
             }
-
+            
             file.SaveTo(fullPath);
-
+            
             project.AddItemFromFile(fullPath);
 
             if (openAfterAdd)

@@ -20,10 +20,11 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
         </Grid.RowDefinitions>
-        <TreeView Grid.Row="0" Margin="5" ItemsSource="{Binding Nodes}" MouseDoubleClick="TreeView_OnMouseDoubleClick">
+        <TreeView Grid.Row="0" Margin="5" ItemsSource="{Binding Nodes}">
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
                     <Setter Property="IsExpanded" Value="True" />
+                    <EventSetter Event="MouseDoubleClick" Handler="TreeView_OnMouseDoubleClick"/>
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.ItemTemplate>
