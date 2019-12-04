@@ -2,7 +2,7 @@
 
 namespace OneCode.Core
 {
-    public class Class : CodeObject
+    public sealed class Class : CodeObject
     {
         public bool IsStatic { get; set; }
 

@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace OneCode.Core
 {
-    internal class MethodsRewriter : CSharpSyntaxRewriter
+    internal sealed class MethodsRewriter : CSharpSyntaxRewriter
     {
         private string[] MethodNamesToSave { get; }
 

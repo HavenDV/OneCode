@@ -9,7 +9,7 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace OneCode.Core
 {
-    public class Code
+    public sealed class Code
     {
         public const string SpecialPrefix = "<![CDATA[";
         public const string SpecialPostfix = "]]>";

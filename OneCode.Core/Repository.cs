@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace OneCode.Core
 {
-    public class Repository
+    public sealed class Repository
     {
         public string Folder { get; set; } = string.Empty;
         public List<CodeFile> Files { get; set; } = new List<CodeFile>();

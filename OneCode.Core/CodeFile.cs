@@ -3,7 +3,7 @@ using System.IO;
 
 namespace OneCode.Core
 {
-    public class CodeFile
+    public sealed class CodeFile
     {
         public string FullPath { get; set; } = string.Empty;
         public string RelativePath { get; set; } = string.Empty;

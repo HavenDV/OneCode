@@ -5,11 +5,26 @@ using System.Linq;
 
 namespace OneCode.Core
 {
-    public class Repositories
+    public sealed class Repositories
     {
+        #region Properties
+
         public ObservableCollection<Repository> Values { get; set; } = new ObservableCollection<Repository>();
 
+        #endregion
+
+        #region Events
+
         public event EventHandler? Changed;
+
+        private void OnChanged()
+        {
+            Changed?.Invoke(this, EventArgs.Empty);
+        }
+
+        #endregion
+
+        #region Public methods
 
         public void Load(string path)
         {
@@ -20,7 +35,7 @@ namespace OneCode.Core
 
             Values.Add(Repository.Load(path));
 
-            Changed?.Invoke(this, EventArgs.Empty);
+            OnChanged();
         }
 
         public void Load(List<string> paths)
@@ -29,6 +44,13 @@ namespace OneCode.Core
             {
                 Load(path);
             }
+        }
+
+        public void Remove(Repository repository)
+        {
+            Values.Remove(repository);
+
+            OnChanged();
         }
 
         public void Reload()
@@ -41,5 +63,7 @@ namespace OneCode.Core
 
             Load(paths);
         }
+
+        #endregion
     }
 }
