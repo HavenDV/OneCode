@@ -1,7 +1,6 @@
-﻿using System.Collections.ObjectModel;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
-using OneCode.VsExtension.Properties;
+using OneCode.VsExtension.UI.ViewModels;
 
 namespace OneCode.VsExtension.UI.Windows
 {
@@ -31,7 +30,7 @@ namespace OneCode.VsExtension.UI.Windows
             // the object returned by the Content property.
             Content = new Controls.RepositoriesControl
             {
-                Values = new ObservableCollection<string>(Settings.Default.RepositoryPath.Split(';'))
+                DataContext = new RepositoriesViewModel(OneCodePackage.Repositories.GetValue()),
             };
         }
 
