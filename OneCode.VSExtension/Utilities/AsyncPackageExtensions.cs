@@ -16,7 +16,7 @@ namespace OneCode.VsExtension.Utilities
                 {
                     throw new NotSupportedException("Cannot create tool window");
                 }
-
+                
                 await package.JoinableTaskFactory.SwitchToMainThreadAsync();
 
                 var frame = (IVsWindowFrame)window.Frame;
