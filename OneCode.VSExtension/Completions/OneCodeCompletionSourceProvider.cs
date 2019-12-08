@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
+using OneCode.VsExtension.Services;
 
 namespace OneCode.VsExtension.Completions
 {
@@ -12,13 +13,12 @@ namespace OneCode.VsExtension.Completions
     [TextViewRole(PredefinedTextViewRoles.Editable)]
     [Order(After = "default")]
     [Order(After = "Roslyn Completion Presenter")]
-    internal sealed class OneCodeCompletionSourceProvider : IAsyncCompletionSourceProvider
+    public sealed class OneCodeCompletionSourceProvider : IAsyncCompletionSourceProvider
     {
         private IDictionary<ITextView, IAsyncCompletionSource> CacheDictionary { get; } = new Dictionary<ITextView, IAsyncCompletionSource>();
 
-        //[Import]
-        // ReSharper disable once InconsistentNaming
-        //private readonly ITextStructureNavigatorSelectorService StructureNavigatorSelector;
+        [Import]
+        private RepositoriesService RepositoriesService { get; set; }
 
         public IAsyncCompletionSource GetOrCreate(ITextView textView)
         {
@@ -27,7 +27,7 @@ namespace OneCode.VsExtension.Completions
                 return cachedSource;
             }
 
-            var source = new OneCodeCompletionSource();
+            var source = new OneCodeCompletionSource(RepositoriesService);
             textView.Closed += (o, e) => CacheDictionary.Remove(textView);
             CacheDictionary.Add(textView, source);
 

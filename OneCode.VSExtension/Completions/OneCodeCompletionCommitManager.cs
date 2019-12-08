@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion;
 using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion.Data;
 using Microsoft.VisualStudio.Text;
 using OneCode.Core;
+using OneCode.VsExtension.Services;
 using OneCode.VsExtension.Utilities;
 
 namespace OneCode.VsExtension.Completions
@@ -13,11 +14,17 @@ namespace OneCode.VsExtension.Completions
     /// <summary>
     /// The simplest implementation of IAsyncCompletionCommitManager that provides Commit Characters and uses default behavior otherwise
     /// </summary>
-    internal sealed class OneCodeCompletionCommitManager : IAsyncCompletionCommitManager
+    public sealed class OneCodeCompletionCommitManager : IAsyncCompletionCommitManager
     {
         private ImmutableArray<char> CommitChars { get; } = new [] { ' ', '\'', '"', ',', '.', ';', ':' }.ToImmutableArray();
 
         public IEnumerable<char> PotentialCommitCharacters => CommitChars;
+        private RepositoriesService RepositoriesService { get; }
+
+        public OneCodeCompletionCommitManager(RepositoriesService repositoriesService)
+        {
+            RepositoriesService = repositoriesService ?? throw new ArgumentNullException(nameof(repositoriesService));
+        }
 
         public bool ShouldCommitCompletion(IAsyncCompletionSession session, SnapshotPoint location, char typedChar, CancellationToken token)
         {
@@ -41,7 +48,7 @@ namespace OneCode.VsExtension.Completions
             if (!session.IsDismissed &&
                 file != null)
             {
-                OneCodePackage.AddItem(file, @class, method);
+                RepositoriesService.AddItem(file, @class, method);
 
                 var usingText = $"using {file.Code.NamespaceName};{Environment.NewLine}";
                 if (!buffer.CurrentSnapshot.GetText().Contains(usingText))

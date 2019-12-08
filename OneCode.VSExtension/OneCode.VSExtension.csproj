@@ -51,6 +51,9 @@
     <Compile Include="Completions\OneCodeCompletionCommitManagerProvider.cs" />
     <Compile Include="Completions\OneCodeCompletionSource.cs" />
     <Compile Include="Completions\OneCodeCompletionSourceProvider.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Services\ExceptionsService.cs" />
+    <Compile Include="Services\RepositoriesService.cs" />
     <Compile Include="UI\Controls\ExceptionsControl.xaml.cs">
       <DependentUpon>ExceptionsControl.xaml</DependentUpon>
     </Compile>

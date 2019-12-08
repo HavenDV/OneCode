@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.Threading;
-using OneCode.Core;
 using OneCode.VsExtension.Commands;
-using OneCode.VsExtension.Properties;
+using OneCode.VsExtension.Services;
 using OneCode.VsExtension.UI.Windows;
-using OneCode.VsExtension.Utilities;
 using Task = System.Threading.Tasks.Task;
 
 namespace OneCode.VsExtension
@@ -47,55 +42,10 @@ namespace OneCode.VsExtension
         /// </summary>
         public const string PackageGuidString = "7ff6c859-ac79-49e7-98cf-70dfcf6a101d";
 
-        public static OneCodePackage Instance { get; set; }
+        #region Properties
 
-        public List<Exception> Exceptions { get; set; }
-
-        #region OneCode
-
-        public AsyncLazy<Repositories> Repositories { get; set; } = new AsyncLazy<Repositories>(() => Task.Run(() =>
-        {
-            var repositories = new Repositories();
-
-            repositories.Load(Settings.Default.RepositoryPath.Split(';').ToList());
-
-            return repositories;
-        }), ThreadHelper.JoinableTaskFactory);
-
-        public static void AddItem(CodeFile file, Class @class, Method method, bool openAfterAdd = false)
-        {
-            if (file == null || Instance == null)
-            {
-                return;
-            }
-
-            var dte = Instance.GetDte();
-            var project = dte.GetActiveProject();
-
-            //var solution = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
-            //IVsHierarchy hierarchy;
-            //solution.GetProjectOfUniqueName(project.UniqueName, out hierarchy);
-
-            var projectDirectory = project.GetDirectory();
-            var fullPath = Path.Combine(projectDirectory ?? string.Empty, file.RelativePathWithoutTargetFramework);
-
-            file.Code.NamespaceName = project.GetDefaultNamespace() + file.AdditionalNamespace;
-            file.Code.Classes = new List<Class> { @class };
-
-            if (method != null)
-            {
-                file.Code.Classes[0].Methods = new List<Method> { method };
-            }
-            
-            file.SaveTo(fullPath);
-            
-            project.AddItemFromFile(fullPath);
-
-            if (openAfterAdd)
-            {
-                dte.OpenFileAsText(fullPath);
-            }
-        }
+        public RepositoriesService RepositoriesService { get; set; }
+        public ExceptionsService ExceptionsService { get; set; }
 
         #endregion
 
@@ -110,6 +60,26 @@ namespace OneCode.VsExtension
         /// <returns>A task representing the async work of package initialization, or an already completed task if there is none. Do not return null from this method.</returns>
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
+            progress.Report(new ServiceProgressData("Initializing services..."));
+
+            var componentModel = await GetServiceAsync(typeof(SComponentModel)) as IComponentModel ?? throw new InvalidOperationException("Service SComponentModel is not found");
+            RepositoriesService = componentModel.DefaultExportProvider.GetExportedValue<RepositoriesService>();
+            ExceptionsService = componentModel.DefaultExportProvider.GetExportedValue<ExceptionsService>();
+
+            progress.Report(new ServiceProgressData("Loading repositories..."));
+
+            await JoinableTaskFactory.RunAsync(() => Task.Run(() =>
+            {
+                try
+                {
+                    RepositoriesService.LoadFromSettings();
+                }
+                catch (Exception exception)
+                {
+                    ExceptionsService.Add(exception);
+                }
+            }, cancellationToken));
+
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
@@ -117,8 +87,6 @@ namespace OneCode.VsExtension
             progress.Report(new ServiceProgressData("Initializing windows..."));
 
             await OneCodeWindowCommand.InitializeAsync(this);
-            
-            Instance = this;
         }
 
         public override IVsAsyncToolWindowFactory GetAsyncToolWindowFactory(Guid toolWindowType)
@@ -143,14 +111,14 @@ namespace OneCode.VsExtension
             return base.GetToolWindowTitle(toolWindowType, id);
         }
 
-        protected override async Task<object> InitializeToolWindowAsync(Type toolWindowType, int id, CancellationToken cancellationToken)
+        protected override Task<object> InitializeToolWindowAsync(Type toolWindowType, int id, CancellationToken cancellationToken)
         {
             if (toolWindowType == typeof(OneCodeWindow))
             {
-                await Repositories.GetValueAsync(cancellationToken);
+                return Task.FromResult<object>(this);
             }
 
-            return null;
+            return Task.FromResult<object>(null);
         }
 
         #endregion

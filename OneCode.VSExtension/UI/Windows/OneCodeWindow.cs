@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 using OneCode.VsExtension.UI.ViewModels;
 
@@ -21,8 +22,10 @@ namespace OneCode.VsExtension.UI.Windows
         /// <summary>
         /// Initializes a new instance of the <see cref="OneCodeWindow"/> class.
         /// </summary>
-        public OneCodeWindow() : base(null)
+        public OneCodeWindow(OneCodePackage package) : base(package)
         {
+            package = package ?? throw new ArgumentNullException(nameof(package));
+
             Caption = "OneCode";
 
             // This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
@@ -30,12 +33,8 @@ namespace OneCode.VsExtension.UI.Windows
             // the object returned by the Content property.
             Content = new Controls.OneCodeWindowControl
             {
-                DataContext = new OneCodeViewModel(OneCodePackage.Instance.Repositories.GetValue()),
+                DataContext = new OneCodeViewModel(package.RepositoriesService, package.ExceptionsService),
             };
-        }
-
-        public OneCodeWindow(string _) : this()
-        {
         }
     }
 }

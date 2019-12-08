@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
@@ -11,6 +12,7 @@ using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Adornments;
 using OneCode.Core;
+using OneCode.VsExtension.Services;
 using OneCode.VsExtension.Utilities;
 using Task = System.Threading.Tasks.Task;
 
@@ -18,19 +20,17 @@ namespace OneCode.VsExtension.Completions
 {
     public sealed class OneCodeCompletionSource : IAsyncCompletionSource
     {
-        // ReSharper disable once UnusedAutoPropertyAccessor.Local
-        //private ITextStructureNavigatorSelectorService StructureNavigatorSelector { get; }
-
         private static ImageElement ImageElement { get; } = new ImageElement(new ImageId(KnownImageIds.ImageCatalogGuid, KnownImageIds.AddMethod));
         private ImmutableArray<CompletionItem>? Items { get; set; }
         private ImmutableArray<CompletionFilter>? Filters { get; set; }
         private ImmutableArray<ImageElement>? Images { get; set; }
-        private Repositories Repositories { get; set; }
+        private RepositoriesService RepositoriesService { get; }
 
-        //public OneCodeCompletionSource() //ITextStructureNavigatorSelectorService structureNavigatorSelector
-        //{
-            //StructureNavigatorSelector = structureNavigatorSelector ?? throw new ArgumentNullException(nameof(structureNavigatorSelector));
-        //}
+        public OneCodeCompletionSource(RepositoriesService repositoriesService)
+        {
+            RepositoriesService = repositoriesService ?? throw new ArgumentNullException(nameof(repositoriesService));
+            RepositoriesService.Repositories.Changed += (sender, args) => Items = GetActualItems().ToImmutableArray();
+        }
 
         public CompletionStartData InitializeCompletion(CompletionTrigger trigger, SnapshotPoint triggerLocation, CancellationToken token)
         {
@@ -122,7 +122,7 @@ namespace OneCode.VsExtension.Completions
 
         public IEnumerable<CompletionItem> GetActualItems()
         {
-            return Repositories.Values
+            return RepositoriesService.Repositories.Values
                 .Select(repository => repository.Files
                     .Select(file => file.Code.Classes.Select(@class => @class.Methods
                             .Where(method => method.IsStatic)
@@ -151,19 +151,13 @@ namespace OneCode.VsExtension.Completions
                 .SelectMany(i => i);
         }
 
-        public async Task<CompletionContext> GetCompletionContextAsync(IAsyncCompletionSession session, CompletionTrigger trigger, SnapshotPoint triggerLocation, SnapshotSpan applicableToSpan, CancellationToken token)
+        public Task<CompletionContext> GetCompletionContextAsync(IAsyncCompletionSession session, CompletionTrigger trigger, SnapshotPoint triggerLocation, SnapshotSpan applicableToSpan, CancellationToken token)
         {
-            if (Repositories == null)
-            {
-                Repositories ??= await OneCodePackage.Instance.Repositories.GetValueAsync(token);
-                Repositories.Changed += (sender, args) => Items = GetActualItems().ToImmutableArray();
-            }
-
             Filters ??= ImmutableArray.Create(new CompletionFilter("OneCode", "O", ImageElement));
             Images ??= ImmutableArray.Create<ImageElement>();
             Items ??= GetActualItems()?.ToImmutableArray();
 
-            return new CompletionContext(Items ?? ImmutableArray<CompletionItem>.Empty);
+            return Task.FromResult(new CompletionContext(Items ?? ImmutableArray<CompletionItem>.Empty));
 
             /*
             // See whether we are in the key or value portion of the pair
