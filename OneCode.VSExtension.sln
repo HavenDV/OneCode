@@ -9,11 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneCode.Core", "OneCode.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneCode.Core.Tests", "OneCode.Core.Tests\OneCode.Core.Tests.csproj", "{1A0CC34A-E835-4B38-AB4E-389D6925E31E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abc.MoqComplete", "Abc.MoqComplete\Abc.MoqComplete.csproj", "{234CD502-3AF1-4A8F-8081-1D643B9B4586}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneCode.ReSharperExtension", "OneCode.ReSharperExtension\OneCode.ReSharperExtension.csproj", "{234CD502-3AF1-4A8F-8081-1D643B9B4586}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abc.MoqComplete.Rider", "Abc.MoqComplete\Abc.MoqComplete.Rider.csproj", "{72ADC18E-03B0-47DD-927F-39EF26169070}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneCode.ReSharperExtension.Rider", "OneCode.ReSharperExtension\OneCode.ReSharperExtension.Rider.csproj", "{72ADC18E-03B0-47DD-927F-39EF26169070}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abc.MoqComplete.Tests", "Abc.MoqComplete.Tests\Abc.MoqComplete.Tests.csproj", "{D8136E8A-B78C-4CCC-9B48-DA3D8F843898}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneCode.ReSharperExtension.Tests", "OneCode.ReSharperExtension.Tests\OneCode.ReSharperExtension.Tests.csproj", "{D8136E8A-B78C-4CCC-9B48-DA3D8F843898}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
