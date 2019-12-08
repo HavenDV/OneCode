@@ -23,7 +23,27 @@ namespace OneCode.VsExtension.Services
             Repositories.Load(paths);
         }
 
-        public void AddItem(CodeFile file, Class @class, Method method, bool openAfterAdd = false)
+        public void AddAndSaveSettings(string path)
+        {
+            Repositories.Load(path);
+
+            SaveSettings();
+        }
+
+        public void RemoveAndSaveSettings(Repository repository)
+        {
+            Repositories.Remove(repository);
+
+            SaveSettings();
+        }
+
+        public void SaveSettings()
+        {
+            Settings.Default.RepositoryPath = string.Join(";", Repositories.Values.Select(i => i.Folder));
+            Settings.Default.Save();
+        }
+
+        public void AddProjectItem(CodeFile file, Class @class, Method method, bool openAfterAdd = false)
         {
             if (file == null)
             {

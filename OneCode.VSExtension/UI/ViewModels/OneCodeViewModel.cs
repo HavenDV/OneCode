@@ -53,7 +53,7 @@ namespace OneCode.VsExtension.UI.ViewModels
         {
             try
             {
-                new RepositoriesViewModel(Repositories)
+                new RepositoriesViewModel(RepositoriesService, ExceptionsService)
                 .ShowAsDialog<RepositoriesControl>(
                     "OneCode Repositories", 400, 400);
             }
@@ -86,7 +86,7 @@ namespace OneCode.VsExtension.UI.ViewModels
 
             try
             {
-                RepositoriesService.AddItem(node.CodeFile, node.Class, node.Method, true);
+                RepositoriesService.AddProjectItem(node.CodeFile, node.Class, node.Method, true);
             }
             catch (Exception exception)
             {

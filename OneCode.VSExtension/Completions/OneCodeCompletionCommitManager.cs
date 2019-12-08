@@ -48,7 +48,7 @@ namespace OneCode.VsExtension.Completions
             if (!session.IsDismissed &&
                 file != null)
             {
-                RepositoriesService.AddItem(file, @class, method);
+                RepositoriesService.AddProjectItem(file, @class, method);
 
                 var usingText = $"using {file.Code.NamespaceName};{Environment.NewLine}";
                 if (!buffer.CurrentSnapshot.GetText().Contains(usingText))

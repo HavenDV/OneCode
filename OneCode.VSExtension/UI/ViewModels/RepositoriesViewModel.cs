@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows.Forms;
 using Microsoft.VisualStudio.PlatformUI;
 using OneCode.Core;
-using OneCode.VsExtension.Properties;
+using OneCode.VsExtension.Services;
 using OneCode.VsExtension.UI.Controls;
 using OneCode.VsExtension.Utilities;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -13,7 +12,8 @@ namespace OneCode.VsExtension.UI.ViewModels
 {
     public sealed class RepositoriesViewModel
     {
-        private Repositories Model { get; }
+        private RepositoriesService RepositoriesService { get; }
+        private ExceptionsService ExceptionsService { get; }
 
         public ObservableCollection<Repository> Values { get; set; }
 
@@ -21,11 +21,12 @@ namespace OneCode.VsExtension.UI.ViewModels
         public DelegateCommand AddCommand { get; }
         public DelegateCommand<Repository> EditCommand { get; }
 
-        public RepositoriesViewModel(Repositories model)
+        public RepositoriesViewModel(RepositoriesService repositoriesService, ExceptionsService exceptionsService)
         {
-            Model = model ?? throw new ArgumentNullException(nameof(model));
+            RepositoriesService = repositoriesService ?? throw new ArgumentNullException(nameof(repositoriesService));
+            ExceptionsService = exceptionsService ?? throw new ArgumentNullException(nameof(exceptionsService));
 
-            Values = model.Values;
+            Values = RepositoriesService.Repositories.Values;
 
             RemoveCommand = new DelegateCommand<Repository>(OnRemove);
             AddCommand = new DelegateCommand(OnAdd);
@@ -39,18 +40,22 @@ namespace OneCode.VsExtension.UI.ViewModels
                 return;
             }
 
-            if (MessageBox.Show(
-                    $"Are you sure you want to delete \"{repository.Folder}\"", 
-                    "Question", 
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+            try
             {
-                return;
+                if (MessageBox.Show(
+                        $"Are you sure you want to delete \"{repository.Folder}\"",
+                        "Question",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+                {
+                    return;
+                }
+
+                RepositoriesService.RemoveAndSaveSettings(repository);
             }
-
-            Model.Remove(repository);
-
-            Settings.Default.RepositoryPath = string.Join(";", Model.Values.Select(i => i.Folder));
-            Settings.Default.Save();
+            catch (Exception exception)
+            {
+                ExceptionsService.Add(exception);
+            }
         }
 
         private void OnEdit(Repository repository)
@@ -60,27 +65,36 @@ namespace OneCode.VsExtension.UI.ViewModels
                 return;
             }
 
-            new RepositoriesViewModel(Model)
-                .ShowAsDialog<RepositoriesControl>(
-                    $"Edit {repository.Folder}", 400, 400);
+            try
+            {
+                new RepositoriesViewModel(RepositoriesService, ExceptionsService)
+                    .ShowAsDialog<RepositoriesControl>(
+                        $"Edit {repository.Folder}", 400, 400);
+            }
+            catch (Exception exception)
+            {
+                ExceptionsService.Add(exception);
+            }
         }
 
         private void OnAdd()
         {
-            using var dialog = new FolderBrowserDialog();
-
-            if (dialog.ShowDialog() != DialogResult.OK ||
-                string.IsNullOrWhiteSpace(dialog.SelectedPath))
+            try
             {
-                return;
+                using var dialog = new FolderBrowserDialog();
+
+                if (dialog.ShowDialog() != DialogResult.OK ||
+                    string.IsNullOrWhiteSpace(dialog.SelectedPath))
+                {
+                    return;
+                }
+
+                RepositoriesService.AddAndSaveSettings(dialog.SelectedPath);
             }
-
-            var path = dialog.SelectedPath;
-
-            Model.Load(path);
-
-            Settings.Default.RepositoryPath = string.Join(";", Model.Values.Select(i => i.Folder));
-            Settings.Default.Save();
+            catch (Exception exception)
+            {
+                ExceptionsService.Add(exception);
+            }
         }
     }
 }
