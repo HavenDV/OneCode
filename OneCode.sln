@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneCode.VSExtension", "OneCode.VSExtension\OneCode.VSExtension.csproj", "{802C18CE-169A-4639-87A3-4D90B6361C69}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneCode.VisualStudioExtension", "OneCode.VisualStudioExtension\OneCode.VisualStudioExtension.csproj", "{802C18CE-169A-4639-87A3-4D90B6361C69}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneCode.Core", "OneCode.Core\OneCode.Core.csproj", "{67FCAE5C-5939-47A9-BF9D-86943C077BB4}"
 EndProject
