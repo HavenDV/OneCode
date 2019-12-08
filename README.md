@@ -2,4 +2,4 @@
 
 # OneCode
 This extensions adds methods and classes from the repositories of your choice to IntelliSense autocompletion and allows you to automatically add them to the project after autocompletion<br/>
-Works with Resharper 2019.1 and Rider
+Works with Visual Studio 2017, Visual Studio 2019, Resharper 2019.1 and Rider
