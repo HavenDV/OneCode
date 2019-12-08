@@ -16,6 +16,7 @@ namespace OneCode.VsExtension.UI.ViewModels
 
         public DelegateCommand UpdateCommand { get; }
         public DelegateCommand ShowRepositoriesCommand { get; }
+        public DelegateCommand ShowExceptionsCommand { get; }
         public DelegateCommand<Node> AddItemCommand { get; }
 
         public OneCodeViewModel(Repositories model)
@@ -25,6 +26,7 @@ namespace OneCode.VsExtension.UI.ViewModels
 
             UpdateCommand = new DelegateCommand(OnUpdate);
             ShowRepositoriesCommand = new DelegateCommand(OnShowRepositories);
+            ShowExceptionsCommand = new DelegateCommand(OnShowExceptions);
             AddItemCommand = new DelegateCommand<Node>(OnAddItem);
 
             RefreshTree(Model);
@@ -40,6 +42,13 @@ namespace OneCode.VsExtension.UI.ViewModels
             new RepositoriesViewModel(Model)
                 .ShowAsDialog<RepositoriesControl>(
                     "OneCode Repositories", 400, 400);
+        }
+
+        private static void OnShowExceptions()
+        {
+            new ExceptionsViewModel(OneCodePackage.Instance.Exceptions)
+                .ShowAsDialog<ExceptionsControl>(
+                    "OneCode Exceptions", 400, 400);
         }
 
         private static void OnAddItem(Node node)

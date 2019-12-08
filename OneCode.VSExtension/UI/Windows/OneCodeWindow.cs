@@ -30,7 +30,7 @@ namespace OneCode.VsExtension.UI.Windows
             // the object returned by the Content property.
             Content = new Controls.OneCodeWindowControl
             {
-                DataContext = new OneCodeViewModel(OneCodePackage.Repositories.GetValue()),
+                DataContext = new OneCodeViewModel(OneCodePackage.Instance.Repositories.GetValue()),
             };
         }
 

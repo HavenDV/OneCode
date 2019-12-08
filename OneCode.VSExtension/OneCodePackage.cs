@@ -46,10 +46,14 @@ namespace OneCode.VsExtension
         /// OneCodeExtensionPackage GUID string.
         /// </summary>
         public const string PackageGuidString = "7ff6c859-ac79-49e7-98cf-70dfcf6a101d";
-        
+
+        public static OneCodePackage Instance { get; set; }
+
+        public List<Exception> Exceptions { get; set; }
+
         #region OneCode
 
-        public static AsyncLazy<Repositories> Repositories { get; set; } = new AsyncLazy<Repositories>(() => Task.Run(() =>
+        public AsyncLazy<Repositories> Repositories { get; set; } = new AsyncLazy<Repositories>(() => Task.Run(() =>
         {
             var repositories = new Repositories();
 
@@ -57,8 +61,6 @@ namespace OneCode.VsExtension
 
             return repositories;
         }), ThreadHelper.JoinableTaskFactory);
-
-        public static OneCodePackage Instance { get; set; }
 
         public static void AddItem(CodeFile file, Class @class, Method method, bool openAfterAdd = false)
         {

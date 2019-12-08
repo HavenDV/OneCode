@@ -51,7 +51,11 @@
     <Compile Include="Completions\OneCodeCompletionCommitManagerProvider.cs" />
     <Compile Include="Completions\OneCodeCompletionSource.cs" />
     <Compile Include="Completions\OneCodeCompletionSourceProvider.cs" />
+    <Compile Include="UI\Controls\ExceptionsControl.xaml.cs">
+      <DependentUpon>ExceptionsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\ViewModels\OneCodeViewModel.cs" />
+    <Compile Include="UI\ViewModels\ExceptionsViewModel.cs" />
     <Compile Include="UI\ViewModels\RepositoryViewModel.cs" />
     <Compile Include="UI\ViewModels\RepositoriesViewModel.cs" />
     <Compile Include="Utilities\ControlExtensions.cs" />
@@ -114,6 +118,10 @@
     <Page Include="UI\Controls\OneCodeWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Controls\ExceptionsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\Controls\RepositoriesControl.xaml">
       <SubType>Designer</SubType>

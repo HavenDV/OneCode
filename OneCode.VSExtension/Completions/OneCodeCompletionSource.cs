@@ -155,7 +155,7 @@ namespace OneCode.VsExtension.Completions
         {
             if (Repositories == null)
             {
-                Repositories ??= await OneCodePackage.Repositories.GetValueAsync(token);
+                Repositories ??= await OneCodePackage.Instance.Repositories.GetValueAsync(token);
                 Repositories.Changed += (sender, args) => Items = GetActualItems().ToImmutableArray();
             }
 

@@ -35,7 +35,8 @@
         </TreeView>
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
             <Button Width="80" Content="Update" Command="{Binding UpdateCommand}"/>
-            <Button Width="120" Content="Show Repositories" Command="{Binding ShowRepositoriesCommand}"/>
+            <Button Width="80" Content="Repositories" Command="{Binding ShowRepositoriesCommand}"/>
+            <Button Width="80" Content="Exceptions" Command="{Binding ShowExceptionsCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>
