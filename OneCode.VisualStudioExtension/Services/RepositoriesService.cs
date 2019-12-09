@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using Newtonsoft.Json;
@@ -12,22 +11,15 @@ namespace OneCode.VsExtension.Services
     [Export]
     public class RepositoriesService
     {
-        public string SettingsDirectory => Directory.CreateDirectory(
-            Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create),
-                "OneCode")).FullName;
-
-        public string SettingsPath => Path.Combine(SettingsDirectory, "settings.json");
+        public Repositories Repositories { get; set; } = new Repositories();
 
         public OneCodeSettings Settings
         {
-            get => File.Exists(SettingsPath)
-                ? JsonConvert.DeserializeObject<OneCodeSettings>(File.ReadAllText(SettingsPath))
+            get => File.Exists(OneCodeSettings.DefaultPath)
+                ? JsonConvert.DeserializeObject<OneCodeSettings>(File.ReadAllText(OneCodeSettings.DefaultPath))
                 : new OneCodeSettings();
-            set => File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(value, Formatting.Indented));
+            set => File.WriteAllText(OneCodeSettings.DefaultPath, JsonConvert.SerializeObject(value, Formatting.Indented));
         }
-
-        public Repositories Repositories { get; set; } = new Repositories();
 
         public void LoadFromSettings()
         {
