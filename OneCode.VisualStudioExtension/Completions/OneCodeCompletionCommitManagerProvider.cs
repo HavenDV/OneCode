@@ -5,6 +5,8 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 using OneCode.VsExtension.Services;
 
+#nullable enable
+
 namespace OneCode.VsExtension.Completions
 {
     [Export(typeof(IAsyncCompletionCommitManagerProvider))]
@@ -16,7 +18,7 @@ namespace OneCode.VsExtension.Completions
         private IDictionary<ITextView, IAsyncCompletionCommitManager> Cache { get; } = new Dictionary<ITextView, IAsyncCompletionCommitManager>();
 
         [Import]
-        private RepositoriesService RepositoriesService { get; set; }
+        private RepositoriesService? RepositoriesService { get; set; }
 
         public IAsyncCompletionCommitManager GetOrCreate(ITextView textView)
         {

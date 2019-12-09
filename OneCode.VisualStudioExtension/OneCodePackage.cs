@@ -10,6 +10,8 @@ using OneCode.VsExtension.Services;
 using OneCode.VsExtension.UI.Windows;
 using Task = System.Threading.Tasks.Task;
 
+#nullable enable
+
 namespace OneCode.VsExtension
 {
     /// <summary>
@@ -44,8 +46,8 @@ namespace OneCode.VsExtension
 
         #region Properties
 
-        public RepositoriesService RepositoriesService { get; set; }
-        public ExceptionsService ExceptionsService { get; set; }
+        public RepositoriesService? RepositoriesService { get; set; }
+        public ExceptionsService? ExceptionsService { get; set; }
 
         #endregion
 
@@ -111,14 +113,14 @@ namespace OneCode.VsExtension
             return base.GetToolWindowTitle(toolWindowType, id);
         }
 
-        protected override Task<object> InitializeToolWindowAsync(Type toolWindowType, int id, CancellationToken cancellationToken)
+        protected override Task<object?> InitializeToolWindowAsync(Type toolWindowType, int id, CancellationToken cancellationToken)
         {
             if (toolWindowType == typeof(OneCodeWindow))
             {
-                return Task.FromResult<object>(this);
+                return Task.FromResult<object?>(this);
             }
 
-            return Task.FromResult<object>(null);
+            return Task.FromResult<object?>(null);
         }
 
         #endregion

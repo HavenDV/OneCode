@@ -5,6 +5,8 @@ using OneCode.VsExtension.UI.Windows;
 using OneCode.VsExtension.Utilities;
 using Task = System.Threading.Tasks.Task;
 
+#nullable enable
+
 namespace OneCode.VsExtension.Commands
 {
     /// <summary>
@@ -30,7 +32,7 @@ namespace OneCode.VsExtension.Commands
         /// <summary>
         /// Gets the instance of the command.
         /// </summary>
-        public static OneCodeWindowCommand Instance {
+        public static OneCodeWindowCommand? Instance {
             get;
             private set;
         }
@@ -69,7 +71,8 @@ namespace OneCode.VsExtension.Commands
             // the UI thread.
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
-            var commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
+            var commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService
+                                 ?? throw new InvalidOperationException("Service IMenuCommandService is not found");
             Instance = new OneCodeWindowCommand(package, commandService);
         }
 

@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using OneCode.Shared.Settings;
 
+#nullable enable
+
 namespace OneCode.Shared
 {
     public sealed class Repositories

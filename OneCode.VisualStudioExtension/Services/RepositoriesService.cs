@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using OneCode.Shared;
 using OneCode.Shared.Settings;
 using OneCode.VsExtension.Utilities;
+
+#nullable enable
 
 namespace OneCode.VsExtension.Services
 {
@@ -21,17 +24,17 @@ namespace OneCode.VsExtension.Services
         {
             Repositories.Add(settings);
 
-            OneCodeSettings.DefaultSettings = Repositories.Settings;
+            OneCodeSettings.DefaultSettings = Repositories.Settings ?? throw new InvalidOperationException("Repositories is not loaded");
         }
 
         public void RemoveAndSaveSettings(RepositorySettings settings)
         {
             Repositories.Remove(settings);
 
-            OneCodeSettings.DefaultSettings = Repositories.Settings;
+            OneCodeSettings.DefaultSettings = Repositories.Settings ?? throw new InvalidOperationException("Repositories is not loaded");
         }
 
-        public void AddProjectItem(CodeFile file, Class @class, Method method, bool openAfterAdd = false)
+        public void AddProjectItem(CodeFile? file, Class? @class, Method? method, bool openAfterAdd = false)
         {
             if (file == null)
             {
@@ -40,6 +43,10 @@ namespace OneCode.VsExtension.Services
 
             var dte = this.GetDte();
             var project = dte.GetActiveProject();
+            if (project == null)
+            {
+                return;
+            }
 
             //var solution = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
             //IVsHierarchy hierarchy;
@@ -48,12 +55,15 @@ namespace OneCode.VsExtension.Services
             var projectDirectory = project.GetDirectory();
             var fullPath = Path.Combine(projectDirectory ?? string.Empty, file.RelativePathWithoutTargetFramework);
 
-            file.Code.NamespaceName = project.GetDefaultNamespace() + file.AdditionalNamespace;
-            file.Code.Classes = new List<Class> { @class };
-
-            if (method != null)
+            if (file.Code != null)
             {
-                file.Code.Classes[0].Methods = new List<Method> { method };
+                file.Code.NamespaceName = project.GetDefaultNamespace() + file.AdditionalNamespace;
+                file.Code.Classes = @class != null ? new List<Class> { @class } : file.Code.Classes;
+
+                if (method != null)
+                {
+                    file.Code.Classes[0].Methods = new List<Method> { method };
+                }
             }
 
             file.SaveTo(fullPath);

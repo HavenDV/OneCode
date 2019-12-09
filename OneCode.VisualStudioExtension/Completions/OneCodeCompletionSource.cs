@@ -16,6 +16,8 @@ using OneCode.VsExtension.Services;
 using OneCode.VsExtension.Utilities;
 using Task = System.Threading.Tasks.Task;
 
+#nullable enable
+
 namespace OneCode.VsExtension.Completions
 {
     public sealed class OneCodeCompletionSource : IAsyncCompletionSource
@@ -26,7 +28,7 @@ namespace OneCode.VsExtension.Completions
         private ImmutableArray<ImageElement>? Images { get; set; }
         private RepositoriesService RepositoriesService { get; }
 
-        public OneCodeCompletionSource(RepositoriesService repositoriesService)
+        public OneCodeCompletionSource(RepositoriesService? repositoriesService)
         {
             RepositoriesService = repositoriesService ?? throw new ArgumentNullException(nameof(repositoriesService));
             RepositoriesService.Repositories.Changed += (sender, args) => Items = GetActualItems().ToImmutableArray();

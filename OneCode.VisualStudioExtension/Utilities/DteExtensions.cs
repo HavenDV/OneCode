@@ -3,11 +3,13 @@ using System.Linq;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 
+#nullable enable
+
 namespace OneCode.VsExtension.Utilities
 {
     public static class DteExtensions
     {
-        public static Project GetActiveProject(this DTE dte)
+        public static Project? GetActiveProject(this DTE dte)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 

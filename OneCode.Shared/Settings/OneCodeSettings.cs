@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
+#nullable enable
+
 namespace OneCode.Shared.Settings
 {
     public sealed class OneCodeSettings

@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using OneCode.Shared.Settings;
 
+#nullable enable
+
 namespace OneCode.Shared
 {
     public sealed class Repository
@@ -18,7 +20,7 @@ namespace OneCode.Shared
             Files = Directory
                 .EnumerateFiles(settings.Folder, "*.cs", SearchOption.AllDirectories)
                 .Where(value => !value.EndsWith("AssemblyInfo.cs"))
-                .Select(path => CodeFile.Load(path, settings.Folder))
+                .Select(path => new CodeFile(path, settings.Folder))
                 .ToList();
         }
     }

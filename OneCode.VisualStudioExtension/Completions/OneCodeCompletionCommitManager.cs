@@ -9,6 +9,8 @@ using OneCode.Shared;
 using OneCode.VsExtension.Services;
 using OneCode.VsExtension.Utilities;
 
+#nullable enable
+
 namespace OneCode.VsExtension.Completions
 {
     /// <summary>
@@ -21,7 +23,7 @@ namespace OneCode.VsExtension.Completions
         public IEnumerable<char> PotentialCommitCharacters => CommitChars;
         private RepositoriesService RepositoriesService { get; }
 
-        public OneCodeCompletionCommitManager(RepositoriesService repositoriesService)
+        public OneCodeCompletionCommitManager(RepositoriesService? repositoriesService)
         {
             RepositoriesService = repositoriesService ?? throw new ArgumentNullException(nameof(repositoriesService));
         }

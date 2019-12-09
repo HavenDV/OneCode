@@ -3,6 +3,8 @@ using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 using OneCode.VsExtension.UI.ViewModels;
 
+#nullable enable
+
 namespace OneCode.VsExtension.UI.Windows
 {
     /// <summary>

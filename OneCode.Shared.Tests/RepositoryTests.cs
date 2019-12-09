@@ -72,7 +72,7 @@ namespace OneCode.Shared.Tests
             var path = Path.GetFullPath(Directory
                 .EnumerateFiles("../../../../../CSharpUtilities", "*.cs", SearchOption.AllDirectories)
                 .FirstOrDefault());
-            var file = CodeFile.Load(path, Path.GetFullPath("../../../../../CSharpUtilities"));
+            var file = new CodeFile(path, Path.GetFullPath("../../../../../CSharpUtilities"));
 
             Console.WriteLine($"FullPath: {file.FullPath}");
             Console.WriteLine($"TargetFramework: {file.TargetFramework}");

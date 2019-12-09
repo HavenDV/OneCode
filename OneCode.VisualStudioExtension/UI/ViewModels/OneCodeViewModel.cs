@@ -7,6 +7,8 @@ using OneCode.VsExtension.Services;
 using OneCode.VsExtension.UI.Controls;
 using OneCode.VsExtension.Utilities;
 
+#nullable enable
+
 namespace OneCode.VsExtension.UI.ViewModels
 {
     public sealed class OneCodeViewModel
@@ -22,7 +24,7 @@ namespace OneCode.VsExtension.UI.ViewModels
         public DelegateCommand ShowExceptionsCommand { get; }
         public DelegateCommand<Node> AddItemCommand { get; }
 
-        public OneCodeViewModel(RepositoriesService repositoriesService, ExceptionsService exceptionsService)
+        public OneCodeViewModel(RepositoriesService? repositoriesService, ExceptionsService? exceptionsService)
         {
             RepositoriesService = repositoriesService ?? throw new ArgumentNullException(nameof(repositoriesService));
             ExceptionsService = exceptionsService ?? throw new ArgumentNullException(nameof(exceptionsService));
@@ -151,10 +153,10 @@ namespace OneCode.VsExtension.UI.ViewModels
 
     public class Node
     {
-        public string Name { get; set; }
-        public Method Method { get; set; }
-        public Class Class { get; set; }
-        public CodeFile CodeFile { get; set; }
-        public ObservableCollection<Node> Nodes { get; set; }
+        public string? Name { get; set; }
+        public Method? Method { get; set; }
+        public Class? Class { get; set; }
+        public CodeFile? CodeFile { get; set; }
+        public ObservableCollection<Node>? Nodes { get; set; }
     }
 }
