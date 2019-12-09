@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
-using Newtonsoft.Json;
 using OneCode.Shared;
 using OneCode.Shared.Settings;
 using OneCode.VsExtension.Utilities;
@@ -13,31 +12,23 @@ namespace OneCode.VsExtension.Services
     {
         public Repositories Repositories { get; set; } = new Repositories();
 
-        public OneCodeSettings Settings
-        {
-            get => File.Exists(OneCodeSettings.DefaultPath)
-                ? JsonConvert.DeserializeObject<OneCodeSettings>(File.ReadAllText(OneCodeSettings.DefaultPath))
-                : new OneCodeSettings();
-            set => File.WriteAllText(OneCodeSettings.DefaultPath, JsonConvert.SerializeObject(value, Formatting.Indented));
-        }
-
         public void LoadFromSettings()
         {
-            Repositories.Load(Settings);
+            Repositories.Load(OneCodeSettings.DefaultSettings);
         }
 
         public void AddAndSaveSettings(RepositorySettings settings)
         {
             Repositories.Add(settings);
 
-            Settings = Repositories.Settings;
+            OneCodeSettings.DefaultSettings = Repositories.Settings;
         }
 
         public void RemoveAndSaveSettings(RepositorySettings settings)
         {
             Repositories.Remove(settings);
 
-            Settings = Repositories.Settings;
+            OneCodeSettings.DefaultSettings = Repositories.Settings;
         }
 
         public void AddProjectItem(CodeFile file, Class @class, Method method, bool openAfterAdd = false)

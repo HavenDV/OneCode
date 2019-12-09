@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace OneCode.Shared.Settings
 {
@@ -14,5 +15,12 @@ namespace OneCode.Shared.Settings
                 "OneCode")).FullName;
 
         public static string DefaultPath => Path.Combine(DefaultDirectory, "settings.json");
+
+        public static OneCodeSettings DefaultSettings {
+            get => File.Exists(DefaultPath)
+                ? JsonConvert.DeserializeObject<OneCodeSettings>(File.ReadAllText(DefaultPath))
+                : new OneCodeSettings();
+            set => File.WriteAllText(DefaultPath, JsonConvert.SerializeObject(value, Formatting.Indented));
+        }
     }
 }
