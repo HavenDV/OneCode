@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using OneCode.Core.Settings;
+using OneCode.Shared.Settings;
 
-namespace OneCode.Core
+namespace OneCode.Shared
 {
     public sealed class Repositories
     {

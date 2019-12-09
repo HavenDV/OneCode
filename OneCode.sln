@@ -5,10 +5,6 @@ VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneCode.VisualStudioExtension", "OneCode.VisualStudioExtension\OneCode.VisualStudioExtension.csproj", "{802C18CE-169A-4639-87A3-4D90B6361C69}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneCode.Core", "OneCode.Core\OneCode.Core.csproj", "{67FCAE5C-5939-47A9-BF9D-86943C077BB4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneCode.Core.Tests", "OneCode.Core.Tests\OneCode.Core.Tests.csproj", "{1A0CC34A-E835-4B38-AB4E-389D6925E31E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneCode.ReSharperExtension", "OneCode.ReSharperExtension\OneCode.ReSharperExtension.csproj", "{234CD502-3AF1-4A8F-8081-1D643B9B4586}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneCode.ReSharperExtension.Rider", "OneCode.ReSharperExtension\OneCode.ReSharperExtension.Rider.csproj", "{72ADC18E-03B0-47DD-927F-39EF26169070}"
@@ -23,7 +19,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "OneCode.Shared", "OneCode.Shared\OneCode.Shared.shproj", "{0B44CABE-2E4B-479F-B826-282AE5D0C58D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneCode.Shared.Tests", "OneCode.Shared.Tests\OneCode.Shared.Tests.csproj", "{92B0F030-69F3-435D-8B55-775BBB180E41}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		OneCode.Shared\OneCode.Shared.projitems*{0b44cabe-2e4b-479f-b826-282ae5d0c58d}*SharedItemsImports = 13
+		OneCode.Shared\OneCode.Shared.projitems*{802c18ce-169a-4639-87a3-4d90b6361c69}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -33,14 +37,6 @@ Global
 		{802C18CE-169A-4639-87A3-4D90B6361C69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{802C18CE-169A-4639-87A3-4D90B6361C69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{802C18CE-169A-4639-87A3-4D90B6361C69}.Release|Any CPU.Build.0 = Release|Any CPU
-		{67FCAE5C-5939-47A9-BF9D-86943C077BB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{67FCAE5C-5939-47A9-BF9D-86943C077BB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{67FCAE5C-5939-47A9-BF9D-86943C077BB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{67FCAE5C-5939-47A9-BF9D-86943C077BB4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1A0CC34A-E835-4B38-AB4E-389D6925E31E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1A0CC34A-E835-4B38-AB4E-389D6925E31E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1A0CC34A-E835-4B38-AB4E-389D6925E31E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1A0CC34A-E835-4B38-AB4E-389D6925E31E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{234CD502-3AF1-4A8F-8081-1D643B9B4586}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{234CD502-3AF1-4A8F-8081-1D643B9B4586}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{234CD502-3AF1-4A8F-8081-1D643B9B4586}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,6 +49,10 @@ Global
 		{D8136E8A-B78C-4CCC-9B48-DA3D8F843898}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8136E8A-B78C-4CCC-9B48-DA3D8F843898}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8136E8A-B78C-4CCC-9B48-DA3D8F843898}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92B0F030-69F3-435D-8B55-775BBB180E41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92B0F030-69F3-435D-8B55-775BBB180E41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92B0F030-69F3-435D-8B55-775BBB180E41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92B0F030-69F3-435D-8B55-775BBB180E41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,8 +2,8 @@
 using System.ComponentModel.Composition;
 using System.IO;
 using Newtonsoft.Json;
-using OneCode.Core;
-using OneCode.Core.Settings;
+using OneCode.Shared;
+using OneCode.Shared.Settings;
 using OneCode.VsExtension.Utilities;
 
 namespace OneCode.VsExtension.Services

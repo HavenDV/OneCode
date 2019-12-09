@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.VisualStudio.PlatformUI;
-using OneCode.Core;
+using OneCode.Shared;
 using OneCode.VsExtension.Services;
 using OneCode.VsExtension.UI.Controls;
 using OneCode.VsExtension.Utilities;

@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace OneCode.Core
+namespace OneCode.Shared
 {
     internal sealed class MethodsRewriter : CSharpSyntaxRewriter
     {

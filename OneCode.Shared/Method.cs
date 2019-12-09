@@ -1,4 +1,4 @@
-﻿namespace OneCode.Core
+﻿namespace OneCode.Shared
 {
     public sealed class Method : CodeObject
     {

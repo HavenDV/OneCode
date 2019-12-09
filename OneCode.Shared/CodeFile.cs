@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace OneCode.Core
+namespace OneCode.Shared
 {
     public sealed class CodeFile
     {

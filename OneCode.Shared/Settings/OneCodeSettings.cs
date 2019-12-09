@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace OneCode.Core.Settings
+namespace OneCode.Shared.Settings
 {
     public sealed class OneCodeSettings
     {

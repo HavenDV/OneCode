@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace OneCode.Core
+namespace OneCode.Shared
 {
     public static class Repository
     {

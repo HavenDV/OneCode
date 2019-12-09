@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OneCode.Core
+namespace OneCode.Shared
 {
     public class CodeObject
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable enable
 
-namespace OneCode.Core.Utilities
+namespace OneCode.Shared.Utilities
 {
     /// <summary>
     /// Extensions that work with <see langword="string"/>

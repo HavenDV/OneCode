@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion.Data;
 using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Adornments;
-using OneCode.Core;
+using OneCode.Shared;
 using OneCode.VsExtension.Services;
 using OneCode.VsExtension.Utilities;
 using Task = System.Threading.Tasks.Task;

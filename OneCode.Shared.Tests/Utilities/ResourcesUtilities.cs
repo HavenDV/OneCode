@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace OneCode.Core.Tests.Utilities
+namespace OneCode.Shared.Tests.Utilities
 {
     public static class ResourcesUtilities
     {
@@ -13,7 +13,7 @@ namespace OneCode.Core.Tests.Utilities
         /// <param name="name"></param>
         /// <param name="assembly"></param>
         /// <returns></returns>
-        public static Stream ReadFileAsStream(string name, Assembly assembly = null)
+        public static Stream ReadFileAsStream(string name, Assembly? assembly = null)
         {
             assembly ??= Assembly.GetExecutingAssembly();
 
@@ -29,7 +29,7 @@ namespace OneCode.Core.Tests.Utilities
         /// <param name="name"></param>
         /// <param name="assembly"></param>
         /// <returns></returns>
-        public static string ReadFileAsString(string name, Assembly assembly = null)
+        public static string ReadFileAsString(string name, Assembly? assembly = null)
         {
             using var stream = ReadFileAsStream(name, assembly);
             using var reader = new StreamReader(stream);

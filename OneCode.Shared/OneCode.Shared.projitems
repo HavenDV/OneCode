@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>0b44cabe-2e4b-479f-b826-282ae5d0c58d</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>OneCode.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Class.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Code.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CodeFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CodeObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Method.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MethodsRewriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Repositories.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Repository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings\OneCodeSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings\RepositorySettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StringExtensions.cs" />
+  </ItemGroup>
+</Project>

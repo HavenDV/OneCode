@@ -4,10 +4,10 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using OneCode.Core.Utilities;
+using OneCode.Shared.Utilities;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace OneCode.Core
+namespace OneCode.Shared
 {
     public sealed class Code
     {

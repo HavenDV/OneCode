@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using OneCode.Core;
+using OneCode.Shared;
 
 namespace OneCode.VsExtension.UI.ViewModels
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OneCode.Core
+namespace OneCode.Shared
 {
     public sealed class Class : CodeObject
     {

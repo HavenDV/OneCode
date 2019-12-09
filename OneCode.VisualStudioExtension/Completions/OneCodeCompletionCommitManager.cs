@@ -5,7 +5,7 @@ using System.Threading;
 using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion;
 using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion.Data;
 using Microsoft.VisualStudio.Text;
-using OneCode.Core;
+using OneCode.Shared;
 using OneCode.VsExtension.Services;
 using OneCode.VsExtension.Utilities;
 

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OneCode.Core.Settings;
-using OneCode.Core.Tests.Utilities;
+using OneCode.Shared.Settings;
+using OneCode.Shared.Tests.Utilities;
 
-namespace OneCode.Core.Tests
+namespace OneCode.Shared.Tests
 {
     [TestClass]
     public class RepositoryTests
@@ -52,7 +52,7 @@ namespace OneCode.Core.Tests
             {
                 Console.WriteLine($"RelativePath: {file.RelativePath}");
 
-                foreach (var @class in file.Code.Classes)
+                foreach (var @class in file.Code?.Classes ?? new List<Class>())
                 {
                     Console.WriteLine($"Class: {@class.Name}");
 
@@ -82,7 +82,7 @@ namespace OneCode.Core.Tests
             Console.WriteLine($"RelativeFolderWithoutTargetFramework: {file.RelativeFolderWithoutTargetFramework}");
             Console.WriteLine($"AdditionalNamespace: {file.AdditionalNamespace}");
 
-            foreach (var method in file.Code.Classes.SelectMany(i => i.Methods))
+            foreach (var method in file.Code?.Classes?.SelectMany(i => i.Methods) ?? new List<Method>())
             {
                 Console.WriteLine($"- {method.Name}");
             }
