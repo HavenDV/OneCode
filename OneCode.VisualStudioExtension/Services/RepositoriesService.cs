@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Linq;
+using Newtonsoft.Json;
 using OneCode.Core;
-using OneCode.VsExtension.Properties;
+using OneCode.Core.Settings;
 using OneCode.VsExtension.Utilities;
 
 namespace OneCode.VsExtension.Services
@@ -12,35 +12,40 @@ namespace OneCode.VsExtension.Services
     [Export]
     public class RepositoriesService
     {
+        public string SettingsDirectory => Directory.CreateDirectory(
+            Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create),
+                "OneCode")).FullName;
+
+        public string SettingsPath => Path.Combine(SettingsDirectory, "settings.json");
+
+        public OneCodeSettings Settings
+        {
+            get => File.Exists(SettingsPath)
+                ? JsonConvert.DeserializeObject<OneCodeSettings>(File.ReadAllText(SettingsPath))
+                : new OneCodeSettings();
+            set => File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(value, Formatting.Indented));
+        }
+
         public Repositories Repositories { get; set; } = new Repositories();
 
         public void LoadFromSettings()
         {
-            var paths = Settings.Default.RepositoryPath?
-                            .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                            .ToList() ?? new List<string>();
-
-            Repositories.Load(paths);
+            Repositories.Load(Settings);
         }
 
-        public void AddAndSaveSettings(string path)
+        public void AddAndSaveSettings(RepositorySettings settings)
         {
-            Repositories.Load(path);
+            Repositories.Add(settings);
 
-            SaveSettings();
+            Settings = Repositories.Settings;
         }
 
-        public void RemoveAndSaveSettings(Repository repository)
+        public void RemoveAndSaveSettings(RepositorySettings settings)
         {
-            Repositories.Remove(repository);
+            Repositories.Remove(settings);
 
-            SaveSettings();
-        }
-
-        public void SaveSettings()
-        {
-            Settings.Default.RepositoryPath = string.Join(";", Repositories.Values.Select(i => i.Folder));
-            Settings.Default.Save();
+            Settings = Repositories.Settings;
         }
 
         public void AddProjectItem(CodeFile file, Class @class, Method method, bool openAfterAdd = false)

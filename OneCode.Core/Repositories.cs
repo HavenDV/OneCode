@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using OneCode.Core.Settings;
 
 namespace OneCode.Core
 {
@@ -9,7 +9,9 @@ namespace OneCode.Core
     {
         #region Properties
 
-        public ObservableCollection<Repository> Values { get; set; } = new ObservableCollection<Repository>();
+        public ObservableCollection<Repository> Values { get; set; } = new ObservableCollection<Repository>(); 
+        
+        public OneCodeSettings? Settings { get; set; }
 
         #endregion
 
@@ -26,47 +28,50 @@ namespace OneCode.Core
 
         #region Public methods
 
-        public void Load(string path, bool raiseChanged = true)
+        public void Add(RepositorySettings settings)
         {
-            if (Values.Any(repository => repository.Folder == path))
-            {
-                return;
-            }
+            Settings = Settings ?? throw new InvalidOperationException("Repositories is not loaded");
 
-            Values.Add(Repository.Load(path));
+            Values.Add(new Repository(settings));
+            Settings.RepositoriesSettings.Add(settings);
 
-            if (raiseChanged)
-            {
-                OnChanged();
-            }
+            OnChanged();
         }
 
-        public void Load(List<string> paths)
+        public void Load(OneCodeSettings? settings)
         {
-            foreach (var path in paths)
+            Settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            foreach (var repositorySettings in settings.RepositoriesSettings)
             {
-                Load(path, false);
+                Values.Add(new Repository(repositorySettings));
             }
 
             OnChanged();
         }
 
-        public void Remove(Repository repository)
+        public void Remove(RepositorySettings settings)
         {
+            Settings = Settings ?? throw new InvalidOperationException("Repositories is not loaded");
+
+            var repository = Values.FirstOrDefault(i => i.Settings == settings);
+            if (repository == null)
+            {
+                return;
+            }
+
             Values.Remove(repository);
+            Settings.RepositoriesSettings.Remove(settings);
 
             OnChanged();
         }
 
         public void Reload()
         {
-            var paths = Values
-                .Select(repository => repository.Folder)
-                .ToList();
+            Settings = Settings ?? throw new InvalidOperationException("Repositories is not loaded");
 
             Values.Clear();
 
-            Load(paths);
+            Load(Settings);
         }
 
         #endregion

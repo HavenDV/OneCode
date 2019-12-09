@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Forms;
 using Microsoft.VisualStudio.PlatformUI;
-using OneCode.Core;
+using OneCode.Core.Settings;
 using OneCode.VsExtension.Services;
 using OneCode.VsExtension.UI.Controls;
 using OneCode.VsExtension.Utilities;
@@ -15,27 +16,27 @@ namespace OneCode.VsExtension.UI.ViewModels
         private RepositoriesService RepositoriesService { get; }
         private ExceptionsService ExceptionsService { get; }
 
-        public ObservableCollection<Repository> Values { get; set; }
+        public ObservableCollection<RepositorySettings> Values { get; set; }
 
-        public DelegateCommand<Repository> RemoveCommand { get; }
+        public DelegateCommand<RepositorySettings> RemoveCommand { get; }
         public DelegateCommand AddCommand { get; }
-        public DelegateCommand<Repository> EditCommand { get; }
+        public DelegateCommand<RepositorySettings> EditCommand { get; }
 
         public RepositoriesViewModel(RepositoriesService repositoriesService, ExceptionsService exceptionsService)
         {
             RepositoriesService = repositoriesService ?? throw new ArgumentNullException(nameof(repositoriesService));
             ExceptionsService = exceptionsService ?? throw new ArgumentNullException(nameof(exceptionsService));
 
-            Values = RepositoriesService.Repositories.Values;
+            Values = new ObservableCollection<RepositorySettings>(RepositoriesService.Repositories.Values.Select(i => i.Settings));
 
-            RemoveCommand = new DelegateCommand<Repository>(OnRemove);
+            RemoveCommand = new DelegateCommand<RepositorySettings>(OnRemove);
             AddCommand = new DelegateCommand(OnAdd);
-            EditCommand = new DelegateCommand<Repository>(OnEdit);
+            EditCommand = new DelegateCommand<RepositorySettings>(OnEdit);
         }
 
-        private void OnRemove(Repository repository)
+        private void OnRemove(RepositorySettings settings)
         {
-            if (repository == null)
+            if (settings == null)
             {
                 return;
             }
@@ -43,14 +44,15 @@ namespace OneCode.VsExtension.UI.ViewModels
             try
             {
                 if (MessageBox.Show(
-                        $"Are you sure you want to delete \"{repository.Folder}\"",
+                        $"Are you sure you want to delete \"{settings.Folder}\"",
                         "Question",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) != DialogResult.Yes)
                 {
                     return;
                 }
 
-                RepositoriesService.RemoveAndSaveSettings(repository);
+                RepositoriesService.RemoveAndSaveSettings(settings);
+                Values.Remove(settings);
             }
             catch (Exception exception)
             {
@@ -58,9 +60,9 @@ namespace OneCode.VsExtension.UI.ViewModels
             }
         }
 
-        private void OnEdit(Repository repository)
+        private void OnEdit(RepositorySettings settings)
         {
-            if (repository == null)
+            if (settings == null)
             {
                 return;
             }
@@ -69,7 +71,7 @@ namespace OneCode.VsExtension.UI.ViewModels
             {
                 new RepositoriesViewModel(RepositoriesService, ExceptionsService)
                     .ShowAsDialog<RepositoriesControl>(
-                        $"Edit {repository.Folder}", 400, 400);
+                        $"Edit {settings.Folder}", 400, 400);
             }
             catch (Exception exception)
             {
@@ -89,7 +91,12 @@ namespace OneCode.VsExtension.UI.ViewModels
                     return;
                 }
 
-                RepositoriesService.AddAndSaveSettings(dialog.SelectedPath);
+                var settings = new RepositorySettings
+                {
+                    Folder = dialog.SelectedPath,
+                };
+                RepositoriesService.AddAndSaveSettings(settings);
+                Values.Add(settings);
             }
             catch (Exception exception)
             {
