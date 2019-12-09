@@ -8,6 +8,9 @@ using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.ExpectedTypes;
 using JetBrains.ReSharper.Psi.Resources;
 using OneCode.ReSharperExtension.Extensions;
+using OneCode.Shared;
+using OneCode.Shared.Settings;
+using System.Linq;
 
 namespace OneCode.ReSharperExtension.CompletionProvider
 {
@@ -23,14 +26,34 @@ namespace OneCode.ReSharperExtension.CompletionProvider
 
         protected override bool AddLookupItems(CSharpCodeCompletionContext context, IItemsCollector collector)
         {
-            var proposedCallback = "ONE_CODE_5";
-            var item = CSharpLookupItemFactory.Instance.CreateKeywordLookupItem(context, proposedCallback, TailType.None, PsiSymbolsThemedIcons.Method.Id);
+            var repositories = new Repositories();
+            repositories.Load(OneCodeSettings.DefaultSettings);
             
-            item.SetInsertCaretOffset(-1);
-            item.SetReplaceCaretOffset(-1);
-            item.WithInitializedRanges(context.CompletionRanges, context.BasicContext);
-            item.SetTopPriority();
-            collector.Add(item);
+            var items = repositories.Values
+                .Select(repository => repository.Files
+                    .Select(file => file.Code.Classes.Select(@class => @class.Methods
+                            .Where(method => method.IsStatic)
+                            .Select(method =>
+                            {
+                                var item = CSharpLookupItemFactory.Instance.CreateKeywordLookupItem(context, $"{@class.Name}.{method.Name.Substring(0, method.Name.IndexOf('(') + 1)}", TailType.None, PsiSymbolsThemedIcons.Method.Id);
+                            
+                                return item;
+                            }))
+                        .SelectMany(i => i))
+                    .SelectMany(i => i))
+                .SelectMany(i => i)
+                .ToList();
+
+            foreach (var item in items)
+            {
+                item.SetInsertCaretOffset(-1);
+                item.SetReplaceCaretOffset(-1);
+                item.WithInitializedRanges(context.CompletionRanges, context.BasicContext);
+                item.SetTopPriority();
+                //item.Behavior = new WithReferenceBehaviorWrapper(new DeclaredElementWithReferenceInfo(), );\
+                
+                collector.Add(item);
+            }
 
             return true;
         }
