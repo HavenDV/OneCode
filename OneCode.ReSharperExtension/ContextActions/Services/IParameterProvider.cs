@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using JetBrains.ProjectModel;
 
-namespace Abc.MoqComplete.ContextActions.Services
+namespace OneCode.ReSharperExtension.ContextActions.Services
 {
     public interface IParameterProvider
     {

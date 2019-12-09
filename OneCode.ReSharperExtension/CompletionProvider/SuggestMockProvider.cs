@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Abc.MoqComplete.Extensions;
-using Abc.MoqComplete.Services;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.CodeCompletion;
 using JetBrains.ReSharper.Feature.Services.CodeCompletion.Infrastructure.LookupItems;
@@ -15,8 +13,10 @@ using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Resources;
 using JetBrains.ReSharper.Psi.Resx.Utils;
 using JetBrains.ReSharper.Psi.Util;
+using OneCode.ReSharperExtension.Extensions;
+using OneCode.ReSharperExtension.Services;
 
-namespace Abc.MoqComplete.CompletionProvider
+namespace OneCode.ReSharperExtension.CompletionProvider
 {
     [Language(typeof(CSharpLanguage))]
     public class SuggestMockProvider : CSharpItemsProviderBase<CSharpCodeCompletionContext>

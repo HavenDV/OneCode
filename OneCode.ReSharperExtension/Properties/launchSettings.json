@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "OneCode.ReSharperExtension": {
+      "commandName": "Executable",
+      "executablePath": "$(DevEnvDir)devenv.exe",
+      "commandLineArgs": "/rootsuffix Plugins $(SolutionFileName)",
+      "workingDirectory": "$(SolutionDir)"
+    }
+  }
+}

@@ -1,7 +1,7 @@
-﻿using Abc.MoqComplete.CodeAnalysis;
-using JetBrains.ReSharper.FeaturesTestFramework.Daemon;
+﻿using JetBrains.ReSharper.FeaturesTestFramework.Daemon;
 using JetBrains.ReSharper.TestFramework;
 using NUnit.Framework;
+using OneCode.ReSharperExtension.CodeAnalysis;
 
 namespace Abc.MoqComplete.Tests.CodeAnalysis
 {

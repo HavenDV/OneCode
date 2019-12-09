@@ -1,12 +1,12 @@
 ﻿using System.Linq;
-using Abc.MoqComplete.Services;
 using JetBrains.DocumentModel;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Tree;
+using OneCode.ReSharperExtension.Services;
 
-namespace Abc.MoqComplete.CodeAnalysis
+namespace OneCode.ReSharperExtension.CodeAnalysis
 {
     [ElementProblemAnalyzer(typeof(IInvocationExpression), HighlightingTypes = new[] { typeof(SuspiciousCallbackWarning) })]
     public class SupiciousCallbackAnalyzer : ElementProblemAnalyzer<IInvocationExpression>
@@ -15,7 +15,7 @@ namespace Abc.MoqComplete.CodeAnalysis
         {
             var methodIdentitifer = element.GetSolution().GetComponent<IMoqMethodIdentifier>();
             var mockedMethodProvider = element.GetSolution().GetComponent<IMockedMethodProvider>();
-
+            
             if (!methodIdentitifer.IsMoqCallbackMethod(element))
                 return;
 

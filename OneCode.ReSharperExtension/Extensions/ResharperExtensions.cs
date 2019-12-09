@@ -3,7 +3,7 @@ using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.ExtensionsAPI.Tree;
 using JetBrains.ReSharper.Psi.Tree;
 
-namespace Abc.MoqComplete.Extensions
+namespace OneCode.ReSharperExtension.Extensions
 {
     internal static class ResharperExtensions
     {

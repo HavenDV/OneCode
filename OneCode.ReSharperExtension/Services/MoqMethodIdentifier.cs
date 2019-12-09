@@ -7,7 +7,7 @@ using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Resx.Utils;
 
-namespace Abc.MoqComplete.Services
+namespace OneCode.ReSharperExtension.Services
 {
     [SolutionComponent]
     public class MoqMethodIdentifier : IMoqMethodIdentifier

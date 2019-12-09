@@ -1,7 +1,7 @@
-﻿using Abc.MoqComplete.ContextActions;
-using JetBrains.ReSharper.FeaturesTestFramework.Intentions;
+﻿using JetBrains.ReSharper.FeaturesTestFramework.Intentions;
 using JetBrains.ReSharper.TestFramework;
 using NUnit.Framework;
+using OneCode.ReSharperExtension.ContextActions;
 
 namespace Abc.MoqComplete.Tests.ContextAction
 {

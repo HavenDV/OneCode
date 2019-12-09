@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Abc.MoqComplete.Extensions;
 using JetBrains.ReSharper.Feature.Services.CodeCompletion;
 using JetBrains.ReSharper.Feature.Services.CodeCompletion.Infrastructure;
 using JetBrains.ReSharper.Feature.Services.CodeCompletion.Infrastructure.LookupItems;
@@ -7,8 +6,9 @@ using JetBrains.ReSharper.Feature.Services.CSharp.CodeCompletion.Infrastructure;
 using JetBrains.ReSharper.Features.Intellisense.CodeCompletion.CSharp.Rules;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp;
+using OneCode.ReSharperExtension.Extensions;
 
-namespace Abc.MoqComplete.CompletionProvider
+namespace OneCode.ReSharperExtension.CompletionProvider
 {
     [Language(typeof(CSharpLanguage))]
     public sealed class SlowPriorityAdjuster : ISlowCodeCompletionItemsProvider

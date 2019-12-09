@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using Abc.MoqComplete.ContextActions.Services;
 using NUnit.Framework;
+using OneCode.ReSharperExtension.ContextActions.Services;
 
 namespace Abc.MoqComplete.Tests.ContextAction.Services
 {

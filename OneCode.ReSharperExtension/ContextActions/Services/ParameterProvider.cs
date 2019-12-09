@@ -2,7 +2,7 @@
 using System.Text;
 using JetBrains.ProjectModel;
 
-namespace Abc.MoqComplete.ContextActions.Services
+namespace OneCode.ReSharperExtension.ContextActions.Services
 {
     [SolutionComponent]
     public class ParameterProvider : IParameterProvider

@@ -7,7 +7,7 @@ using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Tree;
 
-namespace Abc.MoqComplete.Services
+namespace OneCode.ReSharperExtension.Services
 {
     [SolutionComponent]
     public class MockedMethodProvider : IMockedMethodProvider

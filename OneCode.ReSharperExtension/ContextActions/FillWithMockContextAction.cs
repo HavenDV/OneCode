@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Abc.MoqComplete.ContextActions.Services;
-using Abc.MoqComplete.Services;
 using JetBrains.Application.Progress;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
@@ -15,12 +12,15 @@ using JetBrains.ReSharper.Psi.Naming.Impl;
 using JetBrains.ReSharper.Psi.Naming.Settings;
 using JetBrains.TextControl;
 using JetBrains.Util;
+using OneCode.ReSharperExtension.ContextActions.Services;
+using OneCode.ReSharperExtension.Extensions;
+using OneCode.ReSharperExtension.Services;
 using IBlock = JetBrains.ReSharper.Psi.CSharp.Tree.IBlock;
 using IClassBody = JetBrains.ReSharper.Psi.CSharp.Tree.IClassBody;
 using IClassLikeDeclaration = JetBrains.ReSharper.Psi.CSharp.Tree.IClassLikeDeclaration;
 using IObjectCreationExpression = JetBrains.ReSharper.Psi.CSharp.Tree.IObjectCreationExpression;
 
-namespace Abc.MoqComplete.ContextActions
+namespace OneCode.ReSharperExtension.ContextActions
 {
     [ContextAction(Group = "C#", Name = "Fill with Mock", Description = "Fills the constructor with mocks", Priority = short.MinValue)]
     public class FillWithMockContextAction : ContextActionBase

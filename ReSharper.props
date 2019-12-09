@@ -4,17 +4,23 @@
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
-    
-    <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
-    <DefaultItemExcludes>$(DefaultItemExcludes);obj\**</DefaultItemExcludes>
-    <OutputPath>bin\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <DefineConstants>TRACE;DEBUG;JET_MODE_ASSERT</DefineConstants>
   </PropertyGroup>
 
-  <Import Project="Plugin.props" />
+  <PropertyGroup>
+    <SdkVersion>2019.2.3</SdkVersion>
+    <Title>OneCode</Title>
+    <Description>This extension adds methods and classes from the repositories of your choice to IntelliSense autocompletion and allows you to automatically add them to the project after autocompletion</Description>
+    <Copyright>Copyright © havendv, 2019</Copyright>
+    <Authors>havendv</Authors>
+    <PackageLicenseUrl />
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/HavenDV/OneCode.VSExtension</PackageProjectUrl>
+    <PackageTags>resharper r# completion onecode</PackageTags>
+  </PropertyGroup>
 
   <PropertyGroup>
     <WaveVersionBase>$(SdkVersion.Substring(2,2))$(SdkVersion.Substring(5,1))</WaveVersionBase>

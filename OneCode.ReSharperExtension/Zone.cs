@@ -1,6 +1,6 @@
 ﻿using JetBrains.Application.BuildScript.Application.Zones;
 
-namespace Abc.MoqComplete
+namespace OneCode.ReSharperExtension
 {
     [ZoneMarker]
     public sealed class ZoneMarker

@@ -1,7 +1,7 @@
-﻿using Abc.MoqComplete.CompletionProvider;
-using JetBrains.ReSharper.FeaturesTestFramework.Completion;
+﻿using JetBrains.ReSharper.FeaturesTestFramework.Completion;
 using JetBrains.ReSharper.TestFramework;
 using NUnit.Framework;
+using OneCode.ReSharperExtension.CompletionProvider;
 
 namespace Abc.MoqComplete.Tests.Completion
 {

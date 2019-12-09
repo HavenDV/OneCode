@@ -1,5 +1,4 @@
-﻿using Abc.MoqComplete.Extensions;
-using JetBrains.ReSharper.Feature.Services.CodeCompletion;
+﻿using JetBrains.ReSharper.Feature.Services.CodeCompletion;
 using JetBrains.ReSharper.Feature.Services.CodeCompletion.Infrastructure;
 using JetBrains.ReSharper.Feature.Services.CodeCompletion.Infrastructure.LookupItems;
 using JetBrains.ReSharper.Feature.Services.CodeCompletion.Infrastructure.LookupItems.Impl;
@@ -13,8 +12,9 @@ using JetBrains.ReSharper.Psi.Naming.Settings;
 using JetBrains.ReSharper.Psi.Resx.Utils;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Util;
+using OneCode.ReSharperExtension.Extensions;
 
-namespace Abc.MoqComplete.CompletionProvider
+namespace OneCode.ReSharperExtension.CompletionProvider
 {
     [Language(typeof(CSharpLanguage))]
     public class MockVariableNameProvider : ItemsProviderOfSpecificContext<CSharpCodeCompletionContext>

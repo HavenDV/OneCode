@@ -1,6 +1,6 @@
 ﻿using JetBrains.ReSharper.Psi.Modules;
 
-namespace Abc.MoqComplete.Services
+namespace OneCode.ReSharperExtension.Services
 {
     public interface ITestProjectProvider
     {

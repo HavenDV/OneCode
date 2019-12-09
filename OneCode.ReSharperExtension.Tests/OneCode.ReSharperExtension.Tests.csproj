@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
- 	<Company>ABC arbitrage Asset Management</Company>
-	<Copyright>Copyright © ABC arbitrage Asset Management 2019</Copyright>
+ 	<Company>havendv</Company>
+	<Copyright>Copyright © havendv 2019</Copyright>
 	<IsPackable>False</IsPackable>
  </PropertyGroup>
+  <Import Project="../ReSharper.props" />
   <ItemGroup>
     <ProjectReference Include="..\OneCode.ReSharperExtension\OneCode.ReSharperExtension.csproj" />
   </ItemGroup>

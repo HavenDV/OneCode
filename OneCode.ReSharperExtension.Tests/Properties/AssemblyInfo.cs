@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -9,4 +7,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("861aad72-682b-4e32-b68a-af45da05eab7")]
+[assembly: Guid("A06CD56E-DBCF-4173-9F33-6A28C80F474F")]

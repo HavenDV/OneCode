@@ -2,7 +2,7 @@
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 
-namespace Abc.MoqComplete.CodeAnalysis
+namespace OneCode.ReSharperExtension.CodeAnalysis
 {
     [StaticSeverityHighlighting(Severity.WARNING, HighlightingGroupIds.GutterMarksGroup)]
     public class SuspiciousCallbackWarning : IHighlighting

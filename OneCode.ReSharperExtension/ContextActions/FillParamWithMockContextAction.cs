@@ -1,4 +1,6 @@
-﻿using Abc.MoqComplete.Services;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Application.Progress;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
@@ -10,13 +12,11 @@ using JetBrains.ReSharper.Psi.Naming.Impl;
 using JetBrains.ReSharper.Psi.Naming.Settings;
 using JetBrains.TextControl;
 using JetBrains.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Abc.MoqComplete.ContextActions.Services;
+using OneCode.ReSharperExtension.ContextActions.Services;
+using OneCode.ReSharperExtension.Extensions;
+using OneCode.ReSharperExtension.Services;
 
-namespace Abc.MoqComplete.ContextActions
+namespace OneCode.ReSharperExtension.ContextActions
 {
     [ContextAction(Group = "C#", Name = "Fill parameter with Mock", Description = "Fills the current parameter with mock", Priority = short.MinValue + 1)]
     public class FillParamWithMockContextAction : ContextActionBase

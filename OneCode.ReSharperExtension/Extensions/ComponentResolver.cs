@@ -1,7 +1,7 @@
 ﻿using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.CSharp.Analyses.Bulbs;
 
-namespace Abc.MoqComplete.ContextActions
+namespace OneCode.ReSharperExtension.Extensions
 {
     public class ComponentResolver
     {

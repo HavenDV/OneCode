@@ -3,7 +3,7 @@ using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi.Modules;
 
-namespace Abc.MoqComplete.Services
+namespace OneCode.ReSharperExtension.Services
 {
     [SolutionComponent]
     public class TestProjectProvider : ITestProjectProvider

@@ -1,6 +1,6 @@
 using JetBrains.ReSharper.Feature.Services.CodeCompletion.Infrastructure.LookupItems;
 
-namespace Abc.MoqComplete.Extensions
+namespace OneCode.ReSharperExtension.Extensions
 {
     public static class LookupItemExtensions
     {
