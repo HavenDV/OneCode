@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using OneCode.Shared.Utilities;
 
 #nullable enable
 
@@ -11,12 +12,9 @@ namespace OneCode.Shared.Settings
     {
         public List<RepositorySettings> RepositoriesSettings { get; set; } = new List<RepositorySettings>();
 
-        public static string DefaultDirectory => Directory.CreateDirectory(
-            Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create),
-                "OneCode")).FullName;
-
-        public static string DefaultPath => Path.Combine(DefaultDirectory, "settings.json");
+        public static PathString LocalApplicationDataDirectory => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create);
+        public static PathString DefaultDirectory => Directory.CreateDirectory(LocalApplicationDataDirectory / "OneCode").FullName;
+        public static PathString DefaultPath => DefaultDirectory / "settings.json";
 
         public static OneCodeSettings DefaultSettings {
             get => File.Exists(DefaultPath)
