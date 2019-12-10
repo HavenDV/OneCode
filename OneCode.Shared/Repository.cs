@@ -20,7 +20,7 @@ namespace OneCode.Shared
             Files = Directory
                 .EnumerateFiles(settings.Folder, "*.cs", SearchOption.AllDirectories)
                 .Where(value => !value.EndsWith("AssemblyInfo.cs"))
-                .Select(path => new CodeFile(path, settings.Folder))
+                .Select(path => new CodeFile(path, this))
                 .ToList();
         }
     }

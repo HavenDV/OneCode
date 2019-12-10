@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Repository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\OneCodeSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\RepositorySettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\XmlUtilities.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\PathString.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\StringExtensions.cs" />
   </ItemGroup>

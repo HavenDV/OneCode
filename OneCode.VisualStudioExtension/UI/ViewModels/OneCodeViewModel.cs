@@ -112,16 +112,16 @@ namespace OneCode.VsExtension.UI.ViewModels
                         {
                             Name = file.RelativePath,
                             Nodes = new ObservableCollection<Node>(file.Code.Classes
-                                .Where(@class => @class.IsStatic || @class.Methods.Any(method => method.IsStatic))
-                                .Select(@class => @class.Methods.
-                                    Select(method => new Node
-                                    {
-                                        Name = $"{@class.Name}.{method.Name}",
-                                        Method = method,
-                                        Class = @class,
-                                        CodeFile = file,
-                                    }))
-                                .SelectMany(i => i)),
+                                .Where(@class => @class.IsStatic)
+                                .SelectMany(@class => @class.Methods)
+                                .Where(method => method.IsStatic)
+                                .Select(method => new Node
+                                {
+                                    Name = $"{method.Class?.Name}.{method.Name}",
+                                    Method = method,
+                                    Class = method.Class,
+                                    CodeFile = method.Class?.Code?.CodeFile,
+                                })),
                         })),
                 });
                 Nodes.Add(new Node

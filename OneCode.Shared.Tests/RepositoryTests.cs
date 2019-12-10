@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OneCode.Shared.Settings;
@@ -15,7 +14,7 @@ namespace OneCode.Shared.Tests
         public void GetMethodsTest()
         {
             var text = ResourcesUtilities.ReadFileAsString("Repository.cs");
-            var code = Code.Load(text);
+            var code = new Code(text);
             var methods = code.Classes
                 .SelectMany(i => i.Methods)
                 .ToList();
@@ -45,7 +44,7 @@ namespace OneCode.Shared.Tests
         {
             var repository = new Repository(new RepositorySettings
             {
-                Folder = "../../../../OneCode.Core",
+                Folder = "../../../../OneCode.Shared",
             });
 
             foreach (var file in repository.Files)
@@ -69,10 +68,11 @@ namespace OneCode.Shared.Tests
         [TestMethod]
         public void CodeLoadTest()
         {
-            var path = Path.GetFullPath(Directory
-                .EnumerateFiles("../../../../../CSharpUtilities", "*.cs", SearchOption.AllDirectories)
-                .FirstOrDefault());
-            var file = new CodeFile(path, Path.GetFullPath("../../../../../CSharpUtilities"));
+            var repository = new Repository(new RepositorySettings
+            {
+                Folder = "../../../../../CSharpUtilities",
+            });
+            var file = repository.Files.First();
 
             Console.WriteLine($"FullPath: {file.FullPath}");
             Console.WriteLine($"TargetFramework: {file.TargetFramework}");
@@ -92,10 +92,10 @@ namespace OneCode.Shared.Tests
         public void CodeSaveTest()
         {
             var text = ResourcesUtilities.ReadFileAsString("Repository.cs");
-            var code = Code.Load(text);
+            var code = new Code(text);
 
             Assert.AreEqual(2, code.Classes[0].Methods.Count);
-            Assert.AreEqual("OneCode.Core", code.NamespaceName);
+            Assert.AreEqual("OneCode.Shared", code.NamespaceName);
 
             code.NamespaceName = "TEST";
             code.Classes[0].Methods.RemoveAt(0);
@@ -103,7 +103,7 @@ namespace OneCode.Shared.Tests
             var newCodeText = code.Save();
             Console.WriteLine(newCodeText); 
             
-            code = Code.Load(newCodeText);
+            code = new Code(newCodeText);
 
             Assert.AreEqual(1, code.Classes[0].Methods.Count);
             Assert.AreEqual("TEST", code.NamespaceName);

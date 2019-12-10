@@ -4,20 +4,39 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using OneCode.Shared.Utilities;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+
+#nullable enable
 
 namespace OneCode.Shared
 {
     public sealed class Code
     {
-        public const string SpecialPrefix = "<![CDATA[";
-        public const string SpecialPostfix = "]]>";
+        public string FullText { get; private set; }
+        public CodeFile? CodeFile { get; }
 
-        public string? NamespaceName { get; set; } = string.Empty;
-        public string FullText { get; set; } = string.Empty;
+        public string? NamespaceName { get; set; }
+        public List<Class> Classes { get; set; }
 
-        public List<Class> Classes { get; set; } = new List<Class>();
+        public Code(string text, CodeFile? codeFile = null)
+        {
+            FullText = text;
+            CodeFile = codeFile;
+
+            var syntaxTree = CSharpSyntaxTree.ParseText(text);
+            var root = syntaxTree.GetRoot();
+
+            NamespaceName = root
+                .DescendantNodes()
+                .OfType<NamespaceDeclarationSyntax>()
+                .FirstOrDefault()
+                ?.Name.ToString();
+            Classes = root
+                .DescendantNodes()
+                .OfType<ClassDeclarationSyntax>()
+                .Select(syntax => Class.FromSyntax(syntax, this))
+                .ToList();
+        }
 
         public Code Merge(Code other)
         {
@@ -51,67 +70,5 @@ namespace OneCode.Shared
 
             return result.ToFullString();
         }
-
-        #region Static methods
-
-        public static Code Load(string text)
-        {
-            var file = new Code();
-            var syntaxTree = CSharpSyntaxTree.ParseText(text);
-            var root = syntaxTree.GetRoot();
-
-            file.FullText = text;
-            file.NamespaceName = root
-                .DescendantNodes()
-                .OfType<NamespaceDeclarationSyntax>()
-                .FirstOrDefault()
-                ?.Name.ToString();
-            file.Classes = root
-                .DescendantNodes()
-                .OfType<ClassDeclarationSyntax>()
-                .Select(classSyntax => new Class
-                {
-                    Name = classSyntax.Identifier.Text,
-                    FullText = classSyntax.ToFullString(),
-                    Version = GetVersion(classSyntax.Modifiers.ToFullString()),
-                    Dependencies = GetDependencies(classSyntax.Modifiers.ToFullString()),
-                    IsStatic = classSyntax.Modifiers.Any(SyntaxKind.StaticKeyword),
-                    Methods = classSyntax
-                        .DescendantNodes()
-                        .OfType<MethodDeclarationSyntax>()
-                        .Select(methodSyntax => new Method
-                        {
-                            Name = methodSyntax.Identifier.Text + methodSyntax.ParameterList,
-                            FullText = methodSyntax.ToFullString(),
-                            Version = GetVersion(methodSyntax.Modifiers.ToFullString()),
-                            Dependencies = GetDependencies(methodSyntax.Modifiers.ToFullString()),
-                            IsStatic = methodSyntax.Modifiers.Any(SyntaxKind.StaticKeyword),
-                            IsExtension = methodSyntax.ParameterList.Parameters.ToString().StartsWith("this"),
-                        })
-                        .ToList()
-                })
-                .ToList();
-
-            return file;
-        }
-
-        public static string GetVersionText(string modifiersText)
-        {
-            return modifiersText.Extract(SpecialPrefix + "Version: ", SpecialPostfix) ?? "1.0.0.0";
-        }
-        
-        public static List<string> GetDependencies(string modifiersText)
-        {
-            return modifiersText.ExtractAll(SpecialPrefix + "Dependency: ", SpecialPostfix);
-        }
-
-        public static Version GetVersion(string modifiersText)
-        {
-            return Version.TryParse(GetVersionText(modifiersText), out var result)
-                ? result
-                : Version.Parse("1.0.0.0");
-        }
-
-        #endregion
     }
 }

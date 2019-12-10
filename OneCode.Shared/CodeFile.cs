@@ -7,24 +7,25 @@ namespace OneCode.Shared
 {
     public sealed class CodeFile
     {
-        public string FullPath { get; set; }
-        public Code Code { get; set; }
+        public string FullPath { get; }
+        public Repository? Repository { get; }
 
-        public string RelativePath { get; set; } = string.Empty;
+        public Code Code { get; private set; }
+        public string RelativePath { get; } = string.Empty;
+        public string TargetFramework { get; } = string.Empty;
+        public string RelativeFolder { get; } = string.Empty;
+        public string RelativePathWithoutTargetFramework { get; } = string.Empty;
+        public string RelativeFolderWithoutTargetFramework { get; } = string.Empty;
+        public string AdditionalNamespace { get; } = string.Empty;
 
-        public string TargetFramework { get; set; } = string.Empty;
-        public string RelativeFolder { get; set; } = string.Empty;
-
-        public string RelativePathWithoutTargetFramework { get; set; } = string.Empty;
-        public string RelativeFolderWithoutTargetFramework { get; set; } = string.Empty;
-
-        public string AdditionalNamespace { get; set; } = string.Empty;
-
-        public CodeFile(string path, string? baseFolder = null)
+        public CodeFile(string path, Repository? repository = null)
         {
             FullPath = path;
-            Code = Code.Load(File.ReadAllText(path));
+            Repository = repository;
 
+            Code = new Code(File.ReadAllText(path), this);
+
+            var baseFolder = repository?.Settings?.Folder;
             if (string.IsNullOrWhiteSpace(baseFolder))
             {
                 return;
