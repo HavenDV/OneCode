@@ -125,32 +125,31 @@ namespace OneCode.VsExtension.Completions
         public IEnumerable<CompletionItem> GetActualItems()
         {
             return RepositoriesService.Repositories.Values
-                .Select(repository => repository.Files
-                    .Select(file => file.Code.Classes.Select(@class => @class.Methods
-                            .Where(method => method.IsStatic)
-                            .Select(method =>
-                            {
-                                var item = new CompletionItem(
-                                    $"{@class.Name}.{method.Name}",
-                                    this,
-                                    ImageElement,
-                                    Filters ?? ImmutableArray<CompletionFilter>.Empty,
-                                    file.Code.NamespaceName,
-                                    $"{@class.Name}.{method.Name.Substring(0, method.Name.IndexOf('(') + 1)}",
-                                    $"{@class.Name}.{method.Name}",
-                                    $"{@class.Name}.{method.Name}",
-                                    Images ?? ImmutableArray<ImageElement>.Empty);
+                .SelectMany(repository => repository.Files)
+                .SelectMany(file => file.Code.Classes)
+                .SelectMany(@class => @class.Methods)
+                .Where(method => method.IsStatic)
+                .Select(method =>
+                {
+                    var item = new CompletionItem(
+                        $"{method.Class?.Name}.{method.Name}",
+                        this,
+                        ImageElement,
+                        Filters ?? ImmutableArray<CompletionFilter>.Empty,
+                        method.Class?.Code?.NamespaceName,
+                        $"{method.Class?.Name}.{method.Name.Substring(0, method.Name.IndexOf('(') + 1)}",
+                        $"{method.Class?.Name}.{method.Name}",
+                        $"{method.Class?.Name}.{method.Name}",
+                        Images ?? ImmutableArray<ImageElement>.Empty);
 
-                                item.Properties[nameof(Repository)] = repository;
-                                item.Properties[nameof(CodeFile)] = file;
-                                item.Properties[nameof(Class)] = @class;
-                                item.Properties[nameof(Method)] = method;
+                    item.Properties[nameof(Method)] = method;
+                    item.Properties[nameof(Class)] = method.Class;
+                    item.Properties[nameof(Code)] = method.Class?.Code;
+                    item.Properties[nameof(CodeFile)] = method.Class?.Code?.CodeFile;
+                    item.Properties[nameof(Repository)] = method.Class?.Code?.CodeFile?.Repository;
 
-                                return item;
-                            }))
-                        .SelectMany(i => i))
-                    .SelectMany(i => i))
-                .SelectMany(i => i);
+                    return item;
+                });
         }
 
         public Task<CompletionContext> GetCompletionContextAsync(IAsyncCompletionSession session, CompletionTrigger trigger, SnapshotPoint triggerLocation, SnapshotSpan applicableToSpan, CancellationToken token)
