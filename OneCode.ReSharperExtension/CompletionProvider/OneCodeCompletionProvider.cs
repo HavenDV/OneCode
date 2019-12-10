@@ -30,18 +30,16 @@ namespace OneCode.ReSharperExtension.CompletionProvider
             repositories.Load(OneCodeSettings.DefaultSettings);
             
             var items = repositories.Values
-                .Select(repository => repository.Files
-                    .Select(file => file.Code.Classes.Select(@class => @class.Methods
-                            .Where(method => method.IsStatic)
-                            .Select(method =>
-                            {
-                                var item = CSharpLookupItemFactory.Instance.CreateKeywordLookupItem(context, $"{@class.Name}.{method.Name.Substring(0, method.Name.IndexOf('(') + 1)}", TailType.None, PsiSymbolsThemedIcons.Method.Id);
-                            
-                                return item;
-                            }))
-                        .SelectMany(i => i))
-                    .SelectMany(i => i))
-                .SelectMany(i => i)
+                .SelectMany(repository => repository.Files)
+                .SelectMany(file => file.Code.Classes)
+                .SelectMany(@class => @class.Methods)
+                .Where(method => method.IsStatic)
+                .Select(method =>
+                {
+                    var item = CSharpLookupItemFactory.Instance.CreateKeywordLookupItem(context, $"{method.Class?.Name}.{method.Name.Substring(0, method.Name.IndexOf('(') + 1)}", TailType.None, PsiSymbolsThemedIcons.Method.Id);
+                
+                    return item;
+                })
                 .ToList();
 
             foreach (var item in items)
