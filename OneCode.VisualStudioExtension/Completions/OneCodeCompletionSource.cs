@@ -124,10 +124,7 @@ namespace OneCode.VsExtension.Completions
 
         public IEnumerable<CompletionItem> GetActualItems()
         {
-            return RepositoriesService.Repositories.Values
-                .SelectMany(repository => repository.Files)
-                .SelectMany(file => file.Code.Classes)
-                .SelectMany(@class => @class.Methods)
+            return RepositoriesService.Repositories.AllMethods
                 .Where(method => method.IsStatic)
                 .Select(method =>
                 {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using OneCode.Shared.Settings;
@@ -14,6 +15,16 @@ namespace OneCode.Shared
         public ObservableCollection<Repository> Values { get; set; } = new ObservableCollection<Repository>(); 
         
         public OneCodeSettings? Settings { get; set; }
+        public bool IsLoaded { get; private set; }
+
+        public IEnumerable<CodeFile> AllFiles => Values
+            .SelectMany(repository => repository.Files);
+
+        public IEnumerable<Class> AllClasses => AllFiles
+            .SelectMany(file => file.Code.Classes);
+
+        public IEnumerable<Method> AllMethods => AllClasses
+            .SelectMany(@class => @class.Methods);
 
         #endregion
 
@@ -49,6 +60,7 @@ namespace OneCode.Shared
             }
 
             OnChanged();
+            IsLoaded = true;
         }
 
         public void Remove(RepositorySettings settings)
