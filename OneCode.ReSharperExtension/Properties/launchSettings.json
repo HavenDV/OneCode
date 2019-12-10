@@ -3,7 +3,7 @@
     "OneCode.ReSharperExtension": {
       "commandName": "Executable",
       "executablePath": "$(DevEnvDir)devenv.exe",
-      "commandLineArgs": "/rootsuffix Plugins $(SolutionFileName)",
+      "commandLineArgs": "/rootsuffix Plugins /ReSharper.Internal $(SolutionFileName)",
       "workingDirectory": "$(SolutionDir)"
     }
   }
