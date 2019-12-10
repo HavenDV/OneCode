@@ -1,4 +1,5 @@
-﻿using JetBrains.ReSharper.Feature.Services.CodeCompletion;
+﻿using JetBrains.ProjectModel;
+using JetBrains.ReSharper.Feature.Services.CodeCompletion;
 using JetBrains.ReSharper.Feature.Services.CodeCompletion.Infrastructure;
 using JetBrains.ReSharper.Feature.Services.CodeCompletion.Infrastructure.LookupItems;
 using JetBrains.ReSharper.Feature.Services.CSharp.CodeCompletion.Infrastructure;
@@ -8,9 +9,8 @@ using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.ExpectedTypes;
 using JetBrains.ReSharper.Psi.Resources;
 using OneCode.ReSharperExtension.Extensions;
-using OneCode.Shared;
-using OneCode.Shared.Settings;
 using System.Linq;
+using OneCode.ReSharperExtension.Services;
 
 namespace OneCode.ReSharperExtension.CompletionProvider
 {
@@ -26,13 +26,10 @@ namespace OneCode.ReSharperExtension.CompletionProvider
 
         protected override bool AddLookupItems(CSharpCodeCompletionContext context, IItemsCollector collector)
         {
-            var repositories = new Repositories();
-            repositories.Load(OneCodeSettings.DefaultSettings);
-            
-            var items = repositories.Values
-                .SelectMany(repository => repository.Files)
-                .SelectMany(file => file.Code.Classes)
-                .SelectMany(@class => @class.Methods)
+            var repositoriesService = context.AccessContext.GetPsiModule().GetSolution().GetComponent<IRepositoriesService>();
+            repositoriesService.LoadIfRequiredFromSettings();
+
+            var items = repositoriesService.Repositories.AllMethods
                 .Where(method => method.IsStatic)
                 .Select(method =>
                 {
@@ -52,6 +49,9 @@ namespace OneCode.ReSharperExtension.CompletionProvider
                 
                 collector.Add(item);
             }
+
+            var firstMethod = repositoriesService.Repositories.AllMethods.First();
+            repositoriesService.AddProjectItem(context.AccessContext.GetPsiModule().GetSolution().GetAllProjects().First(project => project.IsOpened), firstMethod.Class?.Code?.CodeFile, firstMethod.Class, firstMethod);
 
             return true;
         }
