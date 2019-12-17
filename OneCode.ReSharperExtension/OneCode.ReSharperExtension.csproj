@@ -23,7 +23,4 @@
   <ItemGroup>
     <Content Include="bin\$(Configuration)\OneCode.ReSharperExtension.*" PackagePath="dotFiles" Pack="true" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ContextActions\Services\" />
-  </ItemGroup>
 </Project>

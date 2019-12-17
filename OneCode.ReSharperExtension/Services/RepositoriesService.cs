@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using JetBrains.ProjectModel;
-using JetBrains.ReSharper.I18n.Services;
 using JetBrains.ReSharper.Psi.Modules;
 using JetBrains.ReSharper.Psi.Util;
-using JetBrains.Util;
 using OneCode.Shared;
 using OneCode.Shared.Settings;
 
@@ -25,11 +23,11 @@ namespace OneCode.ReSharperExtension.Services
             Repositories.Load(OneCodeSettings.DefaultSettings);
         }
 
-        public void AddProjectItem(IProject project, CodeFile? file, Class? @class, Method? method)
+        public string? AddProjectItem(IProject project, CodeFile? file, Class? @class, Method? method)
         {
             if (file == null || project == null)
             {
-                return;
+                return null;
             }
 
             var projectDirectory = project.GetLocation().FullPath;
@@ -47,8 +45,8 @@ namespace OneCode.ReSharperExtension.Services
             }
 
             file.SaveTo(fullPath);
-            
-            project.AddExistenFile(FileSystemPath.CreateByCanonicalPath(fullPath), null);
+
+            return fullPath;
         }
     }
 }

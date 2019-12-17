@@ -8,6 +8,6 @@ namespace OneCode.ReSharperExtension.Services
         Repositories Repositories { get; }
 
         void LoadIfRequiredFromSettings();
-        void AddProjectItem(IProject project, CodeFile? file, Class? @class, Method? method);
+        string? AddProjectItem(IProject project, CodeFile? file, Class? @class, Method? method);
     }
 }
