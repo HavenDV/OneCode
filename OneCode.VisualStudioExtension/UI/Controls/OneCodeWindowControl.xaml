@@ -21,10 +21,16 @@
             <RowDefinition Height="30"></RowDefinition>
         </Grid.RowDefinitions>
         <TreeView Grid.Row="0" Margin="5" ItemsSource="{Binding Nodes}">
+            <TreeView.ContextMenu>
+                <ContextMenu StaysOpen="true">
+                    <MenuItem Header="Open File" Command="{Binding OpenFileCommand}" CommandParameter="{Binding Path=PlacementTarget.(TreeView.SelectedValue), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"/>
+                </ContextMenu>
+            </TreeView.ContextMenu>
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
                     <Setter Property="IsExpanded" Value="True" />
                     <EventSetter Event="MouseDoubleClick" Handler="TreeView_OnMouseDoubleClick"/>
+                    <EventSetter Event="PreviewMouseRightButtonDown" Handler="EventSetter_OnHandler"/>
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.ItemTemplate>

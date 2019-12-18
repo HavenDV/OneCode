@@ -23,6 +23,7 @@ namespace OneCode.VsExtension.UI.ViewModels
         public DelegateCommand ShowRepositoriesCommand { get; }
         public DelegateCommand ShowExceptionsCommand { get; }
         public DelegateCommand<Node> AddItemCommand { get; }
+        public DelegateCommand<Node> OpenFileCommand { get; }
 
         public OneCodeViewModel(RepositoriesService? repositoriesService, ExceptionsService? exceptionsService)
         {
@@ -35,6 +36,7 @@ namespace OneCode.VsExtension.UI.ViewModels
             ShowRepositoriesCommand = new DelegateCommand(OnShowRepositories);
             ShowExceptionsCommand = new DelegateCommand(OnShowExceptions);
             AddItemCommand = new DelegateCommand<Node>(OnAddItem);
+            OpenFileCommand = new DelegateCommand<Node>(OnOpenFile);
 
             RefreshTree(Repositories);
         }
@@ -89,6 +91,29 @@ namespace OneCode.VsExtension.UI.ViewModels
             try
             {
                 RepositoriesService.AddProjectItem(node.CodeFile, node.Class, node.Method, true);
+            }
+            catch (Exception exception)
+            {
+                ExceptionsService.Add(exception);
+            }
+        }
+
+        private void OnOpenFile(Node node)
+        {
+            if (node == null)
+            {
+                return;
+            }
+
+            try
+            {
+                var path = node.Method?.Class?.Code?.CodeFile?.FullPath;
+                if (path == null)
+                {
+                    return;
+                }
+
+                RepositoriesService.OpenFile(path);
             }
             catch (Exception exception)
             {

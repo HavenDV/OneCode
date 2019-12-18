@@ -75,5 +75,10 @@ namespace OneCode.VsExtension.Services
                 dte.OpenFileAsText(fullPath);
             }
         }
+
+        public void OpenFile(string path)
+        {
+            this.GetDte().OpenFileAsText(path);
+        }
     }
 }

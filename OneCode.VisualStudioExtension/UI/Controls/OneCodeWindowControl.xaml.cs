@@ -1,6 +1,10 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using OneCode.VsExtension.UI.ViewModels;
+
+#nullable enable
 
 namespace OneCode.VsExtension.UI.Controls
 {
@@ -32,6 +36,28 @@ namespace OneCode.VsExtension.UI.Controls
             {
                 command.Execute(node);
             }
+        }
+
+        private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
+        {
+            var treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
+            if (treeViewItem == null)
+            {
+                return;
+            }
+
+            treeViewItem.Focus();
+            e.Handled = true;
+        }
+
+        private static TreeViewItem? VisualUpwardSearch(DependencyObject? source)
+        {
+            while (source != null && !(source is TreeViewItem))
+            {
+                source = VisualTreeHelper.GetParent(source);
+            }
+
+            return source as TreeViewItem;
         }
     }
 }
