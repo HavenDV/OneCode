@@ -1,15 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
-	<Company>havendv</Company>
-	<Copyright>Copyright © havendv 2019</Copyright>
-	<IsPackable>True</IsPackable>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <Company>havendv</Company>
+    <Copyright>Copyright © havendv 2019</Copyright>
+    <IsPackable>True</IsPackable>
     <IncludeBuildOutput>false</IncludeBuildOutput>
- </PropertyGroup>
+  </PropertyGroup>
+  <Import Project="..\OneCode.Shared\OneCode.Shared.projitems" Label="Shared" />
   <Import Project="../ReSharper.props" />
   <ItemGroup>
     <PackageReference Include="JetBrains.Rider.SDK">
-      <Version>$(SdkVersion)</Version>
+      <Version>2019.3.0</Version>
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -17,8 +22,5 @@
     <Content Include="Resources\plugin.xml" PackagePath="META-INF" Pack="true" />
     <Content Include="Resources\pluginIcon.svg" PackagePath="META-INF" Pack="true" />
     <Content Include="Resources\pluginIcon_dark.svg" PackagePath="META-INF" Pack="true" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ContextActions\Services\" />
   </ItemGroup>
 </Project>
