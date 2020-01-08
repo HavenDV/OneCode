@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.PlatformUI;
 using OneCode.Shared;
@@ -24,6 +25,7 @@ namespace OneCode.VsExtension.UI.ViewModels
         public DelegateCommand ShowExceptionsCommand { get; }
         public DelegateCommand<Node> AddItemCommand { get; }
         public DelegateCommand<Node> OpenFileCommand { get; }
+        public DelegateCommand<Node> OpenSolutionCommand { get; }
 
         public OneCodeViewModel(RepositoriesService? repositoriesService, ExceptionsService? exceptionsService)
         {
@@ -37,6 +39,7 @@ namespace OneCode.VsExtension.UI.ViewModels
             ShowExceptionsCommand = new DelegateCommand(OnShowExceptions);
             AddItemCommand = new DelegateCommand<Node>(OnAddItem);
             OpenFileCommand = new DelegateCommand<Node>(OnOpenFile);
+            OpenSolutionCommand = new DelegateCommand<Node>(OnOpenSolution);
 
             RefreshTree(Repositories);
         }
@@ -114,6 +117,29 @@ namespace OneCode.VsExtension.UI.ViewModels
                 }
 
                 RepositoriesService.OpenFile(path);
+            }
+            catch (Exception exception)
+            {
+                ExceptionsService.Add(exception);
+            }
+        }
+
+        private void OnOpenSolution(Node node)
+        {
+            if (node == null)
+            {
+                return;
+            }
+
+            try
+            {
+                var path = (node.Method?.Class ?? node.Class)?.Code?.CodeFile?.Repository?.Settings?.Folder;
+                if (path == null)
+                {
+                    return;
+                }
+
+                Process.Start(path);
             }
             catch (Exception exception)
             {

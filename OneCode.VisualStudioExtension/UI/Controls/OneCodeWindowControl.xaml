@@ -24,6 +24,7 @@
             <TreeView.ContextMenu>
                 <ContextMenu StaysOpen="true">
                     <MenuItem Header="Open File" Command="{Binding OpenFileCommand}" CommandParameter="{Binding Path=PlacementTarget.(TreeView.SelectedValue), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"/>
+                    <MenuItem Header="Open Solution" Command="{Binding OpenSolutionCommand}" CommandParameter="{Binding Path=PlacementTarget.(TreeView.SelectedValue), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"/>
                 </ContextMenu>
             </TreeView.ContextMenu>
             <TreeView.ItemContainerStyle>
