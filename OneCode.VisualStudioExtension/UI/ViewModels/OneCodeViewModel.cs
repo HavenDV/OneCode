@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.PlatformUI;
 using OneCode.Shared;
@@ -25,6 +26,7 @@ namespace OneCode.VsExtension.UI.ViewModels
         public DelegateCommand ShowExceptionsCommand { get; }
         public DelegateCommand<Node> AddItemCommand { get; }
         public DelegateCommand<Node> OpenFileCommand { get; }
+        public DelegateCommand<Node> OpenFolderCommand { get; }
         public DelegateCommand<Node> OpenSolutionCommand { get; }
 
         public OneCodeViewModel(RepositoriesService? repositoriesService, ExceptionsService? exceptionsService)
@@ -39,6 +41,7 @@ namespace OneCode.VsExtension.UI.ViewModels
             ShowExceptionsCommand = new DelegateCommand(OnShowExceptions);
             AddItemCommand = new DelegateCommand<Node>(OnAddItem);
             OpenFileCommand = new DelegateCommand<Node>(OnOpenFile);
+            OpenFolderCommand = new DelegateCommand<Node>(OnOpenFolder);
             OpenSolutionCommand = new DelegateCommand<Node>(OnOpenSolution);
 
             RefreshTree(Repositories);
@@ -124,7 +127,7 @@ namespace OneCode.VsExtension.UI.ViewModels
             }
         }
 
-        private void OnOpenSolution(Node node)
+        private void OnOpenFolder(Node node)
         {
             if (node == null)
             {
@@ -140,6 +143,35 @@ namespace OneCode.VsExtension.UI.ViewModels
                 }
 
                 Process.Start(path);
+            }
+            catch (Exception exception)
+            {
+                ExceptionsService.Add(exception);
+            }
+        }
+
+        private void OnOpenSolution(Node node)
+        {
+            if (node == null)
+            {
+                return;
+            }
+
+            try
+            {
+                var path = (node.Method?.Class ?? node.Class)?.Code?.CodeFile?.Repository?.Settings?.Folder;
+                if (path == null)
+                {
+                    return;
+                }
+
+                var solutionPath = Directory.EnumerateFiles(path, "*.sln", SearchOption.TopDirectoryOnly).FirstOrDefault();
+                if (solutionPath == null)
+                {
+                    return;
+                }
+
+                Process.Start(solutionPath);
             }
             catch (Exception exception)
             {
