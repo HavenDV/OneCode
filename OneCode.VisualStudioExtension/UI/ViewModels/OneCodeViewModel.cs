@@ -107,7 +107,7 @@ namespace OneCode.VsExtension.UI.ViewModels
 
             try
             {
-                var path = node.Method?.Class?.Code?.CodeFile?.FullPath;
+                var path = (node.Method?.Class ?? node.Class)?.Code?.CodeFile?.FullPath;
                 if (path == null)
                 {
                     return;

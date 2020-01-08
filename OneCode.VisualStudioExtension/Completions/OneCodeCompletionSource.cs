@@ -153,7 +153,7 @@ namespace OneCode.VsExtension.Completions
         {
             Filters ??= ImmutableArray.Create(new CompletionFilter("OneCode", "O", ImageElement));
             Images ??= ImmutableArray.Create<ImageElement>();
-            Items ??= GetActualItems()?.ToImmutableArray();
+            Items ??= GetActualItems().ToImmutableArray();
 
             return Task.FromResult(new CompletionContext(Items ?? ImmutableArray<CompletionItem>.Empty));
 
