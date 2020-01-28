@@ -136,7 +136,7 @@ namespace OneCode.VsExtension.UI.ViewModels
 
             try
             {
-                var path = (node.Method?.Class ?? node.Class)?.Code?.CodeFile?.Repository?.Settings?.Folder;
+                var path = node.Repository?.Settings?.Folder;
                 if (path == null)
                 {
                     return;
@@ -159,7 +159,7 @@ namespace OneCode.VsExtension.UI.ViewModels
 
             try
             {
-                var path = (node.Method?.Class ?? node.Class)?.Code?.CodeFile?.Repository?.Settings?.Folder;
+                var path = node.Repository?.Settings?.Folder;
                 if (path == null)
                 {
                     return;
@@ -194,6 +194,7 @@ namespace OneCode.VsExtension.UI.ViewModels
                         .Select(file => new Node
                         {
                             Name = file.RelativePath,
+                            Repository = file.Repository,
                             Nodes = new ObservableCollection<Node>(file.Code.Classes
                                 .Where(@class => @class.IsStatic)
                                 .SelectMany(@class => @class.Methods)
@@ -204,6 +205,7 @@ namespace OneCode.VsExtension.UI.ViewModels
                                     Method = method,
                                     Class = method.Class,
                                     CodeFile = method.Class?.Code?.CodeFile,
+                                    Repository = file.Repository,
                                 })),
                         })),
                 });
@@ -216,6 +218,7 @@ namespace OneCode.VsExtension.UI.ViewModels
                         .Select(file => new Node
                         {
                             Name = file.RelativePath,
+                            Repository = file.Repository,
                             Nodes = new ObservableCollection<Node>(file.Code.Classes
                                 .Where(@class => !@class.IsStatic)
                                 .Select(@class => new Node
@@ -223,6 +226,7 @@ namespace OneCode.VsExtension.UI.ViewModels
                                     Name = @class.Name,
                                     Class = @class,
                                     CodeFile = file,
+                                    Repository = file.Repository,
                                 })),
                         })),
                 });
@@ -240,6 +244,8 @@ namespace OneCode.VsExtension.UI.ViewModels
         public Method? Method { get; set; }
         public Class? Class { get; set; }
         public CodeFile? CodeFile { get; set; }
+        public Repository? Repository { get; set; }
+
         public ObservableCollection<Node>? Nodes { get; set; }
     }
 }
