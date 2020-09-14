@@ -26,7 +26,10 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		OneCode.Shared\OneCode.Shared.projitems*{0b44cabe-2e4b-479f-b826-282ae5d0c58d}*SharedItemsImports = 13
+		OneCode.Shared\OneCode.Shared.projitems*{234cd502-3af1-4a8f-8081-1d643b9b4586}*SharedItemsImports = 5
+		OneCode.Shared\OneCode.Shared.projitems*{72adc18e-03b0-47dd-927f-39ef26169070}*SharedItemsImports = 5
 		OneCode.Shared\OneCode.Shared.projitems*{802c18ce-169a-4639-87a3-4d90b6361c69}*SharedItemsImports = 4
+		OneCode.Shared\OneCode.Shared.projitems*{92b0f030-69f3-435d-8b55-775bbb180e41}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
