@@ -9,31 +9,31 @@ using OneCode.VsExtension.Services;
 
 namespace OneCode.VsExtension.Completions
 {
-    [Export(typeof(IAsyncCompletionSourceProvider))]
-    [Name(nameof(OneCodeCompletionSourceProvider))]
-    [ContentType("CSharp")]
-    [TextViewRole(PredefinedTextViewRoles.Editable)]
-    [Order(After = "default")]
-    [Order(After = "Roslyn Completion Presenter")]
-    public sealed class OneCodeCompletionSourceProvider : IAsyncCompletionSourceProvider
-    {
-        private IDictionary<ITextView, IAsyncCompletionSource> CacheDictionary { get; } = new Dictionary<ITextView, IAsyncCompletionSource>();
+    //[Export(typeof(IAsyncCompletionSourceProvider))]
+    //[Name(nameof(OneCodeCompletionSourceProvider))]
+    //[ContentType("CSharp")]
+    //[TextViewRole(PredefinedTextViewRoles.Editable)]
+    //[Order(After = "default")]
+    //[Order(After = "Roslyn Completion Presenter")]
+    //public sealed class OneCodeCompletionSourceProvider : IAsyncCompletionSourceProvider
+    //{
+    //    private IDictionary<ITextView, IAsyncCompletionSource> CacheDictionary { get; } = new Dictionary<ITextView, IAsyncCompletionSource>();
 
-        [Import]
-        private RepositoriesService? RepositoriesService { get; set; }
+    //    [Import]
+    //    private RepositoriesService? RepositoriesService { get; set; }
 
-        public IAsyncCompletionSource GetOrCreate(ITextView textView)
-        {
-            if (CacheDictionary.TryGetValue(textView, out var cachedSource))
-            {
-                return cachedSource;
-            }
+    //    public IAsyncCompletionSource GetOrCreate(ITextView textView)
+    //    {
+    //        if (CacheDictionary.TryGetValue(textView, out var cachedSource))
+    //        {
+    //            return cachedSource;
+    //        }
 
-            var source = new OneCodeCompletionSource(RepositoriesService);
-            textView.Closed += (o, e) => CacheDictionary.Remove(textView);
-            CacheDictionary.Add(textView, source);
+    //        var source = new OneCodeCompletionSource(RepositoriesService);
+    //        textView.Closed += (o, e) => CacheDictionary.Remove(textView);
+    //        CacheDictionary.Add(textView, source);
 
-            return source;
-        }
-    }
+    //        return source;
+    //    }
+    //}
 }

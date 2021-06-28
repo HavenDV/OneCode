@@ -35,7 +35,11 @@ namespace OneCode.VsExtension.Completions
 
             // This method is called only when typedChar is among the PotentialCommitCharacters
             // in this simple example, all PotentialCommitCharacters do commit, so we always return true
-            return true;
+
+            // Need testing
+            //return true;
+
+            return false;
         }
 
         public CommitResult TryCommit(IAsyncCompletionSession session, ITextBuffer buffer, CompletionItem item, char typedChar, CancellationToken token)
