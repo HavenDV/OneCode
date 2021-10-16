@@ -12,7 +12,7 @@
   <Import Project="../ReSharper.props" />
   <ItemGroup>
     <PackageReference Include="JetBrains.Rider.SDK">
-      <Version>2019.3.0</Version>
+      <Version>2021.2.0-eap04</Version>
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

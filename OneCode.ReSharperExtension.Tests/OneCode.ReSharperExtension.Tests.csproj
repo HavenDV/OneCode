@@ -10,12 +10,15 @@
     <ProjectReference Include="..\OneCode.ReSharperExtension\OneCode.ReSharperExtension.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="JetBrains.ReSharper.SDK.Tests" Version="$(SdkVersion)" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
-    <PackageReference Include="Moq">
-      <Version>4.10.1</Version>
+    <PackageReference Include="JetBrains.ReSharper.SDK.Tests" Version="2021.2.0-eap04">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NUnit3TestAdapter" Version="3.14.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0-release-20210626-04" />
+    <PackageReference Include="Moq">
+      <Version>4.16.1</Version>
+    </PackageReference>
+    <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="data\**\*" />
